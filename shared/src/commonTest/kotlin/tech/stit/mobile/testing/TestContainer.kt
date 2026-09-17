@@ -1,14 +1,19 @@
 package tech.stit.mobile.testing
 
+import io.ktor.client.engine.HttpClientEngine
+import io.ktor.client.plugins.api.ClientPlugin
+import io.ktor.client.plugins.api.createClientPlugin
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import okio.fakefilesystem.FakeFileSystem
 import tech.stit.mobile.SharedContainer
+import tech.stit.mobile.core.api.ApiClient
 import tech.stit.mobile.core.config.ApiMode
 import tech.stit.mobile.core.config.AppConfig
 import tech.stit.mobile.core.config.AppEnv
 import tech.stit.mobile.core.config.AuthMode
 import tech.stit.mobile.core.mock.MockScenario
+import tech.stit.mobile.core.observability.Logger
 
 fun testConfig(apiMode: ApiMode = ApiMode.Mock, authMode: AuthMode = AuthMode.Bearer, env: AppEnv = AppEnv.Demo) = AppConfig(
     env = env,
@@ -19,6 +24,10 @@ fun testConfig(apiMode: ApiMode = ApiMode.Mock, authMode: AuthMode = AuthMode.Be
     deepLinkScheme = "stit",
     sentryDsn = "",
 )
+
+// ApiClient на подставном движке и фейках платформы; auth по умолчанию — заглушка, чтобы тест ресурса не зависел от SessionStore.
+internal fun testApiClient(engine: HttpClientEngine, auth: ClientPlugin<Unit> = createClientPlugin("NoopAuth") {}): ApiClient =
+    ApiClient(testConfig(), FakePlatformDeps().appInfo, FakeLocale, engine, auth, FakeTelemetry(), Logger("test", MemoryLogSink()))
 
 // Контейнер на MockTransport и фейках платформы: сценарные тесты презентеров идут через весь стек без сети.
 suspend fun TestScope.testContainer(

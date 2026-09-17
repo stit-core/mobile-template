@@ -10,6 +10,7 @@ import tech.stit.mobile.core.lib.AppInfo
 import tech.stit.mobile.core.lib.ConnectivityMonitor
 import tech.stit.mobile.core.lib.DispatcherProvider
 import tech.stit.mobile.core.lib.Settings
+import tech.stit.mobile.core.lib.Store
 import tech.stit.mobile.core.observability.LogLevel
 import tech.stit.mobile.core.observability.LogSink
 import tech.stit.mobile.core.observability.TelemetrySink
@@ -117,7 +118,14 @@ class FakePlatformDeps(
     override val logSink: MemoryLogSink = MemoryLogSink(),
 ) : PlatformDeps {
     override val locale: LocaleProvider = FakeLocale
-    override val appInfo: AppInfo = AppInfo(version = "1.0.0", build = 1_000_000, osVersion = "Android 16", deviceModel = "Pixel 8")
+    override val appInfo: AppInfo = AppInfo(
+        appId = "tech.stit.mobile",
+        version = "1.0.0",
+        build = 1_000_000,
+        osVersion = "Android 16",
+        deviceModel = "Pixel 8",
+        store = Store.Direct,
+    )
     override val filesDir: String = "/data/app"
 }
 

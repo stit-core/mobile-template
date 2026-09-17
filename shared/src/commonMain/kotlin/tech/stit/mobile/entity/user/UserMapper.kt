@@ -9,6 +9,6 @@ internal fun UserView.toModel(): User = User(
     status = status,
     createdAt = createdAt,
     updatedAt = updatedAt,
-    // Бэкенд нумерует версии с 1, но в UserView их пока не отдаёт (B-19).
+    // Бэкенд нумерует версии с 1, но в UserView их пока не отдаёт (B-20).
     version = version ?: 1,
 )

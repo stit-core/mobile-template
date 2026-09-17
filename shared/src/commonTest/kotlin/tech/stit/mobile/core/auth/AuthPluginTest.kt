@@ -20,9 +20,8 @@ import tech.stit.mobile.core.config.AuthMode
 import tech.stit.mobile.core.observability.Logger
 import tech.stit.mobile.testing.FakeClock
 import tech.stit.mobile.testing.FakeSecureStore
-import tech.stit.mobile.testing.FakeTelemetry
 import tech.stit.mobile.testing.MemoryLogSink
-import tech.stit.mobile.testing.testConfig
+import tech.stit.mobile.testing.testApiClient
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -68,7 +67,7 @@ class AuthPluginTest {
         }, AuthMode.Bearer, FakeClock(), Logger("test", MemoryLogSink()), onSignedOut = {})
 
     init {
-        client = ApiClient(testConfig(), engine, authPlugin(store), FakeTelemetry(), Logger("test", MemoryLogSink()))
+        client = testApiClient(engine, authPlugin(store))
     }
 
     @Test

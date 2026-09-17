@@ -1,6 +1,7 @@
 package tech.stit.mobile.core.push
 
 import kotlinx.serialization.Serializable
+import tech.stit.mobile.core.api.ApiError
 import tech.stit.mobile.core.api.ApiJson
 import tech.stit.mobile.core.api.DevicesApi
 import tech.stit.mobile.core.i18n.LocaleProvider
@@ -11,6 +12,7 @@ import tech.stit.mobile.core.lib.SettingsKeys
 import tech.stit.mobile.core.lib.currentPlatform
 import tech.stit.mobile.core.lib.newUuid
 import tech.stit.mobile.core.observability.Logger
+import kotlin.coroutines.cancellation.CancellationException
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.hours
 
@@ -30,6 +32,7 @@ class PushRegistrar internal constructor(
     private class Registered(val registration: DeviceRegistration, val deviceId: String, val at: Long)
 
     // Возвращает число отправленных регистраций; ошибки сети не роняют старт — следующая попытка на следующем старте.
+    @Throws(ApiError::class, CancellationException::class)
     suspend fun register(force: Boolean = false): Int {
         val pushEnabled = permission.isGranted()
         val sent = transports.count { transport -> registerOne(transport, pushEnabled, force) }
@@ -49,6 +52,7 @@ class PushRegistrar internal constructor(
     }
 
     // Пред-запрос разрешения (07 §6, п. 5): системный диалог → регистрация; отказ запоминается, чтобы не спрашивать снова.
+    @Throws(ApiError::class, CancellationException::class)
     suspend fun optIn(): Boolean {
         val granted = permission.isGranted() || permission.request()
         settings.putString(SettingsKeys.PUSH_DECLINED, (!granted).toString())
@@ -71,10 +75,10 @@ class PushRegistrar internal constructor(
         ?: newUuid().also { settings.putString(SettingsKeys.INSTALLATION_ID, it) }
 
     private suspend fun registerOne(transport: PushTransport, pushEnabled: Boolean, force: Boolean): Boolean {
-        val registration = transport.token()?.let { registration(transport.provider, it, pushEnabled) }
-        val needed = registration != null && (force || !load(transport.provider).isFresh(registration))
+        val registration = transport.token()?.let { registration(transport.provider, it, pushEnabled) } ?: return false
+        val needed = force || !load(transport.provider).isFresh(registration)
         if (needed) {
-            val device = api.register(registration!!.toBody()).data
+            val device = api.register(registration.toBody()).data
             save(transport.provider, Registered(registration, device.id, clock.now().epochSeconds))
         }
         return needed

@@ -110,12 +110,9 @@ class MockTransport internal constructor(private val json: Json, private val clo
     }
 
     private suspend fun MockRequestHandleScope.users(request: HttpRequestData, path: String): HttpResponseData = when (request.method) {
-        HttpMethod.Get -> if (path ==
-            "/api/users/me"
-        ) {
-            ok(UserMeOutputBody(state.user), UserMeOutputBody.serializer())
-        } else {
-            problem(HttpStatusCode.NotFound, "NOT_FOUND")
+        HttpMethod.Get -> when (path) {
+            "/api/users/me" -> ok(UserMeOutputBody(state.user), UserMeOutputBody.serializer())
+            else -> problem(HttpStatusCode.NotFound, "NOT_FOUND")
         }
 
         HttpMethod.Patch -> {
@@ -174,13 +171,12 @@ class MockTransport internal constructor(private val json: Json, private val clo
         val fromBody = runCatching { request.body<RefreshInputBody>().refreshToken }.getOrNull()
         val presented = fromBody ?: request.cookie("refresh_token")
         return when (presented) {
-            state.refreshToken -> issueTokens().let {
-                if (fromBody !=
-                    null
-                ) {
-                    ok(it, TokenPairBody.serializer())
+            state.refreshToken -> {
+                val tokens = issueTokens()
+                if (fromBody != null) {
+                    ok(tokens, TokenPairBody.serializer())
                 } else {
-                    noContent(cookies = it)
+                    noContent(cookies = tokens)
                 }
             }
 
@@ -193,13 +189,12 @@ class MockTransport internal constructor(private val json: Json, private val clo
     private fun issueTokens(): TokenPairBody {
         state.refreshToken?.let(state.usedRefreshTokens::add)
         val n = ++state.issued
-        val pair =
-            TokenPairBody(
-                accessToken = "$ACCESS_PREFIX$n",
-                expiresIn = ACCESS_TTL_SECONDS,
-                refreshToken = "mock-refresh-$n",
-                tokenType = TokenPairBody.TokenType.Bearer,
-            )
+        val pair = TokenPairBody(
+            accessToken = "$ACCESS_PREFIX$n",
+            expiresIn = ACCESS_TTL_SECONDS,
+            refreshToken = "mock-refresh-$n",
+            tokenType = TokenPairBody.TokenType.Bearer,
+        )
         state.refreshToken = pair.refreshToken
         return pair
     }
@@ -241,8 +236,7 @@ class MockTransport internal constructor(private val json: Json, private val clo
                     title = body.title ?: current.title,
                     done = body.done ?: current.done,
                     updatedAt = clock.now(),
-                    version =
-                    current.version + 1,
+                    version = current.version + 1,
                 )
                 state.todos[index] = updated
                 ok(TodoOutputBody(updated), TodoOutputBody.serializer())

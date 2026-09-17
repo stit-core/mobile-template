@@ -31,7 +31,7 @@ class RequirementsClient internal constructor(
         val last = fetchedAt
         if (!force && last != null && clock.now() - last < MIN_INTERVAL) return _current.value
         val fresh = try {
-            api.requirements(platformName(), appInfo.version, appInfo.build).data.toModel().also { cache.write(it) }
+            api.requirements(platformName(), appInfo.version, appInfo.build, appInfo.store.apiName).data.toModel().also { cache.write(it) }
         } catch (e: ApiError.Http) {
             if (e.status == NOT_FOUND) AppRequirements.Default else fallback(e)
         } catch (e: ApiError.Network) {

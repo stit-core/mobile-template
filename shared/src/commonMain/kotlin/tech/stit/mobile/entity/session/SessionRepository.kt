@@ -1,6 +1,7 @@
 package tech.stit.mobile.entity.session
 
 import kotlinx.coroutines.flow.StateFlow
+import tech.stit.mobile.core.api.ApiError
 import tech.stit.mobile.core.api.AuthApi
 import tech.stit.mobile.core.auth.AuthState
 import tech.stit.mobile.core.auth.SessionStore
@@ -8,6 +9,7 @@ import tech.stit.mobile.core.auth.TokenPair
 import tech.stit.mobile.core.config.AuthMode
 import tech.stit.mobile.core.observability.Logger
 import tech.stit.mobile.core.push.PushRegistrar
+import kotlin.coroutines.cancellation.CancellationException
 
 // Вход, выход и список сессий пользователя; токены хранит SessionStore, здесь — порядок действий.
 class SessionRepository internal constructor(
@@ -19,6 +21,7 @@ class SessionRepository internal constructor(
 ) {
     val authState: StateFlow<AuthState> get() = sessionStore.authState
 
+    @Throws(ApiError::class, CancellationException::class)
     suspend fun login(email: String, password: String) {
         val tokens = api.login(email, password).tokens?.let { TokenPair(it.accessToken, it.refreshToken, it.expiresIn) }
         check(authMode == AuthMode.Cookie || tokens != null) { "бэкенд не вернул tokens: нужны B-1…B-3 на бэкенде или AUTH_MODE=cookie" }
@@ -32,11 +35,14 @@ class SessionRepository internal constructor(
         sessionStore.clear()
     }
 
+    @Throws(ApiError::class, CancellationException::class)
     suspend fun sessions(): List<Session> = api.sessions().data.map { it.toModel() }
 
+    @Throws(ApiError::class, CancellationException::class)
     suspend fun revoke(jti: String) = api.revokeSession(jti)
 
     // «Выйти со всех устройств» отзывает и текущую сессию.
+    @Throws(ApiError::class, CancellationException::class)
     suspend fun revokeAll() {
         api.revokeAllSessions()
         sessionStore.clear()

@@ -2,6 +2,7 @@ package tech.stit.mobile.core.mock
 
 import kotlinx.serialization.json.Json
 import tech.stit.mobile.core.api.generated.AppRequirementsOutputBody
+import tech.stit.mobile.core.api.generated.AuthUserView
 import tech.stit.mobile.core.api.generated.DeviceListOutputBody
 import tech.stit.mobile.core.api.generated.DeviceView
 import tech.stit.mobile.core.api.generated.LoginOutputBody
@@ -11,6 +12,7 @@ import tech.stit.mobile.core.api.generated.TodoListOutputBody
 import tech.stit.mobile.core.api.generated.TodoView
 import tech.stit.mobile.core.api.generated.UserMeOutputBody
 import tech.stit.mobile.core.api.generated.UserView
+import kotlin.time.Instant
 
 // In-memory состояние сценария: мутации меняют его до следующего reset(), как @mswjs/data у SPA.
 internal class MockState(
@@ -43,14 +45,14 @@ internal class MockState(
         // Сценарий error не отвечает данными: состояние не нужно, но роутер требует объект.
         private fun empty(): MockState = MockState(
             user = UserView(
-                createdAt = kotlin.time.Instant.DISTANT_PAST,
+                createdAt = Instant.DISTANT_PAST,
                 email = "",
                 id = "",
                 name = "",
                 status = "",
-                updatedAt = kotlin.time.Instant.DISTANT_PAST,
+                updatedAt = Instant.DISTANT_PAST,
             ),
-            login = LoginOutputBody(user = tech.stit.mobile.core.api.generated.AuthUserView(email = "", id = "", name = "", role = "")),
+            login = LoginOutputBody(user = AuthUserView(email = "", id = "", name = "", role = "")),
             todos = mutableListOf(),
             sessions = mutableListOf(),
             devices = mutableListOf(),

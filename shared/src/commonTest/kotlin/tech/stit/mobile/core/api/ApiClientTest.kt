@@ -17,6 +17,8 @@ import kotlinx.io.IOException
 import tech.stit.mobile.core.api.generated.TodoCreateInputBody
 import tech.stit.mobile.core.config.AuthMode
 import tech.stit.mobile.core.observability.Logger
+import tech.stit.mobile.testing.FakeLocale
+import tech.stit.mobile.testing.FakePlatformDeps
 import tech.stit.mobile.testing.FakeTelemetry
 import tech.stit.mobile.testing.MemoryLogSink
 import tech.stit.mobile.testing.testConfig
@@ -37,6 +39,8 @@ class ApiClientTest {
         handler: suspend MockRequestHandleScope.(HttpRequestData, Int) -> HttpResponseData,
     ) = ApiClient(
         config = testConfig(authMode = authMode),
+        appInfo = FakePlatformDeps().appInfo,
+        locale = FakeLocale,
         engine = MockEngine { request ->
             requests += request
             handler(request, requests.size)
@@ -53,6 +57,8 @@ class ApiClientTest {
         client.execute(HttpMethod.Get, "/api/todos") {}
         val (post, get) = requests
         assertEquals("android", post.headers[HEADER_CLIENT])
+        assertEquals("tech.stit.mobile/1.0.0+1000000 (Android 16; Pixel 8; android)", post.headers[HttpHeaders.UserAgent])
+        assertEquals("ru-RU", post.headers[HttpHeaders.AcceptLanguage])
         assertEquals(36, post.headers[HEADER_REQUEST_ID]?.length)
         assertEquals(36, post.headers[HEADER_IDEMPOTENCY_KEY]?.length)
         assertEquals(null, get.headers[HEADER_IDEMPOTENCY_KEY])
@@ -65,6 +71,7 @@ class ApiClientTest {
         val client = client(AuthMode.Cookie) { _, _ -> respond("", HttpStatusCode.NoContent, json) }
         client.execute(HttpMethod.Get, "/api/users/me") {}
         assertEquals("web", requests.single().headers[HEADER_CLIENT])
+        assertEquals("tech.stit.mobile/1.0.0+1000000 (Android 16; Pixel 8; web)", requests.single().headers[HttpHeaders.UserAgent])
     }
 
     @Test
@@ -90,9 +97,7 @@ class ApiClientTest {
     @Test
     fun retriesRetryableStatusesHonouringRetryAfter() = runTest {
         val client = client { _, attempt ->
-            if (attempt ==
-                1
-            ) {
+            if (attempt == 1) {
                 respond("", HttpStatusCode.ServiceUnavailable, headersOf(HttpHeaders.RetryAfter, "1"))
             } else {
                 respond("", HttpStatusCode.NoContent, json)

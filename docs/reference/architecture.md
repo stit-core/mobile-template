@@ -30,7 +30,7 @@ shared/src/commonMain/kotlin/tech/stit/mobile/
 ├── SharedContainer.kt     composition root: SharedContainer(platform: PlatformDeps, config: AppConfig) — ленивые val + фабрики <x>Presenter()
 ├── PlatformDeps.kt        что даёт платформа: appInfo, secureStore, settings, filesDir, pushTransports, notificationPermission, telemetry, logSink, locale, connectivity
 ├── core/                  kit-граница — не импортирует entity/ и feature/
-│   ├── api/               ApiClient (Ktor: X-Request-ID, Idempotency-Key на не-GET, RetryPolicy, problem+json → ApiError), ApiJson, HttpEngine (expect), {App,Auth,Devices,Todos,Users}Api, generated/
+│   ├── api/               ApiClient (Ktor: X-Request-ID, X-Client, User-Agent, Accept-Language, Idempotency-Key на не-GET, RetryPolicy, problem+json → ApiError), ApiJson, HttpEngine (expect), {App,Auth,Devices,Todos,Users}Api, generated/
 │   ├── auth/              AuthPlugin (Bearer + повтор после 401), SessionStore (access в памяти, single-flight refresh), SecureStore, TokenPair, AuthState
 │   ├── config/            AppConfig (parse из сырых строк), AppEnv, ApiMode, AuthMode
 │   ├── requirements/      RequirementsClient (GET /api/app/requirements, FileCache, не чаще раза в 5 мин), AppRequirements (status, flags → flag(name), links)
@@ -39,7 +39,7 @@ shared/src/commonMain/kotlin/tech/stit/mobile/
 │   ├── mock/              MockTransport (Ktor MockEngine + MockState), MockScenario, DemoMode; Fixtures — из :shared:embedFixtures (build/generated)
 │   ├── observability/     Logger + LogSink (LogLevel, NoopLogSink), TelemetrySink (NoopTelemetrySink)
 │   ├── i18n/              MessageKey (error.<code> → ключ ресурса, KnownErrorCodes), LocaleProvider
-│   └── lib/               attempt {} → Result, presenterScope, newUuid, FileCache<T> (okio, JSON), Settings + SettingsKeys, AppInfo, ConnectivityMonitor, DispatcherProvider (ioDispatcher — expect), Platform + currentPlatform (expect)
+│   └── lib/               attempt {} → Result, presenterScope, newUuid, FileCache<T> (okio, JSON), Settings + SettingsKeys, AppInfo + Store, ConnectivityMonitor, DispatcherProvider (ioDispatcher — expect), Platform + currentPlatform (expect)
 ├── entity/<slug>/         <Slug>.kt (модель), <Slug>Repository.kt (final class, internal constructor; SSOT в памяти + FileCache), <Slug>Mapper.kt (internal <Slug>View.toModel()) — user, session, todo, device
 └── feature/<group>/       <X>Presenter { state: StateFlow<XState>; dispatch(XIntent); close() }, XState (data class), XIntent (sealed) — shell/Shell, auth/{Login,Sessions,DeleteAccount}, profile/Profile, todos/{TodoList,TodoDetail}, settings/Settings, push/PushOptIn, requirements/Requirements, demo/DemoPanel
 ```
@@ -94,7 +94,10 @@ Obj-C-экспорт `Shared.framework` (static). Публично — final-к�
 `StateFlow`; без generic'ов и `Any` в сигнатурах (rule `kmp-public-api`). Снимок API —
 `shared/api/jvm/shared.api` + `shared/api/shared.klib.api` (BCV, `make api-dump` / `make api-check`;
 строгая klib-валидация — `-Pstit.klibStrict=true` в `check-mac`). SKIE не подключён — фасад
-должен быть удобен и без него.
+должен быть удобен и без него. Публичные `suspend`-функции, из которых может вылететь `ApiError`,
+помечены `@Throws(ApiError::class, CancellationException::class)` (второй класс требует
+Kotlin/Native): без аннотации Obj-C-экспорт пропускает в Swift только `CancellationException`,
+остальное роняет процесс.
 
 ### Persistence
 

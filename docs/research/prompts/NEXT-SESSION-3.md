@@ -70,7 +70,7 @@ docs); эта сессия ведёт волну 3 (B2 ∥ B4) и волну 4 (
     `DemoPanelState(available, scenario, latencyMs)`.
   - **Как собирает платформа**: `AppConfig.parse(APP_ENV, API_BASE_URL, API_MODE, AUTH_MODE,
     DEEP_LINK_HOST, DEEP_LINK_SCHEME, SENTRY_DSN)` (ключи = `config/env/*.properties`);
-    `PlatformDeps` = `appInfo: AppInfo(version, build, osVersion, deviceModel)`,
+    `PlatformDeps` = `appInfo: AppInfo(appId, version, build, osVersion, deviceModel, store)`,
     `secureStore` (`KeystoreSecureStore(context)` / `KeychainSecureStore()`), `settings`
     (`DataStoreSettings(context)` / `UserDefaultsSettings()`; по одному экземпляру на процесс),
     `filesDir`, `pushTransports: List<PushTransport>`, `notificationPermission`, `telemetry`

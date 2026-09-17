@@ -3,9 +3,11 @@ package tech.stit.mobile.entity.todo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import tech.stit.mobile.core.api.ApiError
 import tech.stit.mobile.core.api.TodosApi
 import tech.stit.mobile.core.api.generated.TodoView
 import tech.stit.mobile.core.lib.FileCache
+import kotlin.coroutines.cancellation.CancellationException
 
 // SSOT задач: список в памяти + снимок последнего ответа в FileCache (офлайн — только чтение).
 class TodoRepository internal constructor(
@@ -20,20 +22,25 @@ class TodoRepository internal constructor(
         cache.read()?.let { publish(it) }
     }
 
+    @Throws(ApiError::class, CancellationException::class)
     suspend fun refresh(): List<Todo> {
         publish(api.list().data)
         return _todos.value
     }
 
+    @Throws(ApiError::class, CancellationException::class)
     suspend fun get(id: String): Todo = (views.firstOrNull { it.id == id } ?: api.get(id).data.also { upsert(it) }).toModel()
 
+    @Throws(ApiError::class, CancellationException::class)
     suspend fun create(title: String): Todo = api.create(title).data.also { upsert(it) }.toModel()
 
+    @Throws(ApiError::class, CancellationException::class)
     suspend fun toggle(id: String): Todo {
         val current = views.firstOrNull { it.id == id } ?: api.get(id).data
         return api.update(id, current.version, done = !current.done).data.also { upsert(it) }.toModel()
     }
 
+    @Throws(ApiError::class, CancellationException::class)
     suspend fun delete(id: String) {
         api.delete(id)
         publish(views.filterNot { it.id == id })
@@ -45,10 +52,8 @@ class TodoRepository internal constructor(
         cache.clear()
     }
 
-    private suspend fun upsert(view: TodoView) {
-        val rest = views.filterNot { it.id == view.id }
-        publish(if (views.any { it.id == view.id }) views.map { if (it.id == view.id) view else it } else listOf(view) + rest)
-    }
+    private suspend fun upsert(view: TodoView) =
+        publish(if (views.any { it.id == view.id }) views.map { if (it.id == view.id) view else it } else listOf(view) + views)
 
     private suspend fun publish(fresh: List<TodoView>) {
         views = fresh

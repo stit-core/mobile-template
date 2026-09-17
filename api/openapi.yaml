@@ -700,7 +700,7 @@ components:
           format: date-time
           type: string
         version:
-          description: 'версия для UserUpdateInputBody.version (B-19: бэкенд пока не отдаёт)'
+          description: 'версия для UserUpdateInputBody.version (B-20: бэкенд пока не отдаёт)'
           format: int64
           type: integer
       required:

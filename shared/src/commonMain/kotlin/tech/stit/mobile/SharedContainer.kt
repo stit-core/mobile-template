@@ -80,6 +80,8 @@ class SharedContainer internal constructor(
     internal val apiClient: ApiClient by lazy {
         ApiClient(
             config,
+            platform.appInfo,
+            platform.locale,
             mockTransport?.engine ?: platformHttpEngine(),
             authPlugin(sessionStore),
             platform.telemetry,
@@ -127,10 +129,14 @@ class SharedContainer internal constructor(
     val deviceRepository: DeviceRepository by lazy { DeviceRepository(DevicesApi(apiClient)) }
 
     fun shellPresenter(): ShellPresenter = ShellPresenter(
-        demoMode, sessionStore, userRepository, todoRepository, pushRegistrar, deepLinkParser, platform.connectivity,
-        logger(
-            "Shell",
-        ),
+        demoMode,
+        sessionStore,
+        userRepository,
+        todoRepository,
+        pushRegistrar,
+        deepLinkParser,
+        platform.connectivity,
+        logger("Shell"),
         dispatchers,
     )
 

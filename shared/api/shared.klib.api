@@ -77,6 +77,22 @@ final enum class tech.stit.mobile.core.lib/Platform : kotlin/Enum<tech.stit.mobi
     final fun values(): kotlin/Array<tech.stit.mobile.core.lib/Platform> // tech.stit.mobile.core.lib/Platform.values|values#static(){}[0]
 }
 
+final enum class tech.stit.mobile.core.lib/Store : kotlin/Enum<tech.stit.mobile.core.lib/Store> { // tech.stit.mobile.core.lib/Store|null[0]
+    enum entry AppGallery // tech.stit.mobile.core.lib/Store.AppGallery|null[0]
+    enum entry AppStore // tech.stit.mobile.core.lib/Store.AppStore|null[0]
+    enum entry Direct // tech.stit.mobile.core.lib/Store.Direct|null[0]
+    enum entry Play // tech.stit.mobile.core.lib/Store.Play|null[0]
+    enum entry RuStore // tech.stit.mobile.core.lib/Store.RuStore|null[0]
+
+    final val apiName // tech.stit.mobile.core.lib/Store.apiName|{}apiName[0]
+        final fun <get-apiName>(): kotlin/String // tech.stit.mobile.core.lib/Store.apiName.<get-apiName>|<get-apiName>(){}[0]
+    final val entries // tech.stit.mobile.core.lib/Store.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<tech.stit.mobile.core.lib/Store> // tech.stit.mobile.core.lib/Store.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): tech.stit.mobile.core.lib/Store // tech.stit.mobile.core.lib/Store.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<tech.stit.mobile.core.lib/Store> // tech.stit.mobile.core.lib/Store.values|values#static(){}[0]
+}
+
 final enum class tech.stit.mobile.core.mock/MockScenario : kotlin/Enum<tech.stit.mobile.core.mock/MockScenario> { // tech.stit.mobile.core.mock/MockScenario|null[0]
     enum entry Authenticated // tech.stit.mobile.core.mock/MockScenario.Authenticated|null[0]
     enum entry Empty // tech.stit.mobile.core.mock/MockScenario.Empty|null[0]
@@ -1644,24 +1660,30 @@ final class tech.stit.mobile.core.i18n/MessageKey { // tech.stit.mobile.core.i18
 }
 
 final class tech.stit.mobile.core.lib/AppInfo { // tech.stit.mobile.core.lib/AppInfo|null[0]
-    constructor <init>(kotlin/String, kotlin/Long, kotlin/String, kotlin/String) // tech.stit.mobile.core.lib/AppInfo.<init>|<init>(kotlin.String;kotlin.Long;kotlin.String;kotlin.String){}[0]
+    constructor <init>(kotlin/String, kotlin/String, kotlin/Long, kotlin/String, kotlin/String, tech.stit.mobile.core.lib/Store) // tech.stit.mobile.core.lib/AppInfo.<init>|<init>(kotlin.String;kotlin.String;kotlin.Long;kotlin.String;kotlin.String;tech.stit.mobile.core.lib.Store){}[0]
 
+    final val appId // tech.stit.mobile.core.lib/AppInfo.appId|{}appId[0]
+        final fun <get-appId>(): kotlin/String // tech.stit.mobile.core.lib/AppInfo.appId.<get-appId>|<get-appId>(){}[0]
     final val build // tech.stit.mobile.core.lib/AppInfo.build|{}build[0]
         final fun <get-build>(): kotlin/Long // tech.stit.mobile.core.lib/AppInfo.build.<get-build>|<get-build>(){}[0]
     final val deviceModel // tech.stit.mobile.core.lib/AppInfo.deviceModel|{}deviceModel[0]
         final fun <get-deviceModel>(): kotlin/String // tech.stit.mobile.core.lib/AppInfo.deviceModel.<get-deviceModel>|<get-deviceModel>(){}[0]
     final val osVersion // tech.stit.mobile.core.lib/AppInfo.osVersion|{}osVersion[0]
         final fun <get-osVersion>(): kotlin/String // tech.stit.mobile.core.lib/AppInfo.osVersion.<get-osVersion>|<get-osVersion>(){}[0]
+    final val store // tech.stit.mobile.core.lib/AppInfo.store|{}store[0]
+        final fun <get-store>(): tech.stit.mobile.core.lib/Store // tech.stit.mobile.core.lib/AppInfo.store.<get-store>|<get-store>(){}[0]
     final val version // tech.stit.mobile.core.lib/AppInfo.version|{}version[0]
         final fun <get-version>(): kotlin/String // tech.stit.mobile.core.lib/AppInfo.version.<get-version>|<get-version>(){}[0]
     final val versionWithBuild // tech.stit.mobile.core.lib/AppInfo.versionWithBuild|{}versionWithBuild[0]
         final fun <get-versionWithBuild>(): kotlin/String // tech.stit.mobile.core.lib/AppInfo.versionWithBuild.<get-versionWithBuild>|<get-versionWithBuild>(){}[0]
 
     final fun component1(): kotlin/String // tech.stit.mobile.core.lib/AppInfo.component1|component1(){}[0]
-    final fun component2(): kotlin/Long // tech.stit.mobile.core.lib/AppInfo.component2|component2(){}[0]
-    final fun component3(): kotlin/String // tech.stit.mobile.core.lib/AppInfo.component3|component3(){}[0]
+    final fun component2(): kotlin/String // tech.stit.mobile.core.lib/AppInfo.component2|component2(){}[0]
+    final fun component3(): kotlin/Long // tech.stit.mobile.core.lib/AppInfo.component3|component3(){}[0]
     final fun component4(): kotlin/String // tech.stit.mobile.core.lib/AppInfo.component4|component4(){}[0]
-    final fun copy(kotlin/String = ..., kotlin/Long = ..., kotlin/String = ..., kotlin/String = ...): tech.stit.mobile.core.lib/AppInfo // tech.stit.mobile.core.lib/AppInfo.copy|copy(kotlin.String;kotlin.Long;kotlin.String;kotlin.String){}[0]
+    final fun component5(): kotlin/String // tech.stit.mobile.core.lib/AppInfo.component5|component5(){}[0]
+    final fun component6(): tech.stit.mobile.core.lib/Store // tech.stit.mobile.core.lib/AppInfo.component6|component6(){}[0]
+    final fun copy(kotlin/String = ..., kotlin/String = ..., kotlin/Long = ..., kotlin/String = ..., kotlin/String = ..., tech.stit.mobile.core.lib/Store = ...): tech.stit.mobile.core.lib/AppInfo // tech.stit.mobile.core.lib/AppInfo.copy|copy(kotlin.String;kotlin.String;kotlin.Long;kotlin.String;kotlin.String;tech.stit.mobile.core.lib.Store){}[0]
     final fun equals(kotlin/Any?): kotlin/Boolean // tech.stit.mobile.core.lib/AppInfo.equals|equals(kotlin.Any?){}[0]
     final fun hashCode(): kotlin/Int // tech.stit.mobile.core.lib/AppInfo.hashCode|hashCode(){}[0]
     final fun toString(): kotlin/String // tech.stit.mobile.core.lib/AppInfo.toString|toString(){}[0]

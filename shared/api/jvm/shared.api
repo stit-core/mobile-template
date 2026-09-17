@@ -1455,17 +1455,21 @@ public final class tech/stit/mobile/core/i18n/MessageKey$Companion {
 }
 
 public final class tech/stit/mobile/core/lib/AppInfo {
-	public fun <init> (Ljava/lang/String;JLjava/lang/String;Ljava/lang/String;)V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;JLjava/lang/String;Ljava/lang/String;Ltech/stit/mobile/core/lib/Store;)V
 	public final fun component1 ()Ljava/lang/String;
-	public final fun component2 ()J
-	public final fun component3 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()J
 	public final fun component4 ()Ljava/lang/String;
-	public final fun copy (Ljava/lang/String;JLjava/lang/String;Ljava/lang/String;)Ltech/stit/mobile/core/lib/AppInfo;
-	public static synthetic fun copy$default (Ltech/stit/mobile/core/lib/AppInfo;Ljava/lang/String;JLjava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ltech/stit/mobile/core/lib/AppInfo;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun component6 ()Ltech/stit/mobile/core/lib/Store;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;JLjava/lang/String;Ljava/lang/String;Ltech/stit/mobile/core/lib/Store;)Ltech/stit/mobile/core/lib/AppInfo;
+	public static synthetic fun copy$default (Ltech/stit/mobile/core/lib/AppInfo;Ljava/lang/String;Ljava/lang/String;JLjava/lang/String;Ljava/lang/String;Ltech/stit/mobile/core/lib/Store;ILjava/lang/Object;)Ltech/stit/mobile/core/lib/AppInfo;
 	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAppId ()Ljava/lang/String;
 	public final fun getBuild ()J
 	public final fun getDeviceModel ()Ljava/lang/String;
 	public final fun getOsVersion ()Ljava/lang/String;
+	public final fun getStore ()Ltech/stit/mobile/core/lib/Store;
 	public final fun getVersion ()Ljava/lang/String;
 	public final fun getVersionWithBuild ()Ljava/lang/String;
 	public fun hashCode ()I
@@ -1516,6 +1520,18 @@ public final class tech/stit/mobile/core/lib/SettingsKeys {
 	public static final field PUSH_DECLINED Ljava/lang/String;
 	public static final field PUSH_REGISTRATION_PREFIX Ljava/lang/String;
 	public static final field THEME Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/core/lib/Store : java/lang/Enum {
+	public static final field AppGallery Ltech/stit/mobile/core/lib/Store;
+	public static final field AppStore Ltech/stit/mobile/core/lib/Store;
+	public static final field Direct Ltech/stit/mobile/core/lib/Store;
+	public static final field Play Ltech/stit/mobile/core/lib/Store;
+	public static final field RuStore Ltech/stit/mobile/core/lib/Store;
+	public final fun getApiName ()Ljava/lang/String;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Ltech/stit/mobile/core/lib/Store;
+	public static fun values ()[Ltech/stit/mobile/core/lib/Store;
 }
 
 public final class tech/stit/mobile/core/mock/DemoMode {

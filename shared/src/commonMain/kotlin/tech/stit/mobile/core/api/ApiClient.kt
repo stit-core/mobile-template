@@ -28,6 +28,8 @@ import kotlinx.io.IOException
 import kotlinx.serialization.json.Json
 import tech.stit.mobile.core.config.AppConfig
 import tech.stit.mobile.core.config.AuthMode
+import tech.stit.mobile.core.i18n.LocaleProvider
+import tech.stit.mobile.core.lib.AppInfo
 import tech.stit.mobile.core.lib.Platform
 import tech.stit.mobile.core.lib.currentPlatform
 import tech.stit.mobile.core.lib.newUuid
@@ -47,12 +49,19 @@ internal val NoRetry = AttributeKey<Boolean>("StitNoRetry")
 // Тонкий клиент над Ktor (07 §2.5): X-Request-ID, Idempotency-Key на мутациях, ретраи, problem+json → ApiError.
 internal class ApiClient(
     private val config: AppConfig,
+    appInfo: AppInfo,
+    private val locale: LocaleProvider,
     engine: HttpClientEngine,
     auth: ClientPlugin<Unit>,
     private val telemetry: TelemetrySink,
     private val logger: Logger,
     private val json: Json = ApiJson,
 ) {
+    private val client = clientName(config.authMode)
+
+    // Формат 07 §2.6: acme-mobile/1.4.2+1004002 (Android 16; Pixel 8; android).
+    private val userAgent = "${appInfo.appId}/${appInfo.versionWithBuild} (${appInfo.osVersion}; ${appInfo.deviceModel}; $client)"
+
     val http: HttpClient = HttpClient(engine) {
         expectSuccess = false
         install(ContentNegotiation) { json(json) }
@@ -77,7 +86,9 @@ internal class ApiClient(
         install(requestIdPlugin)
         defaultRequest {
             url(config.apiBaseUrl)
-            header(HEADER_CLIENT, clientName(config.authMode))
+            header(HttpHeaders.UserAgent, userAgent)
+            header(HEADER_CLIENT, client)
+            header(HttpHeaders.AcceptLanguage, locale.languageTag)
             accept(ContentType.Application.Json)
         }
     }

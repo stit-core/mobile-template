@@ -37,7 +37,7 @@ import kotlinx.serialization.encoding.*
  * @param name 
  * @param status 
  * @param updatedAt 
- * @param version версия для UserUpdateInputBody.version (B-19: бэкенд пока не отдаёт)
+ * @param version версия для UserUpdateInputBody.version (B-20: бэкенд пока не отдаёт)
  */
 @Serializable
 
@@ -55,7 +55,7 @@ data class UserView (
 
     @SerialName(value = "updated_at") @Required val updatedAt: kotlin.time.Instant,
 
-    /* версия для UserUpdateInputBody.version (B-19: бэкенд пока не отдаёт) */
+    /* версия для UserUpdateInputBody.version (B-20: бэкенд пока не отдаёт) */
     @SerialName(value = "version") val version: kotlin.Long? = null
 
 ) {

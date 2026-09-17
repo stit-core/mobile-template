@@ -22,7 +22,9 @@ paths:
   `scripts/tools/gen.sh`, не правкой спеки.
 - **Клиенты — руками**: `internal class <Resource>Api` (`App`, `Auth`, `Devices`, `Todos`,
   `Users`) над `ApiClient` (Ktor 3.6): базовый URL из `AppConfig`, `X-Request-ID` (UUID на
-  каждый запрос), `X-Client: android|ios` (`web` в cookie-режиме), `Accept: application/json`.
+  каждый запрос), `X-Client: android|ios` (`web` в cookie-режиме), `User-Agent:
+  <appId>/<version>+<build> (<os> <ver>; <model>; <client>)` из `AppInfo`, `Accept-Language` из
+  `LocaleProvider`, `Accept: application/json`.
 - **Мутации — с `Idempotency-Key`** (UUID на операцию, переиспользуется при ретрае, тело
   байт-в-байт: `Json { encodeDefaults = true }`); ретраи 408/429/502/503/504 с backoff и
   `Retry-After` (потолок 5 мин); 500 не ретраится; POST — только с ключом.

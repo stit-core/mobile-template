@@ -29,7 +29,10 @@ paths:
   `ArchitectureTest` в `jvmTest`). Swift видит их как классы; имена вариантов —
   существительные без коллизий с Foundation (`Loading`, не `Error`).
 - **Исключения — только `ApiError`** (`Http`/`Network`); внутри `shared` презентеры ловят их
-  через `attempt {}` → `Result` и кладут `MessageKey` в `State`.
+  через `attempt {}` → `Result` и кладут `MessageKey` в `State`. Публичная `suspend`-функция,
+  из которой он может вылететь, помечена `@Throws(ApiError::class, CancellationException::class)`
+  (второй класс требует Kotlin/Native): без аннотации Obj-C-экспорт пропускает в Swift только
+  `CancellationException`, любое другое исключение роняет процесс.
 - **Числа и время**: `Long`/`Int`/`Double` (не `UInt`), `kotlin.time.Instant`; строки —
   `String`; деньги — строка decimal + валюта.
 - **Имена файлов и пакетов** не менять ради Swift: Obj-C-имена выводятся из `baseName =

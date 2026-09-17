@@ -3,7 +3,6 @@ package tech.stit.mobile.core.push
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
 import io.ktor.client.engine.mock.toByteArray
-import io.ktor.client.plugins.api.createClientPlugin
 import io.ktor.client.request.HttpRequestData
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
@@ -11,21 +10,19 @@ import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.headersOf
 import kotlinx.coroutines.test.runTest
-import tech.stit.mobile.core.api.ApiClient
 import tech.stit.mobile.core.api.ApiJson
 import tech.stit.mobile.core.api.DevicesApi
 import tech.stit.mobile.core.api.generated.DeviceRegisterInputBody
-import tech.stit.mobile.core.lib.AppInfo
 import tech.stit.mobile.core.lib.SettingsKeys
 import tech.stit.mobile.core.observability.Logger
 import tech.stit.mobile.testing.FakeClock
 import tech.stit.mobile.testing.FakeLocale
 import tech.stit.mobile.testing.FakeNotificationPermission
+import tech.stit.mobile.testing.FakePlatformDeps
 import tech.stit.mobile.testing.FakePushTransport
 import tech.stit.mobile.testing.FakeSettings
-import tech.stit.mobile.testing.FakeTelemetry
 import tech.stit.mobile.testing.MemoryLogSink
-import tech.stit.mobile.testing.testConfig
+import tech.stit.mobile.testing.testApiClient
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -58,10 +55,10 @@ class PushRegistrarTest {
     }
 
     private val registrar = PushRegistrar(
-        api = DevicesApi(ApiClient(testConfig(), engine, createClientPlugin("Noop") {}, FakeTelemetry(), Logger("t", MemoryLogSink()))),
+        api = DevicesApi(testApiClient(engine)),
         transports = listOf(fcm, rustore),
         permission = permission,
-        appInfo = AppInfo("1.0.0", 1, "Android 16", "Pixel 8"),
+        appInfo = FakePlatformDeps().appInfo.copy(build = 1),
         locale = FakeLocale,
         settings = settings,
         sandbox = true,

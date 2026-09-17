@@ -8,6 +8,7 @@ import kotlinx.coroutines.sync.withLock
 import tech.stit.mobile.core.api.ApiError
 import tech.stit.mobile.core.config.AuthMode
 import tech.stit.mobile.core.observability.Logger
+import kotlin.coroutines.cancellation.CancellationException
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.Instant
@@ -51,6 +52,7 @@ class SessionStore internal constructor(
     }
 
     // Токен для заголовка: истёкший access обновляется до запроса, а не после 401.
+    @Throws(ApiError::class, CancellationException::class)
     suspend fun validAccessToken(): String? {
         val current = access
         return when {
@@ -62,6 +64,7 @@ class SessionStore internal constructor(
     }
 
     // true — можно повторить запрос с новым access (или обновлённой cookie); false — сессии больше нет.
+    @Throws(ApiError::class, CancellationException::class)
     suspend fun refreshAfter(staleAccess: String?): Boolean = mutex.withLock {
         if (mode == AuthMode.Cookie) return refreshLocked(null)
         val current = access

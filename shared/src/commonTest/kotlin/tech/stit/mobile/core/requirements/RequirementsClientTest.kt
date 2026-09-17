@@ -2,7 +2,7 @@ package tech.stit.mobile.core.requirements
 
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
-import io.ktor.client.plugins.api.createClientPlugin
+import io.ktor.client.request.HttpRequestData
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
@@ -11,21 +11,20 @@ import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import okio.Path.Companion.toPath
 import okio.fakefilesystem.FakeFileSystem
-import tech.stit.mobile.core.api.ApiClient
 import tech.stit.mobile.core.api.ApiJson
 import tech.stit.mobile.core.api.AppApi
 import tech.stit.mobile.core.api.generated.AppLinksView
 import tech.stit.mobile.core.api.generated.AppRequirementsView
-import tech.stit.mobile.core.lib.AppInfo
 import tech.stit.mobile.core.lib.FileCache
 import tech.stit.mobile.core.observability.Logger
 import tech.stit.mobile.testing.FakeClock
-import tech.stit.mobile.testing.FakeTelemetry
+import tech.stit.mobile.testing.FakePlatformDeps
 import tech.stit.mobile.testing.MemoryLogSink
 import tech.stit.mobile.testing.TestDispatchers
-import tech.stit.mobile.testing.testConfig
+import tech.stit.mobile.testing.testApiClient
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Instant
 
@@ -37,26 +36,35 @@ class RequirementsClientTest {
     private var status = HttpStatusCode.OK
     private var body = ok
     private var calls = 0
+    private var lastRequest: HttpRequestData? = null
     private val clock = FakeClock()
     private val fileSystem = FakeFileSystem()
+    private val appInfo = FakePlatformDeps().appInfo
 
     private fun client(scheduler: kotlinx.coroutines.test.TestCoroutineScheduler): RequirementsClient {
         val engine = MockEngine { request ->
             calls++
-            assertEquals("android", request.url.parameters["platform"])
-            assertEquals("1.0.0", request.url.parameters["version"])
+            lastRequest = request
             respond(body, status, json)
         }
-        val api = AppApi(ApiClient(testConfig(), engine, createClientPlugin("Noop") {}, FakeTelemetry(), Logger("t", MemoryLogSink())))
-        val cache =
-            FileCache(
-                "/cache/requirements.json".toPath(),
-                AppRequirements.serializer(),
-                ApiJson,
-                fileSystem,
-                TestDispatchers(StandardTestDispatcher(scheduler)),
-            )
-        return RequirementsClient(api, cache, AppInfo("1.0.0", 1, "Android 16", "Pixel 8"), clock, Logger("t", MemoryLogSink()))
+        val cache = FileCache(
+            "/cache/requirements.json".toPath(),
+            AppRequirements.serializer(),
+            ApiJson,
+            fileSystem,
+            TestDispatchers(StandardTestDispatcher(scheduler)),
+        )
+        return RequirementsClient(AppApi(testApiClient(engine)), cache, appInfo, clock, Logger("t", MemoryLogSink()))
+    }
+
+    @Test
+    fun fetchIdentifiesPlatformVersionBuildAndStore() = runTest {
+        client(testScheduler).fetch()
+        val query = assertNotNull(lastRequest).url.parameters
+        assertEquals("android", query["platform"])
+        assertEquals("1.0.0", query["version"])
+        assertEquals("1000000", query["build"])
+        assertEquals("direct", query["store"])
     }
 
     @Test
