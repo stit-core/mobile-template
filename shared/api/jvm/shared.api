@@ -1480,6 +1480,14 @@ public abstract interface class tech/stit/mobile/core/lib/ConnectivityMonitor {
 	public abstract fun getOnline ()Lkotlinx/coroutines/flow/StateFlow;
 }
 
+public final class tech/stit/mobile/core/lib/ConnectivityState : tech/stit/mobile/core/lib/ConnectivityMonitor {
+	public fun <init> ()V
+	public fun <init> (Z)V
+	public synthetic fun <init> (ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getOnline ()Lkotlinx/coroutines/flow/StateFlow;
+	public final fun update (Z)V
+}
+
 public final class tech/stit/mobile/core/lib/DefaultDispatchers : tech/stit/mobile/core/lib/DispatcherProvider {
 	public static final field INSTANCE Ltech/stit/mobile/core/lib/DefaultDispatchers;
 	public fun getDefault ()Lkotlinx/coroutines/CoroutineDispatcher;

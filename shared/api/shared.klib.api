@@ -1689,6 +1689,15 @@ final class tech.stit.mobile.core.lib/AppInfo { // tech.stit.mobile.core.lib/App
     final fun toString(): kotlin/String // tech.stit.mobile.core.lib/AppInfo.toString|toString(){}[0]
 }
 
+final class tech.stit.mobile.core.lib/ConnectivityState : tech.stit.mobile.core.lib/ConnectivityMonitor { // tech.stit.mobile.core.lib/ConnectivityState|null[0]
+    constructor <init>(kotlin/Boolean = ...) // tech.stit.mobile.core.lib/ConnectivityState.<init>|<init>(kotlin.Boolean){}[0]
+
+    final val online // tech.stit.mobile.core.lib/ConnectivityState.online|{}online[0]
+        final fun <get-online>(): kotlinx.coroutines.flow/StateFlow<kotlin/Boolean> // tech.stit.mobile.core.lib/ConnectivityState.online.<get-online>|<get-online>(){}[0]
+
+    final fun update(kotlin/Boolean) // tech.stit.mobile.core.lib/ConnectivityState.update|update(kotlin.Boolean){}[0]
+}
+
 final class tech.stit.mobile.core.lib/UserDefaultsSettings : tech.stit.mobile.core.lib/Settings { // tech.stit.mobile.core.lib/UserDefaultsSettings|null[0]
     constructor <init>(platform.Foundation/NSUserDefaults = ...) // tech.stit.mobile.core.lib/UserDefaultsSettings.<init>|<init>(platform.Foundation.NSUserDefaults){}[0]
 
