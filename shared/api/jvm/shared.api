@@ -1,0 +1,28 @@
+public final class tech/stit/mobile/core/config/AppEnv : java/lang/Enum {
+	public static final field Companion Ltech/stit/mobile/core/config/AppEnv$Companion;
+	public static final field Demo Ltech/stit/mobile/core/config/AppEnv;
+	public static final field Dev Ltech/stit/mobile/core/config/AppEnv;
+	public static final field Prod Ltech/stit/mobile/core/config/AppEnv;
+	public static final field Staging Ltech/stit/mobile/core/config/AppEnv;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Ltech/stit/mobile/core/config/AppEnv;
+	public static fun values ()[Ltech/stit/mobile/core/config/AppEnv;
+}
+
+public final class tech/stit/mobile/core/config/AppEnv$Companion {
+	public final fun parse (Ljava/lang/String;)Ltech/stit/mobile/core/config/AppEnv;
+}
+
+public final class tech/stit/mobile/core/lib/Platform : java/lang/Enum {
+	public static final field Android Ltech/stit/mobile/core/lib/Platform;
+	public static final field Ios Ltech/stit/mobile/core/lib/Platform;
+	public static final field Jvm Ltech/stit/mobile/core/lib/Platform;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Ltech/stit/mobile/core/lib/Platform;
+	public static fun values ()[Ltech/stit/mobile/core/lib/Platform;
+}
+
+public final class tech/stit/mobile/core/lib/Platform_jvmKt {
+	public static final fun getCurrentPlatform ()Ltech/stit/mobile/core/lib/Platform;
+}
+

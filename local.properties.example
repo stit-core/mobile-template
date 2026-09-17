@@ -1,0 +1,2 @@
+# Копия → local.properties (в .gitignore). Нужен, только если ANDROID_HOME не задан в окружении.
+sdk.dir=/абсолютный/путь/к/android-sdk

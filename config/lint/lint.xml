@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Severity-переопределения Android Lint; baseline не используется — шаблон стартует с нулём долгов. -->
+<lint>
+    <!-- Версии ведёт libs.versions.toml с двухнедельной выдержкой, а не Lint. -->
+    <issue id="GradleDependency" severity="ignore" />
+    <issue id="NewerVersionAvailable" severity="ignore" />
+</lint>

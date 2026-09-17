@@ -1,0 +1,107 @@
+# Профиль поверх detekt default (buildUponDefaultConfig = true) — только дельты.
+# Формат не судим: это Spotless/ktlint (detekt-formatting не подключён).
+build:
+  maxIssues: 0
+
+config:
+  validation: true
+  warningsAsErrors: true
+
+complexity:
+  LongParameterList:
+    functionThreshold: 8
+    constructorThreshold: 10
+    ignoreAnnotated: ['Composable', 'Inject']
+  TooManyFunctions:
+    ignoreAnnotatedFunctions: ['Composable']
+    thresholdInFiles: 20
+    thresholdInClasses: 20
+
+style:
+  MagicNumber:
+    # Именованная константа — и есть починка MagicNumber: токены (0xFF…, dp) живут в property-декларациях
+    # designsystem, а в композаблах — только через StitTheme.
+    ignorePropertyDeclaration: true
+    ignoreAnnotated: ['Preview']
+  ForbiddenImport:
+    active: true
+    imports:
+      - value: 'android.util.Log'
+        reason: 'Логи — через Logger из shared core/observability, не через android.util.Log.'
+      - value: 'java.util.Date'
+        reason: 'Время — только kotlinx-datetime / java.time.'
+      - value: 'java.util.logging.*'
+        reason: 'Логи — через Logger из shared core/observability.'
+      - value: 'kotlinx.coroutines.GlobalScope'
+        reason: 'Корутина без владельца: используй scope презентера/ViewModel.'
+      - value: 'androidx.compose.material.*'
+        reason: 'Material 2 запрещён — только androidx.compose.material3.'
+      - value: 'retrofit2.*'
+        reason: 'Сеть живёт в shared на Ktor.'
+      - value: 'androidx.security.crypto.*'
+        reason: 'Секреты — через SecureStore из shared (Keystore AES-GCM), библиотека deprecated.'
+      - value: 'androidx.compose.ui.test.junit4.createComposeRule'
+        reason: 'Compose Test API v1 deprecated — импортируй из androidx.compose.ui.test.junit4.v2.'
+      - value: 'androidx.compose.ui.test.junit4.createAndroidComposeRule'
+        reason: 'Compose Test API v1 deprecated — импортируй из androidx.compose.ui.test.junit4.v2.'
+      - value: 'androidx.compose.ui.test.junit4.createEmptyComposeRule'
+        reason: 'Compose Test API v1 deprecated — импортируй из androidx.compose.ui.test.junit4.v2.'
+    forbiddenPatterns: ''
+  ForbiddenComment:
+    active: true
+    comments:
+      - value: 'TODO:'
+        reason: 'TODO в коде не живёт — незакрытое идёт строкой в .claude/plans/roadmap.md.'
+      - value: 'FIXME:'
+        reason: 'FIXME в main-ветке не живёт — заводи запись в roadmap.'
+      - value: 'STOPSHIP:'
+        reason: 'STOPSHIP нельзя мёржить в main.'
+  MaxLineLength:
+    maxLineLength: 140
+    excludeCommentStatements: true
+
+naming:
+  FunctionNaming:
+    # @Composable-функции именуются с большой буквы
+    ignoreAnnotated: ['Composable']
+
+Compose:
+  ComposableAnnotationNaming:
+    active: true
+  ComposableNaming:
+    active: true
+  ComposableParamOrder:
+    active: true
+  CompositionLocalAllowlist:
+    active: true
+    allowedCompositionLocals: 'LocalStitSpacing,LocalStitColors'
+  CompositionLocalNaming:
+    active: true
+  ContentEmitterReturningValues:
+    active: true
+  ModifierComposed:
+    active: true
+  ModifierMissing:
+    active: true
+  ModifierNotUsedAtRoot:
+    active: true
+  ModifierReused:
+    active: true
+  ModifierWithoutDefault:
+    active: true
+  MultipleEmitters:
+    active: true
+  MutableParams:
+    active: true
+  PreviewAnnotationNaming:
+    active: true
+  PreviewPublic:
+    active: true
+  RememberMissing:
+    active: true
+  UnstableCollections:
+    active: false
+  ViewModelForwarding:
+    active: true
+  ViewModelInjection:
+    active: true

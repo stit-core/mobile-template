@@ -1,0 +1,39 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <mobile-template:shared>
+final enum class tech.stit.mobile.core.config/AppEnv : kotlin/Enum<tech.stit.mobile.core.config/AppEnv> { // tech.stit.mobile.core.config/AppEnv|null[0]
+    enum entry Demo // tech.stit.mobile.core.config/AppEnv.Demo|null[0]
+    enum entry Dev // tech.stit.mobile.core.config/AppEnv.Dev|null[0]
+    enum entry Prod // tech.stit.mobile.core.config/AppEnv.Prod|null[0]
+    enum entry Staging // tech.stit.mobile.core.config/AppEnv.Staging|null[0]
+
+    final val entries // tech.stit.mobile.core.config/AppEnv.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<tech.stit.mobile.core.config/AppEnv> // tech.stit.mobile.core.config/AppEnv.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): tech.stit.mobile.core.config/AppEnv // tech.stit.mobile.core.config/AppEnv.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<tech.stit.mobile.core.config/AppEnv> // tech.stit.mobile.core.config/AppEnv.values|values#static(){}[0]
+
+    final object Companion { // tech.stit.mobile.core.config/AppEnv.Companion|null[0]
+        final fun parse(kotlin/String): tech.stit.mobile.core.config/AppEnv // tech.stit.mobile.core.config/AppEnv.Companion.parse|parse(kotlin.String){}[0]
+    }
+}
+
+final enum class tech.stit.mobile.core.lib/Platform : kotlin/Enum<tech.stit.mobile.core.lib/Platform> { // tech.stit.mobile.core.lib/Platform|null[0]
+    enum entry Android // tech.stit.mobile.core.lib/Platform.Android|null[0]
+    enum entry Ios // tech.stit.mobile.core.lib/Platform.Ios|null[0]
+    enum entry Jvm // tech.stit.mobile.core.lib/Platform.Jvm|null[0]
+
+    final val entries // tech.stit.mobile.core.lib/Platform.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<tech.stit.mobile.core.lib/Platform> // tech.stit.mobile.core.lib/Platform.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): tech.stit.mobile.core.lib/Platform // tech.stit.mobile.core.lib/Platform.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<tech.stit.mobile.core.lib/Platform> // tech.stit.mobile.core.lib/Platform.values|values#static(){}[0]
+}
+
+final val tech.stit.mobile.core.lib/currentPlatform // tech.stit.mobile.core.lib/currentPlatform|{}currentPlatform[0]
+    final fun <get-currentPlatform>(): tech.stit.mobile.core.lib/Platform // tech.stit.mobile.core.lib/currentPlatform.<get-currentPlatform>|<get-currentPlatform>(){}[0]

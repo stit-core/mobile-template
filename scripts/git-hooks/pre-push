@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# pre-push: канонический локальный gate перед отправкой в remote. CI-раннеров нет — это последняя проверка,
+# поэтому с GATE_RELEASE=1 (R8 ломает то, что живо в debug). check-mac сюда не входит: SSH в хуке недопустим.
+#
+# --no-verify запрещён политикой проекта. Если действительно нужно пропустить (WIP-ветка) —
+# пользователь руками выставляет SKIP_PREPUSH=1 git push.
+set -euo pipefail
+
+if [ "${SKIP_PREPUSH:-}" = "1" ]; then
+    echo "pre-push: SKIP_PREPUSH=1 — пропускаю проверки"
+    exit 0
+fi
+
+cd "$(git rev-parse --show-toplevel)"
+echo "pre-push: GATE_RELEASE=1 make check"
+GATE_RELEASE=1 exec make check

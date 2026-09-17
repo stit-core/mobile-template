@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Conventional Commits. SSOT по типам — этот паттерн и CLAUDE.md «Git workflow»; менять одним коммитом.
+set -euo pipefail
+COMMIT_MSG_FILE="$1"
+PATTERN='^(feat|fix|refactor|docs|test|chore|meta|perf|style)(\([a-z0-9_/-]+\))?(!)?: .{1,72}$'
+HEAD_LINE="$(head -n 1 "$COMMIT_MSG_FILE" | sed 's/[[:space:]]*$//')"
+if ! [[ "$HEAD_LINE" =~ $PATTERN ]]; then
+    echo "ERROR: первая строка коммита должна быть Conventional Commit"
+    echo "Формат: <type>(<scope>)?: <subject>  (≤72 символа)"
+    echo "Допустимые types: feat, fix, refactor, docs, test, chore, meta, perf, style"
+    echo "Пример: feat(todos): deep link на карточку задачи"
+    echo "        meta(rules): выровнять SSOT commit-prefix"
+    echo "Текущая первая строка: $HEAD_LINE"
+    exit 1
+fi

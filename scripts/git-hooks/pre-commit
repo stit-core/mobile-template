@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# pre-commit — только проверки, без мутаций дерева (автоформат — руками: make fmt).
+# Kotlin: Spotless + detekt (1–3 с тёплые); Swift: swift format lint по staged-файлам; секреты подписи — никогда.
+set -euo pipefail
+cd "$(git rev-parse --show-toplevel)"
+
+secrets=$(git diff --cached --name-only --diff-filter=ACMR | grep -E '(\.jks|\.keystore|\.p12|\.p8|\.mobileprovision)$|(^|/)(local\.properties|Local\.xcconfig|\.env\.local)$' || true)
+if [ -n "$secrets" ]; then
+    echo "ERROR: в коммит попали ключи/локальный конфиг — они живут вне репозитория (Vaultwarden, .gitignore):"
+    echo "$secrets" | sed 's/^/  /'
+    exit 1
+fi
+
+kotlin=$(git diff --cached --name-only --diff-filter=ACMR | grep -E '\.(kt|kts)$' || true)
+if [ -n "$kotlin" ]; then
+    echo "pre-commit: spotlessCheck + detekt"
+    bash scripts/tools/gradle-step.sh "format kotlin" spotlessCheck
+    bash scripts/tools/gradle-step.sh "detekt" detekt
+fi
+
+swift=$(git diff --cached --name-only --diff-filter=ACMR | grep -E '\.swift$' || true)
+if [ -n "$swift" ]; then
+    echo "pre-commit: swift format lint"
+    # shellcheck disable=SC2086
+    bash scripts/tools/swift-step.sh "format swift" swift format lint --strict $swift
+fi
+
+# Напоминание: формат сообщения коммита проверяет commit-msg hook. Установка хуков — make setup.

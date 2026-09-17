@@ -12,3 +12,25 @@
 **/Pods/
 **/node_modules/
 *.log
+
+# сборка и локальное окружение
+*.hprof
+Local.xcconfig
+*.xcresult
+.env.local
+dist/
+.claude/settings.local.json
+.claude/skills/android-cli/
+.claude/skills/agp-9-upgrade/
+.claude/skills/edge-to-edge/
+.claude/skills/navigation-3/
+.claude/skills/navigation-event/
+.claude/skills/r8-analyzer/
+.claude/skills/testing-setup/
+
+# ключи и профили подписи — только вне репозитория (Vaultwarden)
+*.jks
+*.keystore
+*.p12
+*.p8
+*.mobileprovision
