@@ -72,8 +72,9 @@ git mv shared/src/commonMain/kotlin/tech/stit/mobile shared/src/commonMain/kotli
 
 Проверь: `androidApp/app/build.gradle.kts` (`applicationId`, `.demo`), `namespace` каждого
 модуля, `config/env/*.properties` (`DEEP_LINK_HOST`, `DEEP_LINK_SCHEME`),
-`iosApp/Config/*.xcconfig` (`PRODUCT_BUNDLE_IDENTIFIER`, team — только xcconfig, `.pbxproj` не
-трогать), `Makefile` `run-android` (applicationId), Konsist `ArchitectureTest` в `shared/src/jvmTest`
+`iosApp/Config/*.xcconfig` (`BUNDLE_ID` в `Base.xcconfig`, team — только xcconfig, `.pbxproj` не
+трогать), `e2e/*/*.yaml` (`appId`; `make run-android` берёт id из `scripts/tools/app-id.sh`),
+Konsist `ArchitectureTest` в `shared/src/jvmTest`
 (`PKG`) и в `androidApp/app` (`FEATURE_PACKAGE`), `.gate-fixtures/*` (пути пакетов), а также пути
 со слэшами `tech/stit/mobile` — `shared/build.gradle.kts` (`embedFixtures` → `Fixtures.kt`),
 `scripts/tools/gen.sh`/`gen-check.sh` (`TARGET`), `config/openapi/kotlin-models.yaml`; после смены

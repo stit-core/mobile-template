@@ -39,6 +39,20 @@ Program) — резерв для подписи и загрузки в TestFligh
 `build/gate-logs/mac.last` (`<дата> (git <sha>)`) при зелёном `check`. Без `MAC_HOST` — fail-fast:
 `make check-full` и релиз не изображают зелёный.
 
+## Первый `check-mac`
+
+iOS не верифицирован на Mac: Linux-гейт проверяет только `Packages/Pure`, `Tools/archlint`,
+swift-format и SwiftLint всего дерева. В Xcode на хосте перед первым зелёным `check-mac`:
+подключить локальные пакеты `Packages/{Pure,Core,Features,TestSupport}` к таргету `iosApp` и
+связать `Shared.framework` с пакетами (`FRAMEWORK_SEARCH_PATHS` → `shared/build/xcode-frameworks`,
+build phase `scripts/embed-shared.sh`); завести per-env конфигурации и схемы `Staging|Prod|Demo`
+на `Config/*.xcconfig` (в репо — shared-схема `Dev`, с ней работают `mac.sh` и `run-ios`);
+добавить UI-test таргет `iosAppUITests` (`TestPlans/UI.xctestplan`, `UITests/AppLaunchTests.swift`);
+зафиксировать `Package.resolved` (`sentry-cocoa` 9.28, `swift-snapshot-testing` 1.19.5); записать
+эталоны `__Snapshots__/` (`make snapshot-record`). Результат коммитится вместе с
+`Package.resolved` и `__Snapshots__/`; `build/gate-logs/mac.last` — отметка верификации
+(`make status` → `ios verified`).
+
 ## Вербы
 
 | верб | что делает |

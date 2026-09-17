@@ -41,10 +41,10 @@ status: draft
 
 ## Generates
 
-- `androidApp/app/src/main/AndroidManifest.xml` — intent-filters (`autoVerify`) по таблице хостов + custom scheme
-- `iosApp/App/App.entitlements` — `applinks:<host>` per env (через xcconfig)
-- `shared/…/core/deeplink/{Route,DeepLinkParser}.kt` + тест на каждую строку «Paths to Route»
-- `config/env/*.properties` — `DEEP_LINK_HOST`, `DEEP_LINK_SCHEME`
+- `androidApp/app/src/main/AndroidManifest.xml` — intent-filter `autoVerify` с `${DEEP_LINK_HOST}` + `pathPrefix` по таблице путей и custom scheme `${DEEP_LINK_SCHEME}` (плейсхолдеры из `config/env`)
+- `iosApp/App/App.entitlements` — `applinks:$(DEEP_LINK_HOST)`; `App/Info.plist` — `CFBundleURLSchemes $(DEEP_LINK_SCHEME)` (значения — `iosApp/Config/*.xcconfig`)
+- `shared/…/core/deeplink/{Route,DeepLinkParser}.kt` + `DeepLinkParserTest` на каждую строку «Paths to Route»; стадия `deeplinks-check` сверяет манифест, env и тесты с этой таблицей
+- `config/env/*.properties`, `iosApp/Config/*.xcconfig` — `DEEP_LINK_HOST`, `DEEP_LINK_SCHEME`
 - INFRA-HANDOFF → `<org>/infra`: `MOBILE_ANDROID_APP_ID`, `MOBILE_ANDROID_SHA256_{UPLOAD,PLAY,RUSTORE}`,
   `MOBILE_IOS_TEAM_ID`, `MOBILE_IOS_BUNDLE_ID` для сервиса `wellknown` (per env)
 

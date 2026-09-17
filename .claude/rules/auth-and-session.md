@@ -32,15 +32,17 @@ paths:
 - **`AuthMode.Cookie` — режим совместимости** для бэкенда без Bearer-ветки (B-1…B-3):
   включается только `docs/stack/auth.md#mode = cookie` и `AUTH_MODE` в `config/env`;
   «оставаться в системе» в нём не гарантируется; `/init-service` печатает BACKEND-HANDOFF.
-- **Биометрия — разблокировка ключа `SecureStore`, не замена сессии**; опция
-  `AUTH_BIOMETRIC_UNLOCK`.
+- **Биометрия (Android, `AUTH_BIOMETRIC_UNLOCK`) — замок UI при живой сессии, не замена входа**:
+  `DefaultBiometricUnlock` (`BIOMETRIC_STRONG | DEVICE_CREDENTIAL`, хост — `AppCompatActivity`)
+  → `ShellViewModel.unlocked` → `LockedState`; на iOS реализации нет.
 - **Refresh не логируется** (`Logger`/`TelemetrySink` получают только `method path → status`;
   `beforeSend` Sentry на платформе режет `Authorization`, `Cookie`, тела auth);
-  `allowBackup`/`dataExtractionRules` исключают хранилище токенов; Keychain чистится при
-  первом запуске (переживает удаление приложения).
-- **Pinning выключен** (Let's Encrypt ротирует leaf каждые 60–90 дней); шов —
-  `network_security_config.xml` / `NSPinnedDomains` с пустым набором и kill-switch через
-  `requirements.flags.pinning`. `cleartextTrafficPermitted=false`, ATS без исключений.
+  `backup_rules.xml`/`data_extraction_rules.xml` исключают `sharedpref`, шифртекст в DataStore
+  без Keystore-ключа бесполезен; Keychain чистится при первом запуске (`FirstLaunchReset`,
+  переживает удаление приложения).
+- **Pinning выключен** (Let's Encrypt ротирует leaf каждые 60–90 дней); файлов
+  `network_security_config.xml`/`NSPinnedDomains` в шаблоне нет — шов с kill-switch
+  `requirements.flags.pinning`; cleartext запрещён (targetSdk ≥ 28), ATS без исключений.
 - **`security-crypto` (EncryptedSharedPreferences) запрещён** — deprecated (detekt
   `ForbiddenImport`); `UserDefaults`/`SharedPreferences` для токенов — нет.
 - **Обязательные экраны reference-фичи `auth`**: логин, список сессий

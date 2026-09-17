@@ -12,20 +12,21 @@
 ## Раскладка
 
 ```
-androidApp/core/platform/src/main/kotlin/…/permissions/<Slug>Gate.kt     # запрос через Activity Result API, состояние Granted/Denied/PermanentlyDenied
-androidApp/core/ui/src/main/kotlin/…/<Slug>RationaleScreen.kt            # pre-prompt (текст из rationale, ru/en), кнопки «Разрешить»/«Позже»
-androidApp/app/src/main/AndroidManifest.xml                                # <uses-permission …/> (+ maxSdkVersion где уместно)
-iosApp/Packages/Core/Sources/Platform/Permissions/<Slug>.swift             # запрос через системный API, тот же enum состояния
-iosApp/App/Info.plist                                                      # NS<…>UsageDescription (через xcconfig, ru/en InfoPlist.xcstrings)
-shared/…/PlatformDeps.kt                                                   # + интерфейс, если состояние нужно презентеру (например, notifications)
-docs/stack/compliance.md                                                   # + строка permissions-матрицы: id · зачем · данные · Data safety
+androidApp/core/platform/src/main/kotlin/…/<Slug>PermissionGate.kt     # Activity Result API; образец — NotificationPermissionGate (register(activity) в MainActivity.onCreate, suspend isGranted()/request())
+androidApp/feature/<group>/…/<Slug>OptIn{Route,Screen,ViewModel}.kt      # pre-prompt (текст из rationale, ru/en), кнопки «Разрешить»/«Позже»; образец — PushOptIn* в feature/settings
+androidApp/core/platform/src/main/AndroidManifest.xml                     # <uses-permission …/> в модуле, который его использует (+ maxSdkVersion где уместно)
+iosApp/Packages/Core/Sources/Platform/<Slug>Permission.swift              # системный API; образец — NotificationCenterPermission (suspend Boolean → KotlinBoolean)
+iosApp/Packages/Features/Sources/<Group>Feature/<Slug>OptInView.swift     # pre-prompt; образец — PushOptInView
+iosApp/App/Info.plist                                                     # NS<…>UsageDescription (ru/en)
+shared/…/PlatformDeps.kt                                                  # + интерфейс, если состояние нужно презентеру (образец — core/push/NotificationPermission)
+docs/stack/compliance.md                                                  # + строка permissions-матрицы: id · зачем · данные · Data safety
 ```
 
 ## Шаги
 
 1. Строка в `compliance.md` (обоснование из rationale карты, что собирается, куда уходит).
-2. Android: RED — Robolectric-тест `<Slug>RationaleScreen` (состояния) → gate → манифест.
-3. iOS: usage-description непустой и не плейсхолдер (L-3) → `Permissions/<Slug>.swift` (Mac-verify).
+2. Android: RED — Robolectric-тест pre-prompt-экрана (состояния) → gate → манифест модуля.
+3. iOS: usage-description непустой и не плейсхолдер (L-3) → `Platform/<Slug>Permission.swift` (Mac-verify).
 4. Фича, которой нужно разрешение, обрабатывает `Denied` fallback'ом из карты.
 5. `make check`; при новом типе собираемых данных — Data safety / Nutrition Label (L-13/L-14)
    человеку в STORE-HANDOFF.

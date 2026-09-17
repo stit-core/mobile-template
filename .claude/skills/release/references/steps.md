@@ -13,7 +13,7 @@
 |---|---|---|---|
 | `<app>-<X.Y.Z>-<code>-prod.aab` | Android | `make release-android` (`bundleProdRelease`) | да |
 | `<app>-<X.Y.Z>-<code>-prod.apk` | Android | то же (`assembleProdRelease`, universal; RuStore принимает AAB и APK) | да |
-| `mapping-<X.Y.Z>-<code>.txt` | Android | R8 | да (дубль того, что ушло в Sentry) |
+| `mapping-<X.Y.Z>-<code>.txt` | Android | R8 (`build-android.sh` → `dist/`); в GlitchTip заливает `sentry-cli upload-proguard` на шаге 2 (Sentry Gradle-плагин не подключён) | да (дубль того, что ушло в GlitchTip) |
 | `<app>-<X.Y.Z>-<code>-ios.ipa` | iOS | `xcodebuild -exportArchive` (Mac) | при `ios ∈ platforms` |
 | `<app>-<X.Y.Z>-<code>-ios-dSYM.zip` | iOS | из архива (Mac) | при iOS |
 | `checksums.sha256` | обе | `build-android.sh` (+ iOS-ассеты дописываются) | да |
@@ -29,6 +29,7 @@
 затем на хосте:
 
 ```bash
+# схема Prod — per-env схема проекта, заведена в Xcode на Mac (docs/reference/mac-host.md § Первый check-mac)
 xcodebuild archive -project iosApp/iosApp.xcodeproj -scheme Prod -destination 'generic/platform=iOS' \
   -archivePath build/mac/App.xcarchive
 xcodebuild -exportArchive -archivePath build/mac/App.xcarchive -exportOptionsPlist iosApp/ExportOptions.plist \

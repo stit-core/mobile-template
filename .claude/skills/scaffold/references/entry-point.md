@@ -13,29 +13,33 @@
 ## deep-link
 
 ```
-shared/…/core/deeplink/DeepLinkParser.kt           # + ветка: https://<host>/<pattern> и <scheme>://<pattern> → Route.<Key>(id)
-shared/src/commonTest/…/DeepLinkParserTest.kt      # + строка таблицы: url → Route (и негатив: чужой хост → null)
-androidApp/app/src/main/AndroidManifest.xml         # intent-filter autoVerify: scheme https + host ${DEEP_LINK_HOST} + pathPattern; custom scheme
-iosApp/App/App.entitlements                          # applinks:<host> (через xcconfig per env)
-docs/stack/deep-links.md                             # + строка «путь → Route → сессия → pending»
+shared/…/core/deeplink/DeepLinkParser.kt            # + ветка: https://<host>/<pattern> и <scheme>://<pattern> → Route.<Key>(id)
+shared/src/commonTest/…/DeepLinkParserTest.kt       # + строка таблицы: url → Route (и негатив: чужой хост → null); deeplinks-check ищет здесь каждый путь
+androidApp/app/src/main/AndroidManifest.xml          # + <data android:pathPrefix="/<pattern>"/> в intent-filter autoVerify (host — ${DEEP_LINK_HOST}, scheme — ${DEEP_LINK_SCHEME})
+androidApp/core/navigation/…/Destination.kt          # + вариант Destination + ветка Route.toDestination()
+iosApp/Packages/Core/Sources/Routing/AppRoute.swift  # + case (+ tab); SharedBridge/RouteBridge.swift — маппинг из Route; Router.open, RootView.destination
+iosApp/App/App.entitlements                          # applinks:$(DEEP_LINK_HOST) уже есть — новый хост = новое значение в Config/*.xcconfig
+docs/stack/deep-links.md                             # + строка «путь → Route → сессия → pending» в ## Paths to Route
 ```
 
-Шаги: строка в `deep-links.md` → RED `DeepLinkParserTest` → ветка парсера → intent-filter +
-`applinks` → `make api-dump` (если `Route` новый) → INFRA-HANDOFF при новом хосте (AASA
-`components` меняет `<org>/infra`) → `make check`.
+Шаги: строка в `deep-links.md` → RED `DeepLinkParserTest` → ветка парсера → `pathPrefix` в
+манифесте → `Destination`/`AppRoute` → `make api-dump` (если `Route` новый) → `make deeplinks-check`
+→ INFRA-HANDOFF при новом хосте (AASA `components` меняет `<org>/infra`) → `make check`.
 
 ## push
 
 ```
-androidApp/core/platform/…/push/NotificationChannels.kt   # + channel_id, важность, строки; payload → уведомление
-iosApp/Packages/Core/Sources/Platform/NotificationCategories.swift   # + UNNotificationCategory
-shared/…/core/deeplink/DeepLinkParser.kt             # deep_link из payload → Route (тап → ShellIntent.OpenLink(url)); в shared своего парсера payload нет
-docs/stack/push.md                                   # + строка категории (провайдеры, канал, payload)
+androidApp/core/platform/…/push/NotificationChannels.kt   # + channel_id (= category в lower case), важность, строки core_platform_channel_*
+androidApp/core/platform/…/push/PushMessage.kt            # + ключи title_key/body_key в реестр TEXTS → ресурсы core_platform_push_*
+iosApp/Packages/Core/Sources/Platform/PushPayload.swift   # + UNNotificationCategory в NotificationCategories.register
+shared/…/core/deeplink/DeepLinkParser.kt                  # deep_link из payload → Route (тап → ShellIntent.OpenLink(url)); своего парсера payload в shared нет
+docs/stack/push.md                                        # + строка категории (провайдеры, канал, payload)
 ```
 
-Шаги: строка в `push.md` → RED тест `DeepLinkParserTest` на `deep_link` категории → категория/канал
-на платформах (`notification_id` — дедуп, ключи локализации — ресурсы) → BACKEND-HANDOFF (событие
-домена, которое шлёт бэкенд, — `trigger` записи карты) → `make check`.
+Шаги: строка в `push.md` → RED тест `DeepLinkParserTest` на `deep_link` категории → канал/категория
+и ключи текста на платформах (`notification_id` — дедуп: `PushMessage.notificationId`,
+`NotificationDeduplicator`) → BACKEND-HANDOFF (событие домена, которое шлёт бэкенд, — `trigger`
+записи карты) → `make check`.
 
 ## shortcut / share / widget
 
@@ -48,4 +52,4 @@ intent-filter `ACTION_SEND`; iOS — `UIApplicationShortcutItems` / share extens
 - ❌ Строковый маршрут в intent-filter/AASA без `Route`.
 - ❌ Секрет или токен в ссылке/payload.
 - ❌ Custom scheme как единственный вход для веб-ссылок.
-- ❌ Хост в манифесте без строки в `deep-links.md` и без `wellknown`.
+- ❌ Хост в манифесте литералом (NF-18) или без строки в `deep-links.md` и без `wellknown`.

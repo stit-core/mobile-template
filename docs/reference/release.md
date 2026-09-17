@@ -41,8 +41,8 @@ STOP-2 «подано в каналы» — по docs/stack/distribution.md#chan
 | верб | что делает |
 |---|---|
 | `make release-preflight TAG=vX.Y.Z` | `main`, чистое дерево, аннотированный тег на HEAD == `TAG`, тег новее всех, `make doctor`, `GATE_RELEASE=1` гейт (R8), `check-mac` (кроме `PLATFORM=android`) |
-| `make release-android TAG=vX.Y.Z` | `bundleProdRelease` + `assembleProdRelease` с подписью из env → `dist/`, `mapping.txt`, `apksigner verify`, `checksums.sha256`; Sentry Gradle-плагин заливает mapping |
-| iOS | на Mac-хосте: `xcodebuild archive` → `-exportArchive` → `dist/*.ipa` + `dSYM.zip`, `sentry-cli debug-files upload` (`docs/reference/mac-host.md`, `.claude/skills/release/references/steps.md`) |
+| `make release-android TAG=vX.Y.Z` | `bundleProdRelease` + `assembleProdRelease` с подписью из env → `dist/`, `mapping.txt`, `apksigner verify`, `checksums.sha256`; загрузка mapping в GlitchTip — `sentry-cli upload-proguard` на шаге `/release` (Sentry Gradle-плагин не подключён) |
+| iOS | на Mac-хосте: `xcodebuild archive -scheme Prod` (per-env схема проекта, заводится на Mac — `docs/reference/mac-host.md`) → `-exportArchive` → `dist/*.ipa` + `dSYM.zip`, `sentry-cli debug-files upload` (`.claude/skills/release/references/steps.md`) |
 | STOP-1 | `git push origin vX.Y.Z`; Release через Gitea API, ассеты по одному; ntfy `releases-<org>` |
 | STOP-2 | Play Developer API / RuStore API / App Store Connect по `--channels`; ntfy |
 

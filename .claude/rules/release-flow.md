@@ -29,8 +29,9 @@ paths:
   `mapping-<X.Y.Z>-<code>.txt`, (iOS) `.ipa` + `-dSYM.zip`, `checksums.sha256`,
   `release-notes.{ru,en}.md`, `openapi.lock`, `store-handoff.md`. Локальная стадия — `dist/`
   (gitignored), не STOP.
-- **Символы до публикации**: `mapping.txt` в GlitchTip/Sentry (Gradle-плагин, Linux), dSYM —
-  `sentry-cli` на Mac; без символов крэши нечитаемы, а перезалить для уже прилетевших нельзя.
+- **Символы до публикации**: `mapping.txt` — `sentry-cli upload-proguard` (шаг `/release`, Linux;
+  Gradle-плагин Sentry не подключён), dSYM — `sentry-cli debug-files upload` на Mac; без символов
+  крэши нечитаемы, а перезалить для уже прилетевших нельзя.
 - **STOP-2 — подача в каналы**: Play internal, RuStore модерация, TestFlight; промоушен в
   production, ответы модерации, листинги — человек по STORE-HANDOFF (crash-free ≥ 99.5 % за
   48 ч — `observability.md`).

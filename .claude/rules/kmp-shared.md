@@ -24,8 +24,9 @@ paths:
   (`KeystoreSecureStore`, `DataStoreSettings`, `LogcatSink`), `iosMain` (`KeychainSecureStore`,
   `UserDefaultsSettings`, `NSLogSink`), остальное — `androidApp/core/platform` и Swift `Core/Platform`.
 - **`iosMain` — только Foundation и Security** (`NSUserDefaults`, `NSLog`, Keychain через
-  `platform.Security`, Darwin-движок Ktor). UserNotifications/LocalAuthentication/Network —
-  Swift-реализации интерфейсов.
+  `platform.Security`, Darwin-движок Ktor). UserNotifications/Network/APNs — Swift-реализации
+  интерфейсов в `Core/Platform` (`NetworkConnectivity` обновляет holder `ConnectivityState`);
+  биометрия и FCM/RuStore — Kotlin в `androidApp/core/platform`.
 - **cinterop и CocoaPods запрещены** (`kmp-check.sh` grep по `shared/build.gradle.kts`): они
   ломают компиляцию Apple-klib на Linux. Зависимость без iOS-таргета в `commonMain` не живёт.
 - **Слои: `core/**` < `entity/**` < `feature/**`.** `core` не импортирует `entity`/`feature`;

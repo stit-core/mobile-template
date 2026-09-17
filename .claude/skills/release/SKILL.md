@@ -34,8 +34,9 @@ description: Выпустить версию мобильного приложе
 - [ ] `make status`: `main`, working tree clean, `Handoffs: none` или блоки уже в плане.
 - [ ] `make check-full` зелёный на этом HEAD (`build/gate-logs/mac.last` == HEAD при iOS);
       `--platform android` — достаточно `GATE_RELEASE=1 make check`.
-- [ ] Чек-лист L-1…L-9 (автоматика preflight) зелёный; L-10…L-17 — подтверждены человеком
-      поимённо (`docs/reference/distribution.md`), скилл спрашивает через `AskUserQuestion`.
+- [ ] Чек-лист L-1…L-9 пройден агентом по `docs/reference/distribution.md` (в `preflight.sh`
+      этих проверок нет); L-10…L-17 — подтверждены человеком поимённо, скилл спрашивает через
+      `AskUserQuestion`.
 - [ ] Секреты экспортированы человеком в env текущей сессии (`STIT_KEYSTORE_*`, `GITEA_TOKEN`,
       каналы — по `--channels`; таблица — `references/steps.md`); значения агент не читает.
 - [ ] iOS: `MAC_HOST` доступен (`make mac-doctor`), профили/сертификаты на хосте.
@@ -47,8 +48,8 @@ description: Выпустить версию мобильного приложе
 |---|---|---|---|
 | 0 | preflight: `main`, чистое дерево, аннотированный тег на HEAD == `TAG`, тег новее всех, `make doctor`, `GATE_RELEASE=1` гейт, `check-mac` (кроме `PLATFORM=android`) | Linux | `make release-preflight TAG=vX.Y.Z` (`PLATFORM=android` при `--platform android`) |
 | 1 | аннотированный тег `vX.Y.Z` на HEAD — ставит человек по явному OK (`git tag -a vX.Y.Z -m "<release notes>"`); push тега — после STOP-1 | Linux | человек |
-| 2 | Android: `bundleProdRelease` + `assembleProdRelease` с подписью из env → `dist/<app>-X.Y.Z-<code>-prod.{aab,apk}`, `mapping-X.Y.Z-<code>.txt`, `apksigner verify`, `checksums.sha256`; Sentry Gradle-плагин заливает mapping | Linux | `make release-android TAG=vX.Y.Z` |
-| 3 | iOS: архив → `-exportArchive` (method `app-store-connect`) → `dist/*.ipa` + `-dSYM.zip`; `sentry-cli debug-files upload`; подпись — профили на Mac-хосте | Mac | по `docs/reference/mac-host.md` и `references/steps.md` |
+| 2 | Android: `bundleProdRelease` + `assembleProdRelease` с подписью из env → `dist/<app>-X.Y.Z-<code>-prod.{aab,apk}`, `mapping-X.Y.Z-<code>.txt`, `apksigner verify`, `checksums.sha256`; mapping в GlitchTip — `sentry-cli upload-proguard` (Gradle-плагин Sentry не подключён) | Linux | `make release-android TAG=vX.Y.Z` + `sentry-cli` |
+| 3 | iOS: `xcodebuild archive -scheme Prod` (per-env схема проекта на Mac, `docs/reference/mac-host.md`) → `-exportArchive` (method `app-store-connect`) → `dist/*.ipa` + `-dSYM.zip`; `sentry-cli debug-files upload`; подпись — профили на Mac-хосте | Mac | по `docs/reference/mac-host.md` и `references/steps.md` |
 | 4 | release-notes ru/en (черновик из `git log` от предыдущего тега + план; правит человек), `openapi.lock`, `store-handoff.md` → `dist/` | Linux | скилл пишет файлы |
 | 5 | **STOP-1**: `git push origin vX.Y.Z`; Gitea Release на теге, ассеты по одному через API; ntfy `releases-<org>` | Linux | `references/steps.md § STOP-1` |
 | 6 | **STOP-2** (по `--channels`): Play internal, RuStore черновик → модерация, TestFlight (Mac); ntfy | Linux + Mac | `references/steps.md § STOP-2` |

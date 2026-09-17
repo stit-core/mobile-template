@@ -11,7 +11,7 @@ status: draft
 
 | платформа | flavor/схема | провайдеры (`PUSH_PROVIDERS`) | client-side id |
 |---|---|---|---|
-| Android | dev/staging/prod | `rustore,fcm` _(регистрируются все доступные)_ | `RUSTORE_PROJECT_ID`, `google-services.json` (не секрет) |
+| Android | dev/staging/prod | `rustore,fcm` _(`pushTransports()`: регистрируются все, у кого `token() != null`)_ | `RUSTORE_PROJECT_ID` (`config/env`; пустой — RuStore выключен), `google-services.json` (не секрет; без него FCM отдаёт `null`) |
 | Android | demo | `[]` | — |
 | iOS | Dev/Staging/Prod | `apns` (`sandbox` в dev) | `aps-environment` entitlement |
 
@@ -45,9 +45,9 @@ Data-first: `title_key`, `body_key`, `args`, `deep_link` (https из `deep-links
 
 ## Generates
 
-- `config/env/*.properties`, `iosApp/Config/*.xcconfig` — `PUSH_PROVIDERS`
-- `androidApp/core/platform/…/push/{FcmTransport,RuStoreTransport,NotificationChannels}.kt`
-- `iosApp/Packages/Core/Sources/Platform/{ApnsRegistrar,NotificationCategories}.swift`
+- `config/env/*.properties` (`PUSH_PROVIDERS`, `RUSTORE_PROJECT_ID`), `iosApp/Config/*.xcconfig` (`PUSH_PROVIDERS`, `APS_ENVIRONMENT`)
+- `androidApp/core/platform/…/push/{PushTransports,FcmTransport,RuStoreTransport,NotificationChannels,PushMessage,PushNotifier,StitFirebaseMessagingService,StitRuStoreMessagingService}.kt` + сервисы в `core/platform/src/main/AndroidManifest.xml`
+- `iosApp/Packages/Core/Sources/Platform/{ApnsRegistrar,PushPayload}.swift` (`NotificationCategories`, `NotificationDeduplicator`), `App/AppDelegate.swift`
 - `shared/…/core/push/{PushRegistrar,DeviceRegistration,PushStatus,PushTransport}.kt`, `PlatformDeps.pushTransports`/`notificationPermission`
 - `dependencies.md` (SDK провайдеров) + `compliance.md` (privacy manifests)
 - BACKEND-HANDOFF B-18 (`PUT /api/v1/devices`, отправка через `pushkit`)

@@ -27,7 +27,8 @@ description: Red-арм cockpit'а — структурированный раз
 | Тип | Признаки | Где смотреть |
 |---|---|---|
 | **Формат** | `FAIL: format kotlin` / `format swift` | `make fmt`, затем diff — единственные автофиксеры |
-| **detekt / Lint / SwiftLint** | `FAIL: detekt`, `android lint`, SwiftLint `error:` | `build/gate-logs/detekt.log`, `android_lint.log`; правило и файл в первых строках выжимки |
+| **detekt / Lint / SwiftLint / archlint** | `FAIL: detekt`, `android lint`, `swiftlint`, `archlint` | `build/gate-logs/{detekt,android_lint,swiftlint,archlint}.log`; правило и файл в первых строках выжимки |
+| **Паритет** | `FAIL: tokens-check` / `i18n-check` / `deeplinks-check` | `build/gate-logs/{tokens_check,i18n_check,deeplinks_check}.log`: `make gen-tokens` / ключ в `values-ru/` или `core_ui_error_<code>` / тест в `DeepLinkParserTest`, плейсхолдер `${DEEP_LINK_HOST}` |
 | **Build** | `e: file.kt:12:5 Unresolved reference`, `Inconsistent JVM-target`, `Cannot add extension 'kotlin'` | `build/gate-logs/assembleDevDebug.log`; первая `e:` обычно главная |
 | **Unit test** | `FAILED` в `shared jvm tests` / `android unit tests` | `FORMAT=detailed make test`; точечно `./gradlew :shared:jvmTest --tests '*XTest*'` |
 | **Konsist** | `ArchitectureTest > … FAILED` | нарушена матрица `docs/reference/architecture.md` или именование |
@@ -79,7 +80,7 @@ description: Red-арм cockpit'а — структурированный раз
 |---|---|---|
 | `OutOfMemoryError: Metaspace` в Lint | `MaxMetaspaceSize < 1g` | `gradle.properties` не трогать; `./gradlew --stop`, освободить RAM |
 | `SKIPPED` у `link*Framework*`, каталога klib нет | это Linux — framework только на Mac | логика проверяется `make kmp-check`; UI — `make check-mac` |
-| `no such module 'SwiftUI'` на Linux | таргет не в `Packages/Pure` | проверяется на Mac; на Linux — `Pure` + SwiftLint + archlint |
+| `no such module 'SwiftUI'`/`'UIKit'` на Linux | таргет не в `Packages/Pure` или `import UIKit` в `Pure` (NF-22) | UI-код — в `Core`/`Features`, проверяется на Mac; на Linux — `Pure` + SwiftLint + archlint |
 | `InaccessibleObjectException` в Robolectric | нет `--add-opens` | `configureUnitTests`/JVM-args плагина `stit.android.library` |
 | `*_compare.png` в дереве | изменился рендер | намеренно → `make screenshots-record`; нет → чини код |
 | `Inconsistent JVM-target` | `jvmTarget` ≠ Java | `JvmLibraryConventionPlugin`: JVM 17 (NF-08) |

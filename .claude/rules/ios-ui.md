@@ -1,41 +1,51 @@
 ---
 name: ios-ui
-description: SwiftUI-слой iosApp/ — View рисует State презентера из shared, @Observable-адаптер без бизнес-логики, Features не импортируют друг друга и Platform/Persistence, строки из Localizable.xcstrings, Liquid Glass системными компонентами, snapshot на каждое состояние. Terse; «как и почему» — docs/reference/architecture.md. Грузится при правке .swift в iosApp/.
+description: SwiftUI-слой iosApp/ — View рисует State презентера из shared через PresenterModel-адаптер без бизнес-логики, Features не импортируют друг друга и Platform/Persistence, строки из Localizable.xcstrings таргета, токены через @Environment(\.theme), Liquid Glass системными компонентами, snapshot на состояние. Terse; «как и почему» — docs/reference/architecture.md. Грузится при правке .swift в iosApp/.
 paths:
   - "iosApp/**/*.swift"
 ---
 
 # iosApp/ — SwiftUI-слой
 
-Пакеты и матрица зависимостей — `docs/reference/architecture.md`. Здесь — что обязан
-соблюдать при правке Swift-кода. Всё, что импортирует `Shared`/SwiftUI, компилируется только
-на Mac (`make check-mac`); на Linux собирается и тестируется только `Packages/Pure`.
+Пакеты и матрица зависимостей — `docs/reference/architecture.md`. Всё, что импортирует
+`Shared`/SwiftUI, компилируется только на Mac (`make check-mac`); на Linux собираются и
+тестируются `Packages/Pure` и `Tools/archlint`, SwiftLint и swift-format идут по всему дереву.
 
 ## Инварианты
 
-- **View — только представление.** Логика состояний экрана живёт в `shared`
-  (`<X>Presenter`); Swift-модель экрана — тонкий `@Observable` адаптер: подписка на
-  `state`, `dispatch(intent)`. Никаких сетевых вызовов, правил и хранения в View/Model.
-- **`Features/<X>` не импортируют друг друга** и не импортируют `Core/{Persistence,Platform}`
-  — реализации `PlatformDeps` собирает только `App/AppEnvironment.swift`. `Core/*` не
-  импортирует `Features`. Ловят SwiftLint custom rules + `Tools/archlint`.
-- **Сеть — только через `Shared`**: `URLSession(` вне `Core/SharedBridge` запрещён.
-- **Строки — `Localizable.xcstrings`** (ru/en, plural-вариации); литералы в View — нет.
-- **Токены — `DesignSystem.Theme`** (значения — `Pure/DesignSystemTokens`); `Color(red:…)`,
-  `.font(.system(size:))`, фиксированные отступы вне токенов — запрещены.
-- **Liquid Glass — системными компонентами**; `.glassEffect()` только на функциональных
-  элементах; кастомный фон системных баров — нет.
-- **Навигация — `NavigationStack(path: [Route])`** через `Core/Routing`; `Route` приходит из
-  `Shared` (rule `navigation`). `sheet`/`fullScreenCover` не стекируются.
-- **a11y**: `accessibilityIdentifier` на интерактивных элементах (XCUITest), Dynamic Type
-  через `.font(.body)`/`relativeTo:`, touch-target ≥ 44 pt.
-- **Snapshot-тест (`swift-snapshot-testing`) на каждое состояние экрана**; эталоны —
-  `__Snapshots__/`, перезапись — только `make snapshot-record` на симуляторе из
-  `iosApp/.test-simulator`.
-- **Логи — `AppFoundation.log` (`os.Logger`)**; `print`/`debugPrint`/`NSLog` — SwiftLint.
-- `try!`, force unwrap — только в тестах; `import Combine` — запрещён (rule `swift-concurrency`).
-- Новая фича = таргет в `Packages/Features/Package.swift` + реэкспорт в umbrella `Features`;
-  `.pbxproj` не трогается (rule `xcode-project`).
+- **View — только представление.** Логика экрана — `<X>Presenter` в `shared`; Swift-модель —
+  `final class <X>Model: PresenterModel<XState, XIntent>` (`Core/SharedBridge/PresenterModel.swift`:
+  `state` из `StateFlow`, `dispatch(_:)`, `deinit` закрывает презентер), методы-обёртки интентов
+  (`start()`, `refresh()`); никаких сетевых вызовов, правил и хранения в View/Model.
+- **`Features/<X>` не импортируют друг друга** и `Core/{Persistence,Platform}` — реализации
+  `PlatformDeps` собирает только `App/AppEnvironment.swift` (`IosPlatformDeps`); `Core/*` не
+  импортирует `Features`. Ловят SwiftLint `no_feature_import`, `no_platform_import_in_features`
+  и `Tools/archlint` (граф `Package.swift`).
+- **Сеть — только через `Shared`**: `URLSession(` вне `Core/SharedBridge` — SwiftLint `no_raw_urlsession`.
+- **Строки — `Resources/Localizable.xcstrings` своего таргета** (`defaultLocalization: "ru"`, ru/en),
+  `Text("<slug>.<key>", bundle: .module)`; ключи ошибок `error.<code>` — каталог `DesignSystem`
+  (`ErrorStateView(messageKey:)`, `ErrorText`); литералы в View — нет.
+- **Токены — `@Environment(\.theme)`** (`theme.colors/metrics/typography`, значения —
+  `Pure/DesignSystemTokens`); компоненты — `PrimaryButtonStyle`, `.card()`, `LoadingStateView`,
+  `EmptyStateView`, `ErrorStateView`, `ErrorText`, `OfflineBanner`. `Color(red:…)`,
+  `.font(.system(size:))` — SwiftLint `no_hardcoded_color`/`no_fixed_font_size`.
+- **Liquid Glass — системными компонентами** (`TabView`, `NavigationStack`, `Form`, `List`);
+  `.glassEffect()` только на функциональных элементах; кастомный фон системных баров — нет.
+- **Навигация — `Router` + `NavigationStack(path:)` на таб** (`RootView`), маршруты — `AppRoute`
+  (rule `navigation`); модель экрана создаёт `Screen<Model, Content>` (`RootView.swift`) из
+  фабрик `AppEnvironment.<x>Model()`; `sheet`/`fullScreenCover` не стекируются.
+- **a11y**: `accessibilityIdentifier` точечной нотацией (`login.submit`, `todos.row.<id>`,
+  `state.error`) — их читают XCUITest и Maestro `e2e/ios`; Dynamic Type через `theme.typography`
+  (системные `Font`), touch-target ≥ 44 pt (`metrics.touchMin`).
+- **Тесты**: Swift Testing на `Scenario.container(.populated|.empty|.error|.authenticated)` +
+  `waitUntil` (`TestSupport`); snapshot на состояние экрана — `Snapshots.assertScreen(view, named:)`
+  (light + dark, `ViewImageConfig.iPhone13`) в `Features/Tests/SnapshotTests`; эталоны
+  `__Snapshots__/`, перезапись — только `make snapshot-record` на симуляторе из `iosApp/.test-simulator`.
+- **Логи — `AppFoundation.AppLogger` (`OSLogSink` → `os.Logger`)**; `print`/`debugPrint`/`NSLog` —
+  SwiftLint `no_print`/`no_nslog`. `try!`, force unwrap — только в тестах (swift-format);
+  `import Combine` — `no_combine` (rule `swift-concurrency`).
+- Новая фича = имя в `featureNames` (`Packages/Features/Package.swift`: таргет + `<Name>Tests`) +
+  `@_exported import` в `Sources/Features/Features.swift`; `.pbxproj` не трогается (rule `xcode-project`).
 
 ## Сигналы
 

@@ -18,7 +18,8 @@ status: draft
 | Android UI | Compose BOM 2026.09, Material 3 1.4, Navigation 3 1.1.7, Activity/Lifecycle | Apache-2.0 | — | — |
 | DI (Android) | Hilt 2.60.1 + KSP 2.3.12, androidx.hilt 1.4.0 | Apache-2.0 | — | — |
 | persistence | DataStore 1.2.1 (`DataStoreSettings`, `KeystoreSecureStore` в `androidMain`) | Apache-2.0 | androidMain | — |
-| изображения | Coil 3 (Android), `AsyncImage` (iOS) | Apache-2.0 | — | — |
+| платформа Android | AppCompat 1.8.0 (per-app locale ниже API 33), Biometric 1.1.0 (`BiometricUnlock`) | Apache-2.0 | — | — |
+| изображения | шов: библиотеки в шаблоне нет; кандидаты при первом экране с картинками — Coil 3 (Android), `AsyncImage` (iOS) — запись здесь | — | — | — |
 | тесты | JUnit 4, Robolectric 4.17, Compose test v2, Roborazzi 1.74, Turbine 1.2, okio-fakefilesystem, Konsist 0.17.3, Kover 0.9.9, Swift Testing, swift-snapshot-testing 1.19.5 | MIT/Apache | — | — |
 | качество | Spotless 8.10 + ktlint 1.8, detekt 1.23.8 + compose-rules 0.4.28, sort-dependencies, BCV 0.18.2, SwiftLint 0.65.1, swift-format | Apache/MIT | — | — |
 
@@ -28,8 +29,8 @@ status: draft
 
 | SDK | зачем | лицензия | privacy manifest | трансграничка |
 |---|---|---|---|---|
-| sentry-android 8.x / sentry-cocoa 9.x | crash-репорты (self-host GlitchTip) | MIT | есть | нет |
-| RuStore Push SDK · FCM (только транспорт) · APNs | push по `push.md#providers` | _…_ | _проверить_ | _…_ |
+| sentry-android 8.57.0 / sentry-cocoa 9.28 | crash-репорты (self-host GlitchTip) | MIT | есть | нет |
+| `ru.rustore.sdk:pushclient` 7.5.0 (репозиторий VK) · `firebase-messaging` 25.1.3 (только транспорт) · APNs (системный) | push по `push.md#providers` | _…_ | _проверить_ | FCM — Google; RuStore — нет |
 | _<новый SDK>_ | _…_ | _…_ | _…_ | _…_ |
 
 Не подключаются: Retrofit, Koin/Metro, Room/SQLDelight (шов), Compose Multiplatform, Swift OpenAPI

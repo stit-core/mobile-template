@@ -25,8 +25,9 @@ paths:
 - **Удаление аккаунта — экран в приложении, достижимый из настроек** (App Store 5.1.1(v),
   L-6) + web-URL удаления для Play (L-16, `compliance.md#legal`). Регистрация без удаления —
   реджект.
-- **Правовые документы доступны до логина** (`legal/privacy`, L-5): URL политики — в
-  `requirements.links` и `PRIVACY_POLICY_URL` build-time.
+- **Правовые документы доступны до логина** (L-5): URL — `requirements.links`
+  (`privacy_policy`, `account_deletion`, `support`) в секции «О приложении» `Settings`,
+  открываемого с `Login` (`onOpenSettings`); build-time ключа URL политики нет.
 - **Сторонний логин ⇒ Sign in with Apple** (4.8); по умолчанию соцвход выключен — включение
   = запись в `auth.md` + `compliance.md`.
 - **Оплата**: `preset: companion` — платежей в приложении нет (3.1.3(c)); `consumer` —
@@ -48,5 +49,6 @@ paths:
 
 ## Сигналы
 
-- `make release-preflight` красный на L-1…L-9 → чинить код/манифест, не чек-лист.
+- L-1…L-9 агент проверяет по `docs/reference/distribution.md` до `make release-preflight`
+  (в `preflight.sh` этих проверок нет) → чинить код/манифест, не чек-лист.
 - Ревью-вопрос «как войти» → demo-режим не описан в App Review notes (`distribution.md`).

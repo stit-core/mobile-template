@@ -77,13 +77,16 @@ claude                 # → /smartdev → /init-service
   Hilt; модули `app`, `core/*`, `feature/*`, `lint`; flavors `dev | staging | prod | demo`;
   convention-плагины `stit.*` в `build-logic/`.
 - **`iosApp/`** — Xcode 27, Swift 6.4, SwiftUI + `@Observable`, SwiftPM local packages
-  (`Pure` собирается на Linux); один `.xcodeproj`, xcconfig per схема.
+  (`Pure` и `Tools/archlint` собираются на Linux); один `.xcodeproj`, xcconfig per схема.
+- **`design/`** — `tokens.json` (DTCG) → `make gen-tokens` → `Tokens.kt`/`Tokens.swift`;
+  **`e2e/`** — Maestro-флоу против demo-сборки (`make e2e`).
 - **Reference-фичи** — `demo` (mock-режим для App Review), `shell`, `requirements`, `auth`
   (с удалением аккаунта), `profile`, `todos` (deep link), `settings`, `push` — учебные образцы;
   `profile`/`todos` удаляет `/de-template`.
 - **Качество** — Spotless/ktlint, detekt + compose-rules, Android Lint (`warningsAsErrors`),
   Konsist, Robolectric + Compose test v2, Roborazzi, Kover (80 / 70 %), BCV; swift-format,
-  SwiftLint, Swift Testing; негативные фикстуры `make gate-selftest`.
+  SwiftLint, archlint (граф SwiftPM), Swift Testing; паритет токенов / строк / deep links
+  (`tokens-check`, `i18n-check`, `deeplinks-check`); негативные фикстуры `make gate-selftest`.
 - **Релиз** — версия из тега `vX.Y.Z`, подписанные AAB/APK (Linux) и IPA (Mac), символы в
   GlitchTip, Gitea Release, подача в RuStore / Play / TestFlight, STORE-HANDOFF.
 
@@ -95,7 +98,8 @@ claude                 # → /smartdev → /init-service
 
 ```bash
 make doctor          # JDK 21, Android SDK, Swift 6.4, RAM/диск, MAC_HOST
-make check-fast      # формат + detekt + shared jvmTest — цикл «пока пишу»
+make check-fast      # Swift-формат + SwiftLint + Kotlin-формат + detekt + shared jvmTest — цикл «пока пишу»
+make build           # dev+demo debug APK (demo — MockTransport, без сети); make e2e — Maestro против demo
 make check           # gate, Linux-полный; macOS-стадии перечислены SKIP-блоком
 make check-mac       # macOS-стадии по SSH (MAC_HOST); check-full = check + check-mac
 make gate-selftest   # негативные фикстуры обязаны краснеть

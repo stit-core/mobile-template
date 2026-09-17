@@ -12,7 +12,7 @@ status: draft
 | поле | значение |
 |---|---|
 | receiver | `glitchtip` _(self-host, Sentry-совместимый DSN; `sentry` SaaS — опция; `none`)_ |
-| SDK | `sentry-android` (Android, Gradle-плагин для mapping) · `sentry-cocoa` (iOS, SPM) — инициализация в `core:platform` / `Core/Platform` через `TelemetrySink` (`PlatformDeps.telemetry`) |
+| SDK | `sentry-android` 8.57 (Android) · `sentry-cocoa` 9.28 (iOS, SPM) — инициализация в `core:platform` / `Core/Platform` через `TelemetrySink` (`PlatformDeps.telemetry`); Gradle-плагин Sentry не подключён |
 | projects | _`<app>-android`, `<app>-ios` (или один с тегом `platform`)_ |
 
 ## DSN per env
@@ -33,15 +33,15 @@ status: draft
 
 ## Logging
 
-`Logger`/`LogSink` из `core/observability` (`LogcatSink`/`NSLogSink` в debug) и `AppFoundation.log`
-(`os.Logger`); запреты
+`Logger`/`LogSink` из `core/observability` (`LogcatSink` в debug, `SentryLogSink` в release, `SharedLogSink`
+на iOS) и `AppFoundation.AppLogger` (`os.Logger`); запреты
 `android.util.Log`/`println`/`print`/`NSLog` — detekt/SwiftLint; в release — breadcrumbs ≥ warn;
 структурные поля `request_id`, `screen`, `user_id`; breadcrumbs навигации и сети без тел.
 
 ## Symbols
 
-`mapping.txt` — Sentry Gradle-плагин на `assembleProdRelease` (Linux); dSYM — `sentry-cli
-debug-files upload` на Mac; проверяется `release-preflight` до STOP-2. Секреты —
+`mapping.txt` — ассет STOP-1 из `make release-android`, в GlitchTip — `sentry-cli upload-proguard` (шаг
+`/release`); dSYM — `sentry-cli debug-files upload` на Mac; оба до STOP-2 (в `preflight.sh` проверки нет). Секреты —
 `SENTRY_AUTH_TOKEN`, `SENTRY_ORG`, `SENTRY_PROJECT_*`, `SENTRY_URL` (release-time).
 
 ## Quality thresholds
@@ -60,7 +60,7 @@ debug-files upload` на Mac; проверяется `release-preflight` до ST
 
 - `config/env/*.properties`, `iosApp/Config/*.xcconfig` — `SENTRY_DSN`
 - `androidApp/core/platform/…/SentryCrashReporter.kt`, `iosApp/Packages/Core/Sources/Platform/SentryCrashReporter.swift`
-- `sentry { }` в `androidApp/app/build.gradle.kts` (mapping), dSYM-шаг в `/release`
+- шаг символов (mapping + dSYM через `sentry-cli`) в `/release`
 - пороги — блок `RISK`/`PLAY` STORE-HANDOFF
 - INFRA-HANDOFF I-5 (проекты и DSN в GlitchTip)
 

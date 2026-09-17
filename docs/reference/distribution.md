@@ -47,8 +47,8 @@ demo-режим обязателен, без монетизации; `consumer` 
 | 2027-02 | Play: 16 KB page size (весь граф зависимостей); R8 DEX-оптимизация ≥ 25 % при DEX > 10 МБ |
 | 2027-04 | App Store Connect: iOS 27 SDK; Play: Restore Credentials |
 
-Даты и статус проекта — `docs/stack/distribution.md#deadlines`; `release-preflight` печатает
-ближайшие.
+Даты и статус проекта — `docs/stack/distribution.md#deadlines`; `/release` напоминает
+ближайшие в блоке `RISK` STORE-HANDOFF.
 
 ## Demo-режим — требование магазина
 
@@ -59,7 +59,8 @@ App Review требует «active demo account or fully-featured demo mode»: r
 
 ## Чек-лист «до публикации» (L-1…L-17)
 
-Автоматически (`make release-preflight`, падает сборка/гейт):
+Агент проверяет по списку перед `make release-preflight` (в `preflight.sh` этих проверок нет;
+красный пункт — чинить код/манифест, не чек-лист):
 
 | # | проверка |
 |---|---|

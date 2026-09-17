@@ -25,9 +25,8 @@ Rollup всех kinds: три класса значений per env. Новый 
 | `DEEP_LINK_SCHEME` | `stit` | `stit` | `stit` | `stit` | `service.md` |
 | `SENTRY_DSN` | пусто | _…_ | _…_ | пусто | `observability.md` |
 | `PUSH_PROVIDERS` | `rustore,fcm` / `apns` | то же | то же | пусто | `push.md` |
-| `ANALYTICS` | `none` | `none` | `none` | `none` | `analytics.md` |
-| `FEATURE_FLAGS_DEFAULT` | _`flag=false,…`_ | _…_ | _…_ | _…_ | `requirements` |
-| `API_BASE_URL_CHOICES` (только dev) | _`…,http://10.0.2.2:8080`_ | — | — | — | шаблон |
+| `RUSTORE_PROJECT_ID` (Android) | пусто | _…_ | _…_ | пусто | `push.md` |
+| `ANALYTICS` | — (ключа в шаблоне нет; появляется вместе с kind `analytics`) | | | | `analytics.md` |
 
 ## Release-time
 
@@ -53,7 +52,7 @@ Rollup всех kinds: три класса значений per env. Новый 
 | `status` | `ok \| update_recommended \| update_required \| maintenance` |
 | `min_version`, `latest_version`, `store_url` | kill-switch старых версий, ссылка на магазин |
 | `maintenance_until` | экран обслуживания |
-| `flags` | feature flags (строки; дефолты — `FEATURE_FLAGS_DEFAULT`), в т. ч. `demo_login`, `pinning` |
+| `flags` | feature flags (строки; дефолт — аргумент `AppRequirements.flag(name, default)`), в т. ч. `demo_login`, `pinning` |
 | `links` | `privacy_policy`, `account_deletion`, `support` |
 
 ## Requirements
@@ -72,7 +71,7 @@ Rollup всех kinds: три класса значений per env. Новый 
 
 - `config/env/{dev,staging,prod,demo}.properties`, `iosApp/Config/{Dev,Staging,Prod,Demo}.xcconfig`
 - `.env.local.example`, `local.properties.example`, `iosApp/Config/Local.xcconfig.example`
-- `shared/…/core/config/{AppConfig,AppEnv,ApiMode,AuthMode}.kt` (`AppConfig.parse(...)` из сырых строк), `AppFoundation.AppConfig`
+- `shared/…/core/config/{AppConfig,AppEnv,ApiMode,AuthMode}.kt` (`AppConfig.parse(...)` из сырых строк), `AppFoundation.AppConfig`; платформенные ключи — `AppOptions` (`androidApp/app`)
 - seed для INFRA-HANDOFF (хосты, DSN) и `release-preflight` (release-time ключи)
 
 ## Открытые вопросы

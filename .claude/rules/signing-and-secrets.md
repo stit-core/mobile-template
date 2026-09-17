@@ -20,8 +20,9 @@ paths:
 
 - **Ключи живут в Vaultwarden, коллекция `mobile/<org>/<app>`** (keystore — вложение, пароли
   — поля; Apple-сертификаты — `fastlane match` в приватном репо `<org>/ios-certificates`).
-  В репозитории — только `*.example` (`local.properties.example`, `.env.local.example`,
-  `iosApp/Config/Local.xcconfig.example`).
+  В репозитории — только `*.example` (`local.properties.example`,
+  `iosApp/Config/Local.xcconfig.example`; `.env.local.example` с именами release-time ключей
+  пишет `/de-template`).
 - **Никогда не коммитятся**: `*.jks`, `*.keystore`, `*.p12`, `*.p8`, `*.mobileprovision`,
   `*.cer`, `local.properties`, `Local.xcconfig`, `.env.local`, `google-services.json` с
   prod-ключами — `.gitignore` + `pre-commit` + `permissions.deny` на чтение/правку.

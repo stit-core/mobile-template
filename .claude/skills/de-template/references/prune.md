@@ -18,15 +18,23 @@
    (`DeleteAccountPresenter`). Затем `make api-dump` (фасад изменился — по этому решению).
 2. **`androidApp/`** — модули `androidApp/feature/{todos,profile}` (`git rm -r`) + строки
    `include(...)` в `settings.gradle.kts` + `implementation(projects.androidApp.feature.{todos,profile})`
-   в `androidApp/app/build.gradle.kts`; их `src/test/screenshots/`; `NavEntry`-регистрации в
-   `app`; строки `feature_todos_*`/`feature_profile_*` в `res/values*/strings.xml`.
-3. **`iosApp/`** — `iosApp/Packages/Features/Sources/{TodosFeature,ProfileFeature}` +
-   `__Snapshots__`, таргеты в `Packages/Features/Package.swift` и umbrella `Features`;
-   ключи `todos.*`/`profile.*` в `Localizable.xcstrings`; пути `/todos/*` в `applinks`/AASA
-   (INFRA-HANDOFF, если хост остаётся).
-4. **e2e и фикстуры гейта** — `e2e/{common,android,ios}/{todos,profile}-*.yaml`;
-   `.gate-fixtures/NF-*`, ссылающиеся на удалённые модули/пакеты, — перенацелить на
-   оставшиеся (например, `feature/settings`), самотест обязан остаться красным.
+   в `androidApp/app/build.gradle.kts`; `Destination.TodoList/TodoDetail/Profile` и ветки
+   `Route.toDestination()` в `core/navigation/Destination.kt`; в `app/AppNavigation.kt` —
+   `todosEntries`/`profileEntries`, стартовый корень `rememberNavBackStack(Destination.TodoList)`,
+   `ShellTab.Todos/Profile` (`feature/shell/ShellTab.kt`); `DemoFlowTest` (ходит по задачам);
+   строки `feature_todos_*`/`feature_profile_*` в `res/values{,-ru}/strings.xml` (`i18n-check`).
+3. **`iosApp/`** — `iosApp/Packages/Features/Sources/{TodosFeature,ProfileFeature}` (+ их
+   `Tests/*FeatureTests`), имена в `featureNames` (`Packages/Features/Package.swift`) и
+   `@_exported import` в `Sources/Features/Features.swift`; case `todoList/todoDetail/profile` в
+   `Core/Routing/AppRoute.swift` + `AppTab.todos/profile`, ветки `RouteBridge`, `Router.open`;
+   вкладки и `destination` в `App/RootView.swift`, фабрики в `AppEnvironment`; `@Test` todos в
+   `Tests/SnapshotTests/ScreenSnapshotTests.swift` + `__Snapshots__`; строки в `Localizable.xcstrings`
+   таргетов; пути `/todos/*` в AASA (INFRA-HANDOFF, если хост остаётся).
+4. **e2e и фикстуры гейта** — `e2e/android/todos.yaml`; `.gate-fixtures/NF-13` (`feature/todos/PickerPresenter.kt`),
+   `NF-17` (`feature/todos` strings), `NF-21` (`AuthFeature → TodosFeature`), `NF-23`
+   (`TodosFeature/BadNetwork.swift`) — перенацелить на оставшиеся модули/пакеты (например,
+   `feature/settings`, `SettingsFeature`), самотест обязан остаться красным; `pathPrefix`
+   `/todos`, `/profile` в манифесте и строки `DeepLinkParserTest` — убрать парой (`deeplinks-check`).
 5. **`api/openapi.yaml` — не трогать** (копия контракта бэкенда): удалённые фичи перестают
    вызывать операции; регенерировать модели `make gen` — неиспользуемые модели допускаются.
 6. **Фикстуры mock** — `mock/fixtures/*/todos.json` (`user`/`login`/`session`/`devices`/`requirements`
@@ -35,7 +43,7 @@
 7. **Docs** — `docs/stack/*.md`: примеры `todos`/`profile` → проектные значения;
    `docs/reference/strategy-mapping.md` — таблица reference-соответствий очищается;
    `docs/reference/architecture.md#reference` — список оставшихся reference-фич;
-   `docs/stack/deep-links.md` — строка `/todos/{id}` удалена.
+   `docs/stack/deep-links.md` — строка `/todos/{id}` удалена (`deeplinks-check` сверяет с тестами).
 8. **Konsist и Lint** — `androidApp/app/src/test/.../ArchitectureTest.kt` не ссылается на
    удалённые модули (правила общие — обычно без правок); `:androidApp:lint` — детекторы без
    привязки к фичам.

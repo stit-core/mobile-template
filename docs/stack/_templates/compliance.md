@@ -23,7 +23,9 @@ status: draft
 
 | permission | Android id | iOS usage-key | зачем (пользователю) | когда | данные |
 |---|---|---|---|---|---|
-| notifications | `POST_NOTIFICATIONS` | `UNUserNotificationCenter` | _…_ | после первого действия | push-токен |
+| notifications | `POST_NOTIFICATIONS` (`core/platform`) | `UNUserNotificationCenter` (без usage-key) | _…_ | pre-prompt `PushOptIn`, в момент ценности | push-токен |
+| biometric-unlock | `USE_BIOMETRIC` (`core/platform`) | — (в шаблоне нет) | замок приложения при живой сессии (`AUTH_BIOMETRIC_UNLOCK`) | при старте, если включено | — |
+| network-state | `ACCESS_NETWORK_STATE` (`core/platform`) | — | offline-баннер и read-only офлайн (`AndroidConnectivityMonitor`) | всегда | — |
 | _<slug>_ | _…_ | _`NS…UsageDescription`_ | _…_ | _…_ | _…_ |
 
 `AD_ID` и ATT не запрашиваются.
@@ -62,7 +64,7 @@ _одинаков во всех магазинах: …_
 
 ## Checklist
 
-Автоматически (`release-preflight`): L-1 нет `AD_ID` · L-2 нет SDK из чёрного списка без записи ·
+Агент перед `release-preflight` (в `preflight.sh` автоматики нет): L-1 нет `AD_ID` · L-2 нет SDK из чёрного списка без записи ·
 L-3 `NS*UsageDescription` непустые · L-4 `ITSAppUsesNonExemptEncryption` · L-5 `legal/privacy`
 до логина · L-6 экран удаления аккаунта · L-7 плейсхолдеры заменены · L-8 `targetSdk` актуален ·
 L-9 `PrivacyInfo.xcprivacy` валиден. Человек (STORE-HANDOFF): L-10 РКН · L-11 трансграничка ·
@@ -73,8 +75,8 @@ L-16 URL удаления работает без приложения · L-17 d
 ## Generates
 
 - `iosApp/App/PrivacyInfo.xcprivacy` (`NSPrivacyAccessedAPITypes`, `NSPrivacyCollectedDataTypes`)
-- `androidApp/app/src/main/AndroidManifest.xml` — `<uses-permission>` по таблице
-- экраны `legal`, `consent` (`feature/settings`, первый запуск)
+- `androidApp/{app,core/platform}/src/main/AndroidManifest.xml` — `<uses-permission>` по таблице (в модуле, который использует)
+- правовые ссылки — секция «О приложении» в `feature/settings` из `requirements.links`; экран согласия — шов (в шаблоне нет)
 - INFRA-HANDOFF I-6 (URL политики и удаления), блок `LEGAL` STORE-HANDOFF
 
 ## Открытые вопросы

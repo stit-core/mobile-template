@@ -1,11 +1,12 @@
 ---
 name: observability
-description: Логи только через Logger + LogSink из shared / os.Logger; пустой DSN = Sentry выключен; PII-скраббинг в beforeSend; breadcrumbs по навигации и сети без тел; X-Request-ID в событиях; mapping/dSYM загружаются релизом; TelemetrySink — шов для OTel. Грузится при правке core/observability, Sentry*, *Logger*, logging/.
+description: Логи только через Logger + LogSink из shared / AppLogger над os.Logger; пустой DSN = Sentry выключен; PII-скраббинг в beforeSend; breadcrumbs по сети и логам ≥ warn без тел; X-Request-ID в событиях; mapping/dSYM загружает /release; TelemetrySink — шов для OTel. Грузится при правке core/observability, Sentry*, *Logger*, *LogSink*, logging/.
 paths:
   - "shared/**/core/observability/**"
   - "androidApp/**/Sentry*"
   - "iosApp/**/Sentry*"
   - "**/*Logger*"
+  - "**/*LogSink*"
   - "**/logging/**"
 ---
 
@@ -16,33 +17,37 @@ paths:
 
 ## Инварианты
 
-- **Логи — только через `Logger(tag, sink)`** из `core/observability/Logger.kt` в
-  `shared`/Android и `AppFoundation.log` (`os.Logger`) на iOS; `LogSink` даёт платформа
-  (`PlatformDeps.logSink`): debug — `LogcatSink`/`NSLogSink`, release — sink в breadcrumbs
-  Sentry уровня ≥ warn. `android.util.Log` (кроме `LogcatSink`), `println`,
-  `java.util.logging` — detekt `ForbiddenImport`; `print`/`NSLog` — SwiftLint.
-- **Пустой `SENTRY_DSN` = SDK не инициализируется** (dev/demo по умолчанию); `environment =
-  APP_ENV`, `release = <applicationId>@X.Y.Z+<code>` (одинаков на обеих платформах),
-  `dist = <code>`. Приёмник — self-host GlitchTip (Sentry-совместимый DSN).
-- **Инициализация после согласия** пользователя на крэш-репорты (rule `privacy-and-law`).
-- **PII не утекает**: `sendDefaultPii = false`, `attachScreenshot = false`, `beforeSend`
-  Sentry на платформе режет `Authorization`, `Cookie`, email, тела запросов; из `shared` в
+- **Логи — только через `Logger(tag, sink)`** из `core/observability/Logger.kt` в `shared`/Android
+  и `AppFoundation.AppLogger` (`OSLogSink` → `os.Logger`) в Swift; `LogSink` даёт платформа
+  (`PlatformDeps.logSink`): Android debug — `LogcatSink` (`androidMain`), release — `SentryLogSink`
+  (`core:platform`, breadcrumbs уровня ≥ warn); iOS — `SharedLogSink` (`Core/Platform`) в тот же
+  `os.Logger`. `android.util.Log` (кроме `LogcatSink`), `println`, `java.util.logging` — detekt
+  `ForbiddenImport` (NF-01); `print`/`NSLog` — SwiftLint `no_print`/`no_nslog` (NF-20).
+- **Пустой `SENTRY_DSN` = SDK не инициализируется** (dev/demo по умолчанию):
+  `SentryCrashReporter.init(context, config, appInfo)` в `StitApplication.onCreate`,
+  `SentryCrashReporter(dsn:environment:release:)` в `AppEnvironment.init`; при пустом DSN Android
+  отдаёт `NoopTelemetrySink`. `environment = APP_ENV`, `release = <applicationId>@X.Y.Z+<code>`
+  (одинаков на обеих платформах), `dist = <code>`. Приёмник — self-host GlitchTip.
+- **Согласие на крэш-репорты** (rule `privacy-and-law`) — шов: экрана согласия и флага в
+  `SettingsKeys` в шаблоне нет, SDK стартует при непустом DSN; проект с DSN в prod заводит
+  флаг перед `SentryCrashReporter.init` и строку в `compliance.md`.
+- **PII не утекает**: `sendDefaultPii = false`, `attachScreenshot = false`, `beforeSend` на
+  платформе режет `Authorization`, `Cookie`, `Set-Cookie` и тело запроса; из `shared` в
   `TelemetrySink` уходят только `breadcrumb(category, message)`, `captureError(throwable,
   requestId)`, `setUserId(id)` — `UserRepository` ставит id после логина и `null` при logout.
-- **Breadcrumbs**: навигация (`Route`) и сеть (`method path status`, без тел и заголовков
-  auth); `X-Request-ID` каждого запроса — breadcrumb + tag `request_id` на событии ошибки
-  API; пользователю при ошибке показываются первые 8 символов («код обращения»).
-- **Символы — часть релиза**: `mapping.txt` заливает Sentry Gradle-плагин на
-  `assembleProdRelease` (Linux), dSYM — `sentry-cli debug-files upload` на Mac; проверяется в
-  `release-preflight` до STOP-2.
+- **Breadcrumbs**: сеть (`method path status`, без тел и заголовков auth) и логи ≥ warn;
+  `X-Request-ID` каждого запроса — tag `request_id` на событии ошибки API; пользователю при
+  ошибке показываются первые 8 символов («код обращения»).
+- **Символы — часть релиза**: `mapping.txt` — ассет STOP-1 (`build-android.sh` → `dist/`); в
+  GlitchTip его и dSYM заливает `sentry-cli` на шагах `/release` до STOP-2 (Sentry Gradle-плагин
+  не подключён; в `preflight.sh` проверки символов нет). Без символов крэши нечитаемы.
 - **`TelemetrySink` — шов** (`PlatformDeps.telemetry`): `NoopTelemetrySink` в `shared`,
-  Sentry-реализация — на платформе; OTel (`otlp`) — только когда у проекта есть коллектор,
-  env `OTEL_EXPORTER_OTLP_ENDPOINT`.
+  Sentry-реализация — на платформе (`core:platform/SentryCrashReporter.kt`,
+  `Core/Platform/SentryCrashReporter.swift`; `sentry-android` 8.57, `sentry-cocoa` 9.28); OTel
+  (`otlp`) — только когда у проекта есть коллектор, env `OTEL_EXPORTER_OTLP_ENDPOINT`.
 - **Пороги качества** — поле `docs/stack/observability.md`: crash-free ≥ 99.5 % / 48 ч,
   ANR < 0.47 %, hang rate iOS < 1 %; проверяются человеком перед промоушеном (STORE-HANDOFF).
-- Timber, Kermit, Firebase Crashlytics, `sentry-kotlin-multiplatform` — не подключаются: SDK
-  платформ (`sentry-android`, `sentry-cocoa`) инициализируются в `core:platform` /
-  `Core/Platform` (`SentryCrashReporter` реализует `TelemetrySink` из `PlatformDeps`).
+- Timber, Kermit, Firebase Crashlytics, `sentry-kotlin-multiplatform` — не подключаются.
 
 ## Сигналы
 

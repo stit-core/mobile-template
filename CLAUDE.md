@@ -5,8 +5,8 @@ kotlinx-serialization, презентеры на `StateFlow`) + нативный
 (AGP 9.4, Compose BOM 2026.09, Material 3, Navigation 3, Hilt) и `iosApp/`
 (Xcode 27, Swift 6.4, SwiftUI, `@Observable`, SwiftPM local packages).
 Гейт: Spotless/ktlint + detekt + Android Lint + Robolectric/Roborazzi + Kover +
-Konsist; swift-format + SwiftLint + `swift test` чистых пакетов; macOS-стадии —
-по SSH (`make check-mac`).
+Konsist; swift-format + SwiftLint + archlint + `swift test` чистых пакетов; паритет
+токенов/строк/deep links; macOS-стадии — по SSH (`make check-mac`).
 
 Этот файл — **ядро (always-on) + роутер**. Детали — в `docs/`, контекстные
 правила — в `.claude/rules/` (path-scoped), процедуры — в `.claude/skills/`.
@@ -66,17 +66,20 @@ next-step, не падают.
 |---|---|
 | `make doctor` | preflight: JDK 21, Android SDK 37, Swift 6.4, RAM ≥ 6 ГБ, Mac-хост (если задан) |
 | `make fmt` | автоформат Kotlin (Spotless/ktlint + порядок зависимостей) + Swift (swift-format) — единственные автофиксеры |
-| `make test` | JVM-тесты: `shared` (jvmTest, androidHostTest), Android (Robolectric, Konsist), lint-детекторы |
+| `make test` | JVM-тесты: `shared` (jvmTest, androidHostTest), Android (Robolectric, Konsist), lint-детекторы, Swift `Pure` |
 | `make screenshots` / `screenshots-record` | Roborazzi verify / перезапись эталонов (осознанно) |
 | `make kmp-check` | `shared` → klib под iOS-таргеты + проверка каталога (SKIPPED ≠ OK) + запрет cinterop |
 | `make api-check` / `api-dump` | сверка публичного API `shared` с дампами / обновление дампов (решение в плане) |
 | `make gen` / `gen-check` / `mock-check` | модели из `api/openapi.yaml` (+ `openapi.lock`; нужны `OPENAPI_GENERATOR_JAR`, `python3` + PyYAML; затем `make api-dump`) / проверка дрейфа / фикстуры ↔ схема |
-| `make check` | **gate** (Linux-полный): всё выше + detekt + Lint + Kover + assembleDevDebug + Swift-стадии |
-| `make check-fast` | Swift-формат + Kotlin-формат + detekt + `shared` jvmTest — цикл «пока пишу» |
+| `make gen-tokens` / `tokens-check` | `design/tokens.json` → `Tokens.kt` + `Tokens.swift` (коммитятся) / паритет: регенерация во temp == дерево |
+| `make i18n-check` / `deeplinks-check` | `values/` == `values-ru/` + `error.<code>` → `core_ui_error_*` (iOS xcstrings — WARN) / манифест ↔ `config/env` ↔ `DeepLinkParserTest` ↔ `deep-links.md` |
+| `make swift-lint` / `swift-test` | SwiftLint `--strict` + archlint (граф `Package.swift`) / `swift test` `Pure` + пол 70 % |
+| `make check` | **gate** (Linux-полный): Swift-стадии → паритет (tokens/i18n/deeplinks) → контракт → detekt/Lint/тесты/Kover → kmp/api → assembleDevDebug; порядок — `docs/reference/architecture.md#гейт` |
+| `make check-fast` | Swift-формат + SwiftLint + Kotlin-формат + detekt + `shared` jvmTest — цикл «пока пишу» |
 | `make check-mac` | macOS-стадии по SSH (`MAC_HOST`): link framework, iosSimulatorArm64Test, xcodebuild, планы Unit + Snapshot |
 | `make check-full` | `check` + `check-mac`; обязателен перед `/release` |
 | `make gate-selftest` | негативные фикстуры `.gate-fixtures/`: гейт обязан краснеть |
-| `make run-android` / `run-ios` | dev-сборка на эмулятор / (Mac) симулятор |
+| `make build` / `run-android` / `run-ios` / `e2e` | dev+demo debug APK / devDebug на эмулятор (id — `scripts/tools/app-id.sh`) / (Mac) симулятор / Maestro против demo-сборки (`P=android\|ios`) |
 | `make release-preflight` / `release-android` | см. `docs/reference/release.md`; оркеструет `/release` |
 | `make status` | сводка для `/smartdev` |
 
@@ -95,6 +98,7 @@ next-step, не падают.
 | Релиз, версии, магазины, Mac-хост | `docs/reference/release.md`, `distribution.md`, `mac-host.md` |
 | Observability (Sentry/GlitchTip, `Logger`/`LogSink`, `os.Logger`) | `docs/reference/observability.md` + rule `observability` |
 | Тесты (JVM, Robolectric, Roborazzi, Swift Testing, snapshot, Maestro) | rule `tests-pipeline` |
+| Токены дизайна (`design/tokens.json`, паритет платформ) | rule `design-tokens` |
 | env, флейворы, xcconfig, секреты, сессия | rules `env-and-config`, `signing-and-secrets`, `auth-and-session` |
 | API-контракт, кодоген, mock-режим | rules `api-contract`, `mock-and-fixtures` |
 | Магазины и право | rules `store-compliance`, `privacy-and-law` |
@@ -126,8 +130,9 @@ next-step, не падают.
   обязателен
 - **Один автофиксер на язык**: Spotless (ktlint 1.8) и swift-format;
   detekt-formatting и SwiftFormat не подключаются; baseline'ов lint/detekt нет
-- **Токены**: цвета/размеры только через токены обеих платформ; сырой `0xFF…`
-  в композабле — красный detekt (`MagicNumber`)
+- **Токены**: `design/tokens.json` → `make gen-tokens` → `Tokens.kt`/`Tokens.swift`
+  (коммитятся, `tokens-check` сверяет); в UI — только `StitTheme`/`theme`; сырой `0xFF…`
+  — detekt `MagicNumber` + Lint `StitRawDesignValue`, в Swift — SwiftLint
 - **Секреты**: токены только в `SecureStore` (Keystore/Keychain), access — в
   памяти; `security-crypto` запрещён; ключи подписи — в Vaultwarden, не в репо
 - **Сеть — только через `shared`**: `URLSession`/`OkHttp` напрямую в фичах запрещены
@@ -174,8 +179,8 @@ next-step, не падают.
   `Local.xcconfig`, `.env.local`
 - Править `*.pbxproj` руками (product name, bundle id, team — в xcconfig;
   таргеты — в `Package.swift`)
-- Править `build/`, `core/api/generated/`, `shared/api/*.api` руками
-  (только `make gen` / `make api-dump`)
+- Править `build/`, `core/api/generated/`, `shared/api/*.api`, `generated/Tokens.kt`,
+  `Tokens.swift` руками (только `make gen` / `make api-dump` / `make gen-tokens`)
 - `android sdk install` / `sdkmanager` и `./gradlew bundleRelease` «по пути»
 - Считать зелёный Linux-гейт доказательством работоспособности iOS-UI
 

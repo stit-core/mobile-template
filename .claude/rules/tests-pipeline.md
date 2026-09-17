@@ -1,6 +1,6 @@
 ---
 name: tests-pipeline
-description: Пирамида тестов — презентер на JVM с фикстурами → Robolectric/Compose test v2 → Roborazzi/snapshot → Maestro (вне gate); фейки, а не моки; те же сценарии mock/; полы покрытия 80/70/70; эталоны пишет стандартное окружение; негативные фикстуры — часть гейта. Грузится при правке тестов, скриншотов, снапшотов, e2e, .gate-fixtures.
+description: Пирамида тестов — презентер на JVM с фикстурами → Robolectric/Compose test v2 → Roborazzi/snapshot → Maestro (make e2e, вне gate); фейки, а не моки; те же сценарии mock/; полы покрытия 80/70/70; эталоны пишет стандартное окружение; паритетные стадии и негативные фикстуры NF-01…24 — часть гейта. Грузится при правке тестов, скриншотов, снапшотов, e2e, .gate-fixtures.
 paths:
   - "**/src/*Test*/**"
   - "**/commonTest/**"
@@ -21,34 +21,36 @@ skill `/triage-failure` (падающий тест по той же причин
 
 | слой | тест | инструменты | пол |
 |---|---|---|---|
-| `shared` презентеры, use-case'ы | сценарии по состояниям через фикстуры `mock/`; ошибки и offline-ветки | `commonTest`, `runTest`, `StandardTestDispatcher`, Turbine | 80 % строк (`:shared:koverVerify`, `generated/**` исключён) |
-| `shared` репозитории, мапперы, `DeepLinkParser`, `AuthPlugin` | table-driven; single-flight refresh под параллельными запросами; reuse → logout | те же + Ktor `MockEngine` | |
+| `shared` презентеры | сценарии по состояниям через фикстуры `mock/` (`<Group>PresentersTest`); ошибки и offline-ветки | `commonTest`, `testContainer(scenario)`, `runTest`, `StandardTestDispatcher`, Turbine | 80 % строк (`:shared:koverVerify`, `generated/**` исключён) |
+| `shared` репозитории, мапперы, `DeepLinkParser`, `AuthPlugin` | table-driven; single-flight refresh под параллельными запросами; reuse → logout; каждый путь deep link (`deeplinks-check`) | те же + Ktor `MockEngine` | |
 | `shared` контракт | `FixturesTest` — все сценарии × сущности парсятся сгенерированными моделями (`make mock-check`) | JVM | — |
 | `shared` архитектура | Konsist `ArchitectureTest` (`jvmTest`): чистый `commonMain`, слои `core < entity < feature`, плоский фасад презентеров | Konsist, стадия `shared jvm tests` | — |
 | `androidMain` (`KeystoreSecureStore`, `DataStoreSettings`, `LogcatSink`) | под Robolectric (`shared/src/androidHostTest`, `robolectric.properties` sdk=35) | `androidHostTest` | — |
-| Android экраны | Robolectric Compose-тест + Roborazzi-скриншот **на каждое состояние** | Compose test v2, Roborazzi (`robolectric.properties` sdk=35) | 70 % (`:androidApp:app:koverVerifyGate`) |
-| Android архитектура | Konsist `ArchitectureTest`; тест lint-детектора | Konsist, `lint-tests` | — |
-| iOS `Pure` | Swift Testing, параметризованные | `swift test`, `llvm-cov` (`coverage-floor.sh`) | 70 % |
-| iOS `Core`/`Features` | Swift Testing + snapshot на каждое состояние (Mac) | `check-mac`, `swift-snapshot-testing` | без пола |
-| гейт | негативная фикстура на каждый механизм | `make gate-selftest` | все красные |
-| e2e | Maestro-флоу `app-start`, `login`, `todos` (устройство/эмулятор) | `e2e/` | вне gate |
+| Android экраны | `<Key>ScreenTest` (Compose test v2) + `<Group>ScreenshotTest : ScreenshotTest` **на каждое состояние** → `src/test/screenshots/<key>_<state>[_dark].png`; `DemoFlowTest` (`app`, Hilt + Robolectric) — demo-сборка от входа до задачи | Robolectric (`sdk=35`), Roborazzi, `core:testing` (`FakePlatformDeps`, `MainDispatcherRule`) | 70 % (`:androidApp:app:koverVerifyGate`) |
+| Android архитектура | Konsist `ArchitectureTest` (`app`); `DesignSystemDetectorTest` (`lint-tests`) | стадия `android unit tests` | — |
+| ресурсы и паритет | `tokens-check` (регенерация `Tokens.kt`/`Tokens.swift`), `i18n-check` (`values/` == `values-ru/`, `core_ui_error_<code>`; xcstrings — WARN), `deeplinks-check` (манифест ↔ env ↔ `DeepLinkParserTest` ↔ `deep-links.md`) | `scripts/tools/*-check.sh` | — |
+| iOS `Pure` + `Tools/archlint` | Swift Testing (`TokensTests`, `AppConfigTests`, …; `ArchRulesTests`) | `swift test`, `coverage-floor.sh` (llvm-cov по всем `*Tests.so`) | 70 % |
+| iOS `Core`/`Features` | Swift Testing на `Scenario.container` + `waitUntil` (`<Key>ModelTests`); `SnapshotTests` — `Snapshots.assertScreen` light + dark на состояние (Mac) | `check-mac` (планы `Unit`, `Snapshot`), `swift-snapshot-testing` | без пола |
+| гейт | негативная фикстура на каждый механизм: NF-01…10 каркас, NF-11…16 `shared`, NF-17…19 паритет, NF-20…24 Swift | `make gate-selftest` | все красные |
+| e2e | Maestro `e2e/android/{app-start,login,todos}.yaml`, `e2e/ios/{app-start,login}.yaml` против demo-сборки | `make e2e` (`P=android` дефолт; iOS — Mac) | вне gate |
 
 ## Инварианты
 
 - **Фейки, не моки**: `Fake<Port>` в `shared/src/commonTest/…/testing/Fakes.kt` (`FakePlatformDeps`,
-  `FakeSecureStore`, `FakeClock`, `TestDispatchers`) + `testContainer(scenario)` на `MockTransport`,
-  и `androidApp/core/testing`; MockK — только когда фейк невозможен. Мок и фейк одного порта
-  вместе не живут.
-- **Детерминизм**: фиксированный `Clock`, `DispatcherProvider`, фикстуры `mock/fixtures/<scenario>/`;
-  сценарии те же, что в `demo`-сборке (`empty | populated | authenticated | error`).
+  `FakeSecureStore`, `FakeClock`, `TestDispatchers`) + `testContainer(scenario)` на `MockTransport`;
+  `androidApp/core/testing/Fakes.kt` и `iosApp/Packages/TestSupport` — та же форма; MockK — только
+  когда фейк невозможен. Мок и фейк одного порта вместе не живут.
+- **Детерминизм**: фиксированный `Clock`, `DispatcherProvider`, UTC в `ScreenshotTest`, фикстуры
+  `mock/fixtures/<scenario>/`; сценарии те же, что в `demo`-сборке (`empty | populated | authenticated | error`).
 - **Эталоны** (`src/test/screenshots/`, `__Snapshots__/`) перезаписываются только
   `make screenshots-record` / `make snapshot-record` осознанно и на стандартном окружении
-  (JDK/toolchain из `libs.versions.toml`, симулятор из `.test-simulator`). `*_compare.png`
-  — сигнал, не мусор.
+  (JDK/toolchain из `libs.versions.toml`, симулятор из `.test-simulator`). `*_compare.png` — сигнал, не мусор.
 - **Compose test API v2** (`androidx.compose.ui.test.junit4.v2`); v1-импорты — detekt.
   `isIncludeAndroidResources = true` уже включён плагинами.
-- **Тесты читаются как спецификация**: имена по-русски в backticks допустимы, идентификаторы
-  — английские; закомментированных и `@Ignore`-тестов нет.
-- **Негативная фикстура** `.gate-fixtures/NF-NN/fixture.sh` (`EXPECT`, `TOUCHES`, `apply`) на
-  каждый новый механизм гейта; новая стадия — сначала в `stage()` и `STAGES` `check.sh`.
-- `make test` — весь набор JVM; `make check-fast` — `shared` jvmTest в цикле «пока пишу».
+- **Тесты читаются как спецификация**: имена по-русски в backticks допустимы, идентификаторы —
+  английские; закомментированных и `@Ignore`-тестов нет.
+- **Негативная фикстура** `.gate-fixtures/NF-NN/fixture.sh` (первая строка `# NF-NN — <что ловит>`,
+  `EXPECT`, `TOUCHES`, `apply`) на каждый новый механизм гейта; новая стадия — сначала в `stage()` и
+  `STAGES` `check.sh`; `make gate-selftest F=NF-NN` — одна фикстура.
+- `make test` — JVM-набор + Swift `Pure`; `make check-fast` — Swift-формат, SwiftLint, Kotlin-формат,
+  detekt, `shared` jvmTest в цикле «пока пишу».
