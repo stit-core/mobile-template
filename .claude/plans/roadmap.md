@@ -33,10 +33,12 @@ KMP-ядро `shared/` + нативный UI `androidApp/` (Compose) и `iosApp/
 S-10, S-15 (нужен Mac) и S-12 (нужны аккаунты магазинов). Всё это — в `## Backlog`.
 
 **Открытые вопросы.**
-- [ ] Q1: собирается ли SKIE 0.10.14 на Linux без cinterop (фаза 2, спайк внутри волны 1) →
-  решает агент A; при «нет» — SKIE остаётся TODO-строкой в roadmap, фасад пишется плоским.
-- [ ] Q2: считает ли BCV 0.18.2 `iosArm64` поддерживаемым на Linux при Kotlin 2.4 (S-2) →
-  решает агент B1; при «нет» — на Linux проверяется JVM-дамп, klib-дамп уходит в `check-mac`.
+- [x] Q1: собирается ли SKIE 0.10.14 на Linux без cinterop → нет: SKIE 0.10.14 поддерживает Kotlin
+  ≤ 2.4.10 и падает на 2.4.20 при конфигурации; SKIE не подключён, фасад для Swift — плоский по
+  правилу `kmp-public-api`; подключение — строкой в `## Backlog`.
+- [x] Q2: считает ли BCV 0.18.2 `iosArm64` поддерживаемым на Linux при Kotlin 2.4 (S-2) → да:
+  `apiDump`/`apiCheck` на Linux ведут оба дампа (`shared/api/jvm/shared.api`, `shared/api/shared.klib.api`);
+  строгая klib-валидация — `-Pstit.klibStrict=true` в `check-mac`.
 
 **Гейт (Done).**
 - `make doctor`, `make check`, `make check-fast`, `make gate-selftest` — зелёные на этой машине
@@ -55,15 +57,24 @@ S-10, S-15 (нужен Mac) и S-12 (нужны аккаунты магазин�
 **Атомы.**
 
 #### Phase 1 — волна 1: фундамент
-- [ ] **A1:** Агент A — каркас репозитория и Linux-гейт на пустом дереве (08 §2.1, §2.3, §4;
+- [x] **A1:** Агент A — каркас репозитория и Linux-гейт на пустом дереве (08 §2.1, §2.3, §4;
   семя — spike `android-gate`): корень Gradle, `build-logic` (11 плагинов), пустой `shared/`,
   `androidApp/*`, `Makefile`, `scripts/tools/*`, `scripts/git-hooks/*`, `.gate-fixtures/NF-01…10`,
   заглушки `AGENTS.md`/`CLAUDE.md`.
   - Verify: `make doctor && make check && make gate-selftest` → check зелёный ≤ 15 с тёплый с
     SKIP-блоком, 10 фикстур красные · Зависит от: —
-- [ ] **A2:** Протокол проверки §4 после волны 1 (машина и гейт, структура, читаемость), точечные
+  - **Done:** `make doctor` OK; `make check` → 0 с SKIP-блоком, тёплый 19–21 с (машина в swap; цель
+    ≤ 15 с — перемерить на свободной машине), холодный 104 с; `check-fast` 7 с, `kmp-check` 1 с,
+    `gate-selftest` 10/10 красных; `GATE_RELEASE=1 make check` зелёный (R8 1 ч 45 м при zram 100 %);
+    покрытие shared 100 % / Android 100 % (заглушки); SKIE не подключён (Q1), BCV klib на Linux (Q2).
+- [x] **A2:** Протокол проверки §4 после волны 1 (машина и гейт, структура, читаемость), точечные
   правки, коммит `feat(repo): каркас и Linux-гейт`.
   - Verify: `make check` → 0 и `git status` чистый · Зависит от: A1
+  - **Done:** основная сессия: `make doctor` OK (1 warn RAM), `make check` тёплый 21 с после `--stop`
+    и 9 с на живом демоне (код 0, SKIP-блок из 5 macOS-стадий), `check-fast` 3 с, `gate-selftest`
+    10/10 красных за 29 с, дерево после самотеста без изменений, `./gradlew --stop`; прочитаны все
+    файлы каркаса, оба PNG-эталона читаемы; замечания (run-android app id, дубль списка скиллов,
+    секции status.sh, themes.xml) — в `docs/research/prompts/NEXT-SESSION-2.md` §1.
 
 #### Phase 2 — волна 2: shared ∥ обвязка
 - [ ] **A3:** Агент B1 — `shared/` целиком (08 §2.2–§2.7, 07): core, контракт API + кодоген
@@ -109,6 +120,13 @@ S-10, S-15 (нужен Mac) и S-12 (нужны аккаунты магазин�
 - **2026-09-17 · старт.** `git init -b main`, первый коммит с ресёрчем, план записан.
   Машина: тулчейны в `~/.cache/stit-mobile-research/`, свободной RAM ≈ 3 ГБ (swap занят) —
   Gradle-агенты строго по одному. Следующий шаг: A1.
+- **2026-09-17 · волна 1 закрыта.**
+  - Закрыто: A1, A2 ✓ (коммит `feat(repo): каркас и Linux-гейт`); Q1, Q2 ✓.
+  - Обнаружено: субагент с явным `model: fable` падает на старте (403) — запускать без `model`;
+    обрывы API лечатся `SendMessage` тому же агенту (контекст и дерево сохраняются); SKIE 0.10.14
+    несовместим с Kotlin 2.4.20; тёплый `make check` 19–21 с из-за swap и 12 вызовов Gradle.
+  - Следующий шаг: A3 ∥ A4 (волна 2) по `docs/research/prompts/NEXT-SESSION-2.md` (блоки состояния
+    для B1/B3 готовы там же).
 
 ## Backlog
 
@@ -137,3 +155,9 @@ S-10, S-15 (нужен Mac) и S-12 (нужны аккаунты магазин�
   `androidApp/baselineprofile` в `docs/reference/release.md`.
 - **SQLDelight-шов для offline-first проектов** — спайк компиляции на Linux без cinterop;
   до него persistence v1 = in-memory + `FileCache` + `Settings` + `SecureStore`.
+- **SKIE для Swift-фасада** — подключить в `stit.kmp.library`, когда SKIE поддержит Kotlin 2.4.20+
+  (0.10.14 ограничен 2.4.10); до этого фасад плоский (`kmp-public-api`), sealed → Swift через
+  Obj-C export без enum-сахара.
+- **Тёплый `make check` ≤ 15 с** — сейчас 19–21 с на занятой машине (12 вызовов Gradle по 1–2 с +
+  `spotlessCheck` 5 с); если на свободной машине > 15 с — объединить дешёвые стадии (`spotlessCheck
+  checkSortDependencies detekt lintDevDebug`) в один вызов Gradle с разбором per-task статусов.
