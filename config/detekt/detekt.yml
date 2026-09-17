@@ -31,7 +31,7 @@ style:
       - value: 'android.util.Log'
         reason: 'Логи — через Logger из shared core/observability, не через android.util.Log.'
       - value: 'java.util.Date'
-        reason: 'Время — только kotlinx-datetime / java.time.'
+        reason: 'Время — только kotlin.time / java.time.'
       - value: 'java.util.logging.*'
         reason: 'Логи — через Logger из shared core/observability.'
       - value: 'kotlinx.coroutines.GlobalScope'

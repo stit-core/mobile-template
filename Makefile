@@ -1,7 +1,7 @@
 .PHONY: help fmt fmt-check detekt lint test screenshots screenshots-record cover cover-check \
         check-fast run-android build check check-full kmp-check api-dump api-check gen gen-check mock-check \
         check-mac mac-doctor mac-build mac-test snapshot-record run-ios release-preflight release-android \
-        setup doctor clean status map deps search gate-selftest
+        setup doctor clean status map deps search gate-selftest validate-plan links-check kin-diff
 
 # Единый словарь для агента: `make <verb>`. Concise-by-default (scripts/tools/*): одна строка OK:/FAIL:
 # на шаг, полный лог — build/gate-logs/<шаг>.log. FORMAT=detailed — длиннее выжимка лога при падении,
@@ -140,6 +140,15 @@ search: ## Поиск по коду (Q=pattern [P=path]) — rg, fallback grep
 	@if command -v rg >/dev/null 2>&1; then rg -n --max-count=80 -- "$(Q)" $(if $(P),$(P),.); \
 	else grep -rn --exclude-dir=build --exclude-dir=.gradle --exclude-dir=.git -- "$(Q)" $(if $(P),$(P),.); fi
 
+links-check: ## Ссылки в docs/**, README, CLAUDE.md, .claude/** резолвятся в существующие файлы
+	@bash scripts/tools/links-check.sh
+
+kin-diff: ## Advisory-сверка идентичных файлов с go-backend-template (docs/reference/kinship.md)
+	@bash scripts/tools/kin-diff.sh
+
 ##@ META
 gate-selftest: ## Негативные фикстуры .gate-fixtures/NF-*: каждая обязана уронить свою стадию (F=NF-03 — одна)
 	@bash scripts/tools/gate-selftest.sh $(F)
+
+validate-plan: ## Структура .claude/plans/roadmap.md: атомы с Verify/Зависит от, статусы, чекпоинты
+	@bash scripts/tools/validate-plan.sh

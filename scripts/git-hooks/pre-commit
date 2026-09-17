@@ -25,4 +25,10 @@ if [ -n "$swift" ]; then
     bash scripts/tools/swift-step.sh "format swift" swift format lint --strict $swift
 fi
 
+roadmap=$(git diff --cached --name-only --diff-filter=ACMR | grep -E '^\.claude/plans/roadmap\.md$' || true)
+if [ -n "$roadmap" ]; then
+    echo "pre-commit: validate-plan"
+    bash scripts/tools/validate-plan.sh
+fi
+
 # Напоминание: формат сообщения коммита проверяет commit-msg hook. Установка хуков — make setup.
