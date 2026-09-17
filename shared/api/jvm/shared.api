@@ -1,3 +1,1341 @@
+public abstract interface class tech/stit/mobile/PlatformDeps {
+	public abstract fun getAppInfo ()Ltech/stit/mobile/core/lib/AppInfo;
+	public abstract fun getConnectivity ()Ltech/stit/mobile/core/lib/ConnectivityMonitor;
+	public abstract fun getFilesDir ()Ljava/lang/String;
+	public abstract fun getLocale ()Ltech/stit/mobile/core/i18n/LocaleProvider;
+	public abstract fun getLogSink ()Ltech/stit/mobile/core/observability/LogSink;
+	public abstract fun getNotificationPermission ()Ltech/stit/mobile/core/push/NotificationPermission;
+	public abstract fun getPushTransports ()Ljava/util/List;
+	public abstract fun getSecureStore ()Ltech/stit/mobile/core/auth/SecureStore;
+	public abstract fun getSettings ()Ltech/stit/mobile/core/lib/Settings;
+	public abstract fun getTelemetry ()Ltech/stit/mobile/core/observability/TelemetrySink;
+}
+
+public final class tech/stit/mobile/SharedContainer {
+	public fun <init> (Ltech/stit/mobile/PlatformDeps;Ltech/stit/mobile/core/config/AppConfig;)V
+	public final fun deleteAccountPresenter ()Ltech/stit/mobile/feature/auth/DeleteAccountPresenter;
+	public final fun demoPanelPresenter ()Ltech/stit/mobile/feature/demo/DemoPanelPresenter;
+	public final fun getConfig ()Ltech/stit/mobile/core/config/AppConfig;
+	public final fun getDeepLinkParser ()Ltech/stit/mobile/core/deeplink/DeepLinkParser;
+	public final fun getDemoMode ()Ltech/stit/mobile/core/mock/DemoMode;
+	public final fun getDeviceRepository ()Ltech/stit/mobile/entity/device/DeviceRepository;
+	public final fun getMockTransport ()Ltech/stit/mobile/core/mock/MockTransport;
+	public final fun getPushRegistrar ()Ltech/stit/mobile/core/push/PushRegistrar;
+	public final fun getRequirements ()Ltech/stit/mobile/core/requirements/RequirementsClient;
+	public final fun getSessionRepository ()Ltech/stit/mobile/entity/session/SessionRepository;
+	public final fun getSessionStore ()Ltech/stit/mobile/core/auth/SessionStore;
+	public final fun getTodoRepository ()Ltech/stit/mobile/entity/todo/TodoRepository;
+	public final fun getUserRepository ()Ltech/stit/mobile/entity/user/UserRepository;
+	public final fun loginPresenter ()Ltech/stit/mobile/feature/auth/LoginPresenter;
+	public final fun profilePresenter ()Ltech/stit/mobile/feature/profile/ProfilePresenter;
+	public final fun pushOptInPresenter ()Ltech/stit/mobile/feature/push/PushOptInPresenter;
+	public final fun requirementsPresenter ()Ltech/stit/mobile/feature/requirements/RequirementsPresenter;
+	public final fun sessionsPresenter ()Ltech/stit/mobile/feature/auth/SessionsPresenter;
+	public final fun settingsPresenter ()Ltech/stit/mobile/feature/settings/SettingsPresenter;
+	public final fun shellPresenter ()Ltech/stit/mobile/feature/shell/ShellPresenter;
+	public final fun todoDetailPresenter (Ljava/lang/String;)Ltech/stit/mobile/feature/todos/TodoDetailPresenter;
+	public final fun todoListPresenter ()Ltech/stit/mobile/feature/todos/TodoListPresenter;
+}
+
+public abstract class tech/stit/mobile/core/api/ApiError : java/lang/Exception {
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getMessageKey ()Ltech/stit/mobile/core/i18n/MessageKey;
+}
+
+public final class tech/stit/mobile/core/api/ApiError$Http : tech/stit/mobile/core/api/ApiError {
+	public fun <init> (ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;)V
+	public final fun getCode ()Ljava/lang/String;
+	public final fun getDetail ()Ljava/lang/String;
+	public final fun getFieldErrors ()Ljava/util/Map;
+	public final fun getRequestId ()Ljava/lang/String;
+	public final fun getStatus ()I
+}
+
+public final class tech/stit/mobile/core/api/ApiError$Network : tech/stit/mobile/core/api/ApiError {
+	public fun <init> (Ljava/lang/Throwable;)V
+}
+
+public final class tech/stit/mobile/core/api/ApiErrorKt {
+	public static final fun toMessageKey (Ljava/lang/Throwable;)Ltech/stit/mobile/core/i18n/MessageKey;
+}
+
+public final class tech/stit/mobile/core/api/generated/AppLinksView {
+	public static final field Companion Ltech/stit/mobile/core/api/generated/AppLinksView$Companion;
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ltech/stit/mobile/core/api/generated/AppLinksView;
+	public static synthetic fun copy$default (Ltech/stit/mobile/core/api/generated/AppLinksView;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ltech/stit/mobile/core/api/generated/AppLinksView;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAccountDeletion ()Ljava/lang/String;
+	public final fun getPrivacyPolicy ()Ljava/lang/String;
+	public final fun getSupport ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class tech/stit/mobile/core/api/generated/AppLinksView$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ltech/stit/mobile/core/api/generated/AppLinksView$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ltech/stit/mobile/core/api/generated/AppLinksView;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ltech/stit/mobile/core/api/generated/AppLinksView;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/AppLinksView$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/AppRequirementsOutputBody {
+	public static final field Companion Ltech/stit/mobile/core/api/generated/AppRequirementsOutputBody$Companion;
+	public fun <init> (Ltech/stit/mobile/core/api/generated/AppRequirementsView;)V
+	public final fun component1 ()Ltech/stit/mobile/core/api/generated/AppRequirementsView;
+	public final fun copy (Ltech/stit/mobile/core/api/generated/AppRequirementsView;)Ltech/stit/mobile/core/api/generated/AppRequirementsOutputBody;
+	public static synthetic fun copy$default (Ltech/stit/mobile/core/api/generated/AppRequirementsOutputBody;Ltech/stit/mobile/core/api/generated/AppRequirementsView;ILjava/lang/Object;)Ltech/stit/mobile/core/api/generated/AppRequirementsOutputBody;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getData ()Ltech/stit/mobile/core/api/generated/AppRequirementsView;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class tech/stit/mobile/core/api/generated/AppRequirementsOutputBody$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ltech/stit/mobile/core/api/generated/AppRequirementsOutputBody$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ltech/stit/mobile/core/api/generated/AppRequirementsOutputBody;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ltech/stit/mobile/core/api/generated/AppRequirementsOutputBody;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/AppRequirementsOutputBody$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/AppRequirementsView {
+	public static final field Companion Ltech/stit/mobile/core/api/generated/AppRequirementsView$Companion;
+	public fun <init> (Ljava/util/Map;Ljava/lang/String;Ltech/stit/mobile/core/api/generated/AppLinksView;Ljava/lang/String;Ltech/stit/mobile/core/api/generated/AppRequirementsView$Status;Lkotlin/time/Instant;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/util/Map;Ljava/lang/String;Ltech/stit/mobile/core/api/generated/AppLinksView;Ljava/lang/String;Ltech/stit/mobile/core/api/generated/AppRequirementsView$Status;Lkotlin/time/Instant;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/util/Map;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ltech/stit/mobile/core/api/generated/AppLinksView;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Ltech/stit/mobile/core/api/generated/AppRequirementsView$Status;
+	public final fun component6 ()Lkotlin/time/Instant;
+	public final fun component7 ()Ljava/lang/String;
+	public final fun copy (Ljava/util/Map;Ljava/lang/String;Ltech/stit/mobile/core/api/generated/AppLinksView;Ljava/lang/String;Ltech/stit/mobile/core/api/generated/AppRequirementsView$Status;Lkotlin/time/Instant;Ljava/lang/String;)Ltech/stit/mobile/core/api/generated/AppRequirementsView;
+	public static synthetic fun copy$default (Ltech/stit/mobile/core/api/generated/AppRequirementsView;Ljava/util/Map;Ljava/lang/String;Ltech/stit/mobile/core/api/generated/AppLinksView;Ljava/lang/String;Ltech/stit/mobile/core/api/generated/AppRequirementsView$Status;Lkotlin/time/Instant;Ljava/lang/String;ILjava/lang/Object;)Ltech/stit/mobile/core/api/generated/AppRequirementsView;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFlags ()Ljava/util/Map;
+	public final fun getLatestVersion ()Ljava/lang/String;
+	public final fun getLinks ()Ltech/stit/mobile/core/api/generated/AppLinksView;
+	public final fun getMaintenanceUntil ()Lkotlin/time/Instant;
+	public final fun getMinVersion ()Ljava/lang/String;
+	public final fun getStatus ()Ltech/stit/mobile/core/api/generated/AppRequirementsView$Status;
+	public final fun getStoreUrl ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class tech/stit/mobile/core/api/generated/AppRequirementsView$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ltech/stit/mobile/core/api/generated/AppRequirementsView$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ltech/stit/mobile/core/api/generated/AppRequirementsView;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ltech/stit/mobile/core/api/generated/AppRequirementsView;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/AppRequirementsView$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/AppRequirementsView$Status : java/lang/Enum {
+	public static final field Companion Ltech/stit/mobile/core/api/generated/AppRequirementsView$Status$Companion;
+	public static final field Maintenance Ltech/stit/mobile/core/api/generated/AppRequirementsView$Status;
+	public static final field Ok Ltech/stit/mobile/core/api/generated/AppRequirementsView$Status;
+	public static final field UpdateRecommended Ltech/stit/mobile/core/api/generated/AppRequirementsView$Status;
+	public static final field UpdateRequired Ltech/stit/mobile/core/api/generated/AppRequirementsView$Status;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun getValue ()Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Ltech/stit/mobile/core/api/generated/AppRequirementsView$Status;
+	public static fun values ()[Ltech/stit/mobile/core/api/generated/AppRequirementsView$Status;
+}
+
+public final class tech/stit/mobile/core/api/generated/AppRequirementsView$Status$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/AuthUserView {
+	public static final field Companion Ltech/stit/mobile/core/api/generated/AuthUserView$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ltech/stit/mobile/core/api/generated/AuthUserView;
+	public static synthetic fun copy$default (Ltech/stit/mobile/core/api/generated/AuthUserView;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ltech/stit/mobile/core/api/generated/AuthUserView;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getEmail ()Ljava/lang/String;
+	public final fun getId ()Ljava/lang/String;
+	public final fun getName ()Ljava/lang/String;
+	public final fun getRole ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class tech/stit/mobile/core/api/generated/AuthUserView$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ltech/stit/mobile/core/api/generated/AuthUserView$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ltech/stit/mobile/core/api/generated/AuthUserView;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ltech/stit/mobile/core/api/generated/AuthUserView;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/AuthUserView$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/ChangePasswordInputBody {
+	public static final field Companion Ltech/stit/mobile/core/api/generated/ChangePasswordInputBody$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ltech/stit/mobile/core/api/generated/ChangePasswordInputBody;
+	public static synthetic fun copy$default (Ltech/stit/mobile/core/api/generated/ChangePasswordInputBody;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ltech/stit/mobile/core/api/generated/ChangePasswordInputBody;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getNewPassword ()Ljava/lang/String;
+	public final fun getOldPassword ()Ljava/lang/String;
+	public final fun getUserId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class tech/stit/mobile/core/api/generated/ChangePasswordInputBody$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ltech/stit/mobile/core/api/generated/ChangePasswordInputBody$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ltech/stit/mobile/core/api/generated/ChangePasswordInputBody;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ltech/stit/mobile/core/api/generated/ChangePasswordInputBody;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/ChangePasswordInputBody$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/Cookie {
+	public static final field Companion Ltech/stit/mobile/core/api/generated/Cookie$Companion;
+	public fun <init> (Ljava/lang/String;Lkotlin/time/Instant;ZJLjava/lang/String;ZLjava/lang/String;ZLjava/lang/String;Ljava/lang/String;JZLjava/util/List;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component10 ()Ljava/lang/String;
+	public final fun component11 ()J
+	public final fun component12 ()Z
+	public final fun component13 ()Ljava/util/List;
+	public final fun component14 ()Ljava/lang/String;
+	public final fun component2 ()Lkotlin/time/Instant;
+	public final fun component3 ()Z
+	public final fun component4 ()J
+	public final fun component5 ()Ljava/lang/String;
+	public final fun component6 ()Z
+	public final fun component7 ()Ljava/lang/String;
+	public final fun component8 ()Z
+	public final fun component9 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Lkotlin/time/Instant;ZJLjava/lang/String;ZLjava/lang/String;ZLjava/lang/String;Ljava/lang/String;JZLjava/util/List;Ljava/lang/String;)Ltech/stit/mobile/core/api/generated/Cookie;
+	public static synthetic fun copy$default (Ltech/stit/mobile/core/api/generated/Cookie;Ljava/lang/String;Lkotlin/time/Instant;ZJLjava/lang/String;ZLjava/lang/String;ZLjava/lang/String;Ljava/lang/String;JZLjava/util/List;Ljava/lang/String;ILjava/lang/Object;)Ltech/stit/mobile/core/api/generated/Cookie;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDomain ()Ljava/lang/String;
+	public final fun getExpires ()Lkotlin/time/Instant;
+	public final fun getHttpOnly ()Z
+	public final fun getMaxAge ()J
+	public final fun getName ()Ljava/lang/String;
+	public final fun getPartitioned ()Z
+	public final fun getPath ()Ljava/lang/String;
+	public final fun getQuoted ()Z
+	public final fun getRaw ()Ljava/lang/String;
+	public final fun getRawExpires ()Ljava/lang/String;
+	public final fun getSameSite ()J
+	public final fun getSecure ()Z
+	public final fun getUnparsed ()Ljava/util/List;
+	public final fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class tech/stit/mobile/core/api/generated/Cookie$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ltech/stit/mobile/core/api/generated/Cookie$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ltech/stit/mobile/core/api/generated/Cookie;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ltech/stit/mobile/core/api/generated/Cookie;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/Cookie$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/DeviceListOutputBody {
+	public static final field Companion Ltech/stit/mobile/core/api/generated/DeviceListOutputBody$Companion;
+	public fun <init> (Ljava/util/List;J)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun component2 ()J
+	public final fun copy (Ljava/util/List;J)Ltech/stit/mobile/core/api/generated/DeviceListOutputBody;
+	public static synthetic fun copy$default (Ltech/stit/mobile/core/api/generated/DeviceListOutputBody;Ljava/util/List;JILjava/lang/Object;)Ltech/stit/mobile/core/api/generated/DeviceListOutputBody;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getData ()Ljava/util/List;
+	public final fun getTotal ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class tech/stit/mobile/core/api/generated/DeviceListOutputBody$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ltech/stit/mobile/core/api/generated/DeviceListOutputBody$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ltech/stit/mobile/core/api/generated/DeviceListOutputBody;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ltech/stit/mobile/core/api/generated/DeviceListOutputBody;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/DeviceListOutputBody$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/DeviceOutputBody {
+	public static final field Companion Ltech/stit/mobile/core/api/generated/DeviceOutputBody$Companion;
+	public fun <init> (Ltech/stit/mobile/core/api/generated/DeviceView;)V
+	public final fun component1 ()Ltech/stit/mobile/core/api/generated/DeviceView;
+	public final fun copy (Ltech/stit/mobile/core/api/generated/DeviceView;)Ltech/stit/mobile/core/api/generated/DeviceOutputBody;
+	public static synthetic fun copy$default (Ltech/stit/mobile/core/api/generated/DeviceOutputBody;Ltech/stit/mobile/core/api/generated/DeviceView;ILjava/lang/Object;)Ltech/stit/mobile/core/api/generated/DeviceOutputBody;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getData ()Ltech/stit/mobile/core/api/generated/DeviceView;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class tech/stit/mobile/core/api/generated/DeviceOutputBody$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ltech/stit/mobile/core/api/generated/DeviceOutputBody$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ltech/stit/mobile/core/api/generated/DeviceOutputBody;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ltech/stit/mobile/core/api/generated/DeviceOutputBody;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/DeviceOutputBody$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/DeviceRegisterInputBody {
+	public static final field Companion Ltech/stit/mobile/core/api/generated/DeviceRegisterInputBody$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ltech/stit/mobile/core/api/generated/DeviceRegisterInputBody$Platform;Ltech/stit/mobile/core/api/generated/DeviceRegisterInputBody$Provider;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ltech/stit/mobile/core/api/generated/DeviceRegisterInputBody$Platform;Ltech/stit/mobile/core/api/generated/DeviceRegisterInputBody$Provider;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component10 ()Ljava/lang/Boolean;
+	public final fun component11 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ltech/stit/mobile/core/api/generated/DeviceRegisterInputBody$Platform;
+	public final fun component4 ()Ltech/stit/mobile/core/api/generated/DeviceRegisterInputBody$Provider;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun component6 ()Ljava/lang/String;
+	public final fun component7 ()Ljava/lang/String;
+	public final fun component8 ()Ljava/lang/String;
+	public final fun component9 ()Ljava/lang/Boolean;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ltech/stit/mobile/core/api/generated/DeviceRegisterInputBody$Platform;Ltech/stit/mobile/core/api/generated/DeviceRegisterInputBody$Provider;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;)Ltech/stit/mobile/core/api/generated/DeviceRegisterInputBody;
+	public static synthetic fun copy$default (Ltech/stit/mobile/core/api/generated/DeviceRegisterInputBody;Ljava/lang/String;Ljava/lang/String;Ltech/stit/mobile/core/api/generated/DeviceRegisterInputBody$Platform;Ltech/stit/mobile/core/api/generated/DeviceRegisterInputBody$Provider;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;ILjava/lang/Object;)Ltech/stit/mobile/core/api/generated/DeviceRegisterInputBody;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAppVersion ()Ljava/lang/String;
+	public final fun getDeviceModel ()Ljava/lang/String;
+	public final fun getInstallationId ()Ljava/lang/String;
+	public final fun getLocale ()Ljava/lang/String;
+	public final fun getOsVersion ()Ljava/lang/String;
+	public final fun getPlatform ()Ltech/stit/mobile/core/api/generated/DeviceRegisterInputBody$Platform;
+	public final fun getProvider ()Ltech/stit/mobile/core/api/generated/DeviceRegisterInputBody$Provider;
+	public final fun getPushEnabled ()Ljava/lang/Boolean;
+	public final fun getSandbox ()Ljava/lang/Boolean;
+	public final fun getTimezone ()Ljava/lang/String;
+	public final fun getToken ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class tech/stit/mobile/core/api/generated/DeviceRegisterInputBody$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ltech/stit/mobile/core/api/generated/DeviceRegisterInputBody$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ltech/stit/mobile/core/api/generated/DeviceRegisterInputBody;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ltech/stit/mobile/core/api/generated/DeviceRegisterInputBody;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/DeviceRegisterInputBody$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/DeviceRegisterInputBody$Platform : java/lang/Enum {
+	public static final field Android Ltech/stit/mobile/core/api/generated/DeviceRegisterInputBody$Platform;
+	public static final field Companion Ltech/stit/mobile/core/api/generated/DeviceRegisterInputBody$Platform$Companion;
+	public static final field Ios Ltech/stit/mobile/core/api/generated/DeviceRegisterInputBody$Platform;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun getValue ()Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Ltech/stit/mobile/core/api/generated/DeviceRegisterInputBody$Platform;
+	public static fun values ()[Ltech/stit/mobile/core/api/generated/DeviceRegisterInputBody$Platform;
+}
+
+public final class tech/stit/mobile/core/api/generated/DeviceRegisterInputBody$Platform$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/DeviceRegisterInputBody$Provider : java/lang/Enum {
+	public static final field Apns Ltech/stit/mobile/core/api/generated/DeviceRegisterInputBody$Provider;
+	public static final field Companion Ltech/stit/mobile/core/api/generated/DeviceRegisterInputBody$Provider$Companion;
+	public static final field Fcm Ltech/stit/mobile/core/api/generated/DeviceRegisterInputBody$Provider;
+	public static final field Hms Ltech/stit/mobile/core/api/generated/DeviceRegisterInputBody$Provider;
+	public static final field Ntfy Ltech/stit/mobile/core/api/generated/DeviceRegisterInputBody$Provider;
+	public static final field Rustore Ltech/stit/mobile/core/api/generated/DeviceRegisterInputBody$Provider;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun getValue ()Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Ltech/stit/mobile/core/api/generated/DeviceRegisterInputBody$Provider;
+	public static fun values ()[Ltech/stit/mobile/core/api/generated/DeviceRegisterInputBody$Provider;
+}
+
+public final class tech/stit/mobile/core/api/generated/DeviceRegisterInputBody$Provider$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/DeviceView {
+	public static final field Companion Ltech/stit/mobile/core/api/generated/DeviceView$Companion;
+	public fun <init> (Ljava/lang/String;Lkotlin/time/Instant;Ljava/lang/String;Lkotlin/time/Instant;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/time/Instant;)V
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/time/Instant;Ljava/lang/String;Lkotlin/time/Instant;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/time/Instant;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lkotlin/time/Instant;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Lkotlin/time/Instant;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun component6 ()Ljava/lang/String;
+	public final fun component7 ()Ljava/lang/String;
+	public final fun component8 ()Lkotlin/time/Instant;
+	public final fun copy (Ljava/lang/String;Lkotlin/time/Instant;Ljava/lang/String;Lkotlin/time/Instant;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/time/Instant;)Ltech/stit/mobile/core/api/generated/DeviceView;
+	public static synthetic fun copy$default (Ltech/stit/mobile/core/api/generated/DeviceView;Ljava/lang/String;Lkotlin/time/Instant;Ljava/lang/String;Lkotlin/time/Instant;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/time/Instant;ILjava/lang/Object;)Ltech/stit/mobile/core/api/generated/DeviceView;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAppVersion ()Ljava/lang/String;
+	public final fun getCreatedAt ()Lkotlin/time/Instant;
+	public final fun getDeviceModel ()Ljava/lang/String;
+	public final fun getId ()Ljava/lang/String;
+	public final fun getLastSeenAt ()Lkotlin/time/Instant;
+	public final fun getPlatform ()Ljava/lang/String;
+	public final fun getProvider ()Ljava/lang/String;
+	public final fun getRevokedAt ()Lkotlin/time/Instant;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class tech/stit/mobile/core/api/generated/DeviceView$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ltech/stit/mobile/core/api/generated/DeviceView$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ltech/stit/mobile/core/api/generated/DeviceView;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ltech/stit/mobile/core/api/generated/DeviceView;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/DeviceView$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/EmailVerifyInputBody {
+	public static final field Companion Ltech/stit/mobile/core/api/generated/EmailVerifyInputBody$Companion;
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Ltech/stit/mobile/core/api/generated/EmailVerifyInputBody;
+	public static synthetic fun copy$default (Ltech/stit/mobile/core/api/generated/EmailVerifyInputBody;Ljava/lang/String;ILjava/lang/Object;)Ltech/stit/mobile/core/api/generated/EmailVerifyInputBody;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getToken ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class tech/stit/mobile/core/api/generated/EmailVerifyInputBody$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ltech/stit/mobile/core/api/generated/EmailVerifyInputBody$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ltech/stit/mobile/core/api/generated/EmailVerifyInputBody;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ltech/stit/mobile/core/api/generated/EmailVerifyInputBody;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/EmailVerifyInputBody$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/ErrorDetail {
+	public static final field Companion Ltech/stit/mobile/core/api/generated/ErrorDetail$Companion;
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Lkotlinx/serialization/json/JsonElement;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Lkotlinx/serialization/json/JsonElement;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Lkotlinx/serialization/json/JsonElement;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Lkotlinx/serialization/json/JsonElement;)Ltech/stit/mobile/core/api/generated/ErrorDetail;
+	public static synthetic fun copy$default (Ltech/stit/mobile/core/api/generated/ErrorDetail;Ljava/lang/String;Ljava/lang/String;Lkotlinx/serialization/json/JsonElement;ILjava/lang/Object;)Ltech/stit/mobile/core/api/generated/ErrorDetail;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getLocation ()Ljava/lang/String;
+	public final fun getMessage ()Ljava/lang/String;
+	public final fun getValue ()Lkotlinx/serialization/json/JsonElement;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class tech/stit/mobile/core/api/generated/ErrorDetail$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ltech/stit/mobile/core/api/generated/ErrorDetail$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ltech/stit/mobile/core/api/generated/ErrorDetail;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ltech/stit/mobile/core/api/generated/ErrorDetail;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/ErrorDetail$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/ErrorModel {
+	public static final field Companion Ltech/stit/mobile/core/api/generated/ErrorModel$Companion;
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/util/List;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Ljava/lang/Long;
+	public final fun component6 ()Ljava/lang/String;
+	public final fun component7 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;)Ltech/stit/mobile/core/api/generated/ErrorModel;
+	public static synthetic fun copy$default (Ltech/stit/mobile/core/api/generated/ErrorModel;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ltech/stit/mobile/core/api/generated/ErrorModel;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCode ()Ljava/lang/String;
+	public final fun getDetail ()Ljava/lang/String;
+	public final fun getErrors ()Ljava/util/List;
+	public final fun getInstance ()Ljava/lang/String;
+	public final fun getStatus ()Ljava/lang/Long;
+	public final fun getTitle ()Ljava/lang/String;
+	public final fun getType ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class tech/stit/mobile/core/api/generated/ErrorModel$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ltech/stit/mobile/core/api/generated/ErrorModel$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ltech/stit/mobile/core/api/generated/ErrorModel;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ltech/stit/mobile/core/api/generated/ErrorModel;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/ErrorModel$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/LoginInputBody {
+	public static final field Companion Ltech/stit/mobile/core/api/generated/LoginInputBody$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Ltech/stit/mobile/core/api/generated/LoginInputBody;
+	public static synthetic fun copy$default (Ltech/stit/mobile/core/api/generated/LoginInputBody;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ltech/stit/mobile/core/api/generated/LoginInputBody;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getEmail ()Ljava/lang/String;
+	public final fun getPassword ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class tech/stit/mobile/core/api/generated/LoginInputBody$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ltech/stit/mobile/core/api/generated/LoginInputBody$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ltech/stit/mobile/core/api/generated/LoginInputBody;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ltech/stit/mobile/core/api/generated/LoginInputBody;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/LoginInputBody$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/LoginOutputBody {
+	public static final field Companion Ltech/stit/mobile/core/api/generated/LoginOutputBody$Companion;
+	public fun <init> (Ltech/stit/mobile/core/api/generated/AuthUserView;Ltech/stit/mobile/core/api/generated/TokenPairBody;)V
+	public synthetic fun <init> (Ltech/stit/mobile/core/api/generated/AuthUserView;Ltech/stit/mobile/core/api/generated/TokenPairBody;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ltech/stit/mobile/core/api/generated/AuthUserView;
+	public final fun component2 ()Ltech/stit/mobile/core/api/generated/TokenPairBody;
+	public final fun copy (Ltech/stit/mobile/core/api/generated/AuthUserView;Ltech/stit/mobile/core/api/generated/TokenPairBody;)Ltech/stit/mobile/core/api/generated/LoginOutputBody;
+	public static synthetic fun copy$default (Ltech/stit/mobile/core/api/generated/LoginOutputBody;Ltech/stit/mobile/core/api/generated/AuthUserView;Ltech/stit/mobile/core/api/generated/TokenPairBody;ILjava/lang/Object;)Ltech/stit/mobile/core/api/generated/LoginOutputBody;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getTokens ()Ltech/stit/mobile/core/api/generated/TokenPairBody;
+	public final fun getUser ()Ltech/stit/mobile/core/api/generated/AuthUserView;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class tech/stit/mobile/core/api/generated/LoginOutputBody$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ltech/stit/mobile/core/api/generated/LoginOutputBody$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ltech/stit/mobile/core/api/generated/LoginOutputBody;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ltech/stit/mobile/core/api/generated/LoginOutputBody;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/LoginOutputBody$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/PasswordResetConfirmInputBody {
+	public static final field Companion Ltech/stit/mobile/core/api/generated/PasswordResetConfirmInputBody$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Ltech/stit/mobile/core/api/generated/PasswordResetConfirmInputBody;
+	public static synthetic fun copy$default (Ltech/stit/mobile/core/api/generated/PasswordResetConfirmInputBody;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ltech/stit/mobile/core/api/generated/PasswordResetConfirmInputBody;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getPassword ()Ljava/lang/String;
+	public final fun getToken ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class tech/stit/mobile/core/api/generated/PasswordResetConfirmInputBody$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ltech/stit/mobile/core/api/generated/PasswordResetConfirmInputBody$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ltech/stit/mobile/core/api/generated/PasswordResetConfirmInputBody;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ltech/stit/mobile/core/api/generated/PasswordResetConfirmInputBody;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/PasswordResetConfirmInputBody$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/PasswordResetRequestInputBody {
+	public static final field Companion Ltech/stit/mobile/core/api/generated/PasswordResetRequestInputBody$Companion;
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Ltech/stit/mobile/core/api/generated/PasswordResetRequestInputBody;
+	public static synthetic fun copy$default (Ltech/stit/mobile/core/api/generated/PasswordResetRequestInputBody;Ljava/lang/String;ILjava/lang/Object;)Ltech/stit/mobile/core/api/generated/PasswordResetRequestInputBody;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getEmail ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class tech/stit/mobile/core/api/generated/PasswordResetRequestInputBody$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ltech/stit/mobile/core/api/generated/PasswordResetRequestInputBody$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ltech/stit/mobile/core/api/generated/PasswordResetRequestInputBody;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ltech/stit/mobile/core/api/generated/PasswordResetRequestInputBody;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/PasswordResetRequestInputBody$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/RefreshInputBody {
+	public static final field Companion Ltech/stit/mobile/core/api/generated/RefreshInputBody$Companion;
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Ltech/stit/mobile/core/api/generated/RefreshInputBody;
+	public static synthetic fun copy$default (Ltech/stit/mobile/core/api/generated/RefreshInputBody;Ljava/lang/String;ILjava/lang/Object;)Ltech/stit/mobile/core/api/generated/RefreshInputBody;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getRefreshToken ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class tech/stit/mobile/core/api/generated/RefreshInputBody$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ltech/stit/mobile/core/api/generated/RefreshInputBody$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ltech/stit/mobile/core/api/generated/RefreshInputBody;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ltech/stit/mobile/core/api/generated/RefreshInputBody;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/RefreshInputBody$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/SessionListOutputBody {
+	public static final field Companion Ltech/stit/mobile/core/api/generated/SessionListOutputBody$Companion;
+	public fun <init> (Ljava/util/List;J)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun component2 ()J
+	public final fun copy (Ljava/util/List;J)Ltech/stit/mobile/core/api/generated/SessionListOutputBody;
+	public static synthetic fun copy$default (Ltech/stit/mobile/core/api/generated/SessionListOutputBody;Ljava/util/List;JILjava/lang/Object;)Ltech/stit/mobile/core/api/generated/SessionListOutputBody;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getData ()Ljava/util/List;
+	public final fun getTotal ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class tech/stit/mobile/core/api/generated/SessionListOutputBody$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ltech/stit/mobile/core/api/generated/SessionListOutputBody$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ltech/stit/mobile/core/api/generated/SessionListOutputBody;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ltech/stit/mobile/core/api/generated/SessionListOutputBody;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/SessionListOutputBody$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/SessionView {
+	public static final field Companion Ltech/stit/mobile/core/api/generated/SessionView$Companion;
+	public fun <init> (ZLkotlin/time/Instant;Lkotlin/time/Instant;Ljava/lang/String;Ljava/lang/String;Ltech/stit/mobile/core/api/generated/SessionView$Client;Ljava/lang/String;Lkotlin/time/Instant;)V
+	public synthetic fun <init> (ZLkotlin/time/Instant;Lkotlin/time/Instant;Ljava/lang/String;Ljava/lang/String;Ltech/stit/mobile/core/api/generated/SessionView$Client;Ljava/lang/String;Lkotlin/time/Instant;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Z
+	public final fun component2 ()Lkotlin/time/Instant;
+	public final fun component3 ()Lkotlin/time/Instant;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun component6 ()Ltech/stit/mobile/core/api/generated/SessionView$Client;
+	public final fun component7 ()Ljava/lang/String;
+	public final fun component8 ()Lkotlin/time/Instant;
+	public final fun copy (ZLkotlin/time/Instant;Lkotlin/time/Instant;Ljava/lang/String;Ljava/lang/String;Ltech/stit/mobile/core/api/generated/SessionView$Client;Ljava/lang/String;Lkotlin/time/Instant;)Ltech/stit/mobile/core/api/generated/SessionView;
+	public static synthetic fun copy$default (Ltech/stit/mobile/core/api/generated/SessionView;ZLkotlin/time/Instant;Lkotlin/time/Instant;Ljava/lang/String;Ljava/lang/String;Ltech/stit/mobile/core/api/generated/SessionView$Client;Ljava/lang/String;Lkotlin/time/Instant;ILjava/lang/Object;)Ltech/stit/mobile/core/api/generated/SessionView;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAppVersion ()Ljava/lang/String;
+	public final fun getClient ()Ltech/stit/mobile/core/api/generated/SessionView$Client;
+	public final fun getCurrent ()Z
+	public final fun getDeviceName ()Ljava/lang/String;
+	public final fun getExpiresAt ()Lkotlin/time/Instant;
+	public final fun getIssuedAt ()Lkotlin/time/Instant;
+	public final fun getJti ()Ljava/lang/String;
+	public final fun getLastUsedAt ()Lkotlin/time/Instant;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class tech/stit/mobile/core/api/generated/SessionView$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ltech/stit/mobile/core/api/generated/SessionView$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ltech/stit/mobile/core/api/generated/SessionView;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ltech/stit/mobile/core/api/generated/SessionView;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/SessionView$Client : java/lang/Enum {
+	public static final field Android Ltech/stit/mobile/core/api/generated/SessionView$Client;
+	public static final field Companion Ltech/stit/mobile/core/api/generated/SessionView$Client$Companion;
+	public static final field Ios Ltech/stit/mobile/core/api/generated/SessionView$Client;
+	public static final field Web Ltech/stit/mobile/core/api/generated/SessionView$Client;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun getValue ()Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Ltech/stit/mobile/core/api/generated/SessionView$Client;
+	public static fun values ()[Ltech/stit/mobile/core/api/generated/SessionView$Client;
+}
+
+public final class tech/stit/mobile/core/api/generated/SessionView$Client$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/SessionView$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/TodoCreateInputBody {
+	public static final field Companion Ltech/stit/mobile/core/api/generated/TodoCreateInputBody$Companion;
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Ltech/stit/mobile/core/api/generated/TodoCreateInputBody;
+	public static synthetic fun copy$default (Ltech/stit/mobile/core/api/generated/TodoCreateInputBody;Ljava/lang/String;ILjava/lang/Object;)Ltech/stit/mobile/core/api/generated/TodoCreateInputBody;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getTitle ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class tech/stit/mobile/core/api/generated/TodoCreateInputBody$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ltech/stit/mobile/core/api/generated/TodoCreateInputBody$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ltech/stit/mobile/core/api/generated/TodoCreateInputBody;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ltech/stit/mobile/core/api/generated/TodoCreateInputBody;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/TodoCreateInputBody$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/TodoListOutputBody {
+	public static final field Companion Ltech/stit/mobile/core/api/generated/TodoListOutputBody$Companion;
+	public fun <init> (Ljava/util/List;JJJ)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun component2 ()J
+	public final fun component3 ()J
+	public final fun component4 ()J
+	public final fun copy (Ljava/util/List;JJJ)Ltech/stit/mobile/core/api/generated/TodoListOutputBody;
+	public static synthetic fun copy$default (Ltech/stit/mobile/core/api/generated/TodoListOutputBody;Ljava/util/List;JJJILjava/lang/Object;)Ltech/stit/mobile/core/api/generated/TodoListOutputBody;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getData ()Ljava/util/List;
+	public final fun getPage ()J
+	public final fun getPropertySize ()J
+	public final fun getTotal ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class tech/stit/mobile/core/api/generated/TodoListOutputBody$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ltech/stit/mobile/core/api/generated/TodoListOutputBody$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ltech/stit/mobile/core/api/generated/TodoListOutputBody;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ltech/stit/mobile/core/api/generated/TodoListOutputBody;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/TodoListOutputBody$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/TodoOutputBody {
+	public static final field Companion Ltech/stit/mobile/core/api/generated/TodoOutputBody$Companion;
+	public fun <init> (Ltech/stit/mobile/core/api/generated/TodoView;)V
+	public final fun component1 ()Ltech/stit/mobile/core/api/generated/TodoView;
+	public final fun copy (Ltech/stit/mobile/core/api/generated/TodoView;)Ltech/stit/mobile/core/api/generated/TodoOutputBody;
+	public static synthetic fun copy$default (Ltech/stit/mobile/core/api/generated/TodoOutputBody;Ltech/stit/mobile/core/api/generated/TodoView;ILjava/lang/Object;)Ltech/stit/mobile/core/api/generated/TodoOutputBody;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getData ()Ltech/stit/mobile/core/api/generated/TodoView;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class tech/stit/mobile/core/api/generated/TodoOutputBody$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ltech/stit/mobile/core/api/generated/TodoOutputBody$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ltech/stit/mobile/core/api/generated/TodoOutputBody;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ltech/stit/mobile/core/api/generated/TodoOutputBody;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/TodoOutputBody$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/TodoUpdateInputBody {
+	public static final field Companion Ltech/stit/mobile/core/api/generated/TodoUpdateInputBody$Companion;
+	public fun <init> (JLjava/lang/Boolean;Ljava/lang/String;)V
+	public synthetic fun <init> (JLjava/lang/Boolean;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()J
+	public final fun component2 ()Ljava/lang/Boolean;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun copy (JLjava/lang/Boolean;Ljava/lang/String;)Ltech/stit/mobile/core/api/generated/TodoUpdateInputBody;
+	public static synthetic fun copy$default (Ltech/stit/mobile/core/api/generated/TodoUpdateInputBody;JLjava/lang/Boolean;Ljava/lang/String;ILjava/lang/Object;)Ltech/stit/mobile/core/api/generated/TodoUpdateInputBody;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDone ()Ljava/lang/Boolean;
+	public final fun getTitle ()Ljava/lang/String;
+	public final fun getVersion ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class tech/stit/mobile/core/api/generated/TodoUpdateInputBody$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ltech/stit/mobile/core/api/generated/TodoUpdateInputBody$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ltech/stit/mobile/core/api/generated/TodoUpdateInputBody;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ltech/stit/mobile/core/api/generated/TodoUpdateInputBody;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/TodoUpdateInputBody$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/TodoView {
+	public static final field Companion Ltech/stit/mobile/core/api/generated/TodoView$Companion;
+	public fun <init> (Lkotlin/time/Instant;ZLjava/lang/String;Ljava/lang/String;Lkotlin/time/Instant;J)V
+	public final fun component1 ()Lkotlin/time/Instant;
+	public final fun component2 ()Z
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Lkotlin/time/Instant;
+	public final fun component6 ()J
+	public final fun copy (Lkotlin/time/Instant;ZLjava/lang/String;Ljava/lang/String;Lkotlin/time/Instant;J)Ltech/stit/mobile/core/api/generated/TodoView;
+	public static synthetic fun copy$default (Ltech/stit/mobile/core/api/generated/TodoView;Lkotlin/time/Instant;ZLjava/lang/String;Ljava/lang/String;Lkotlin/time/Instant;JILjava/lang/Object;)Ltech/stit/mobile/core/api/generated/TodoView;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCreatedAt ()Lkotlin/time/Instant;
+	public final fun getDone ()Z
+	public final fun getId ()Ljava/lang/String;
+	public final fun getTitle ()Ljava/lang/String;
+	public final fun getUpdatedAt ()Lkotlin/time/Instant;
+	public final fun getVersion ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class tech/stit/mobile/core/api/generated/TodoView$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ltech/stit/mobile/core/api/generated/TodoView$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ltech/stit/mobile/core/api/generated/TodoView;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ltech/stit/mobile/core/api/generated/TodoView;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/TodoView$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/TokenPairBody {
+	public static final field Companion Ltech/stit/mobile/core/api/generated/TokenPairBody$Companion;
+	public fun <init> (Ljava/lang/String;JLjava/lang/String;Ltech/stit/mobile/core/api/generated/TokenPairBody$TokenType;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()J
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ltech/stit/mobile/core/api/generated/TokenPairBody$TokenType;
+	public final fun copy (Ljava/lang/String;JLjava/lang/String;Ltech/stit/mobile/core/api/generated/TokenPairBody$TokenType;)Ltech/stit/mobile/core/api/generated/TokenPairBody;
+	public static synthetic fun copy$default (Ltech/stit/mobile/core/api/generated/TokenPairBody;Ljava/lang/String;JLjava/lang/String;Ltech/stit/mobile/core/api/generated/TokenPairBody$TokenType;ILjava/lang/Object;)Ltech/stit/mobile/core/api/generated/TokenPairBody;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAccessToken ()Ljava/lang/String;
+	public final fun getExpiresIn ()J
+	public final fun getRefreshToken ()Ljava/lang/String;
+	public final fun getTokenType ()Ltech/stit/mobile/core/api/generated/TokenPairBody$TokenType;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class tech/stit/mobile/core/api/generated/TokenPairBody$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ltech/stit/mobile/core/api/generated/TokenPairBody$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ltech/stit/mobile/core/api/generated/TokenPairBody;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ltech/stit/mobile/core/api/generated/TokenPairBody;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/TokenPairBody$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/TokenPairBody$TokenType : java/lang/Enum {
+	public static final field Bearer Ltech/stit/mobile/core/api/generated/TokenPairBody$TokenType;
+	public static final field Companion Ltech/stit/mobile/core/api/generated/TokenPairBody$TokenType$Companion;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun getValue ()Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Ltech/stit/mobile/core/api/generated/TokenPairBody$TokenType;
+	public static fun values ()[Ltech/stit/mobile/core/api/generated/TokenPairBody$TokenType;
+}
+
+public final class tech/stit/mobile/core/api/generated/TokenPairBody$TokenType$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/UserGetOutputBody {
+	public static final field Companion Ltech/stit/mobile/core/api/generated/UserGetOutputBody$Companion;
+	public fun <init> (Ltech/stit/mobile/core/api/generated/UserView;)V
+	public final fun component1 ()Ltech/stit/mobile/core/api/generated/UserView;
+	public final fun copy (Ltech/stit/mobile/core/api/generated/UserView;)Ltech/stit/mobile/core/api/generated/UserGetOutputBody;
+	public static synthetic fun copy$default (Ltech/stit/mobile/core/api/generated/UserGetOutputBody;Ltech/stit/mobile/core/api/generated/UserView;ILjava/lang/Object;)Ltech/stit/mobile/core/api/generated/UserGetOutputBody;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getData ()Ltech/stit/mobile/core/api/generated/UserView;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class tech/stit/mobile/core/api/generated/UserGetOutputBody$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ltech/stit/mobile/core/api/generated/UserGetOutputBody$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ltech/stit/mobile/core/api/generated/UserGetOutputBody;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ltech/stit/mobile/core/api/generated/UserGetOutputBody;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/UserGetOutputBody$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/UserListOutputBody {
+	public static final field Companion Ltech/stit/mobile/core/api/generated/UserListOutputBody$Companion;
+	public fun <init> (Ljava/util/List;JJJ)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun component2 ()J
+	public final fun component3 ()J
+	public final fun component4 ()J
+	public final fun copy (Ljava/util/List;JJJ)Ltech/stit/mobile/core/api/generated/UserListOutputBody;
+	public static synthetic fun copy$default (Ltech/stit/mobile/core/api/generated/UserListOutputBody;Ljava/util/List;JJJILjava/lang/Object;)Ltech/stit/mobile/core/api/generated/UserListOutputBody;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getData ()Ljava/util/List;
+	public final fun getPage ()J
+	public final fun getPropertySize ()J
+	public final fun getTotal ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class tech/stit/mobile/core/api/generated/UserListOutputBody$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ltech/stit/mobile/core/api/generated/UserListOutputBody$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ltech/stit/mobile/core/api/generated/UserListOutputBody;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ltech/stit/mobile/core/api/generated/UserListOutputBody;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/UserListOutputBody$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/UserMeOutputBody {
+	public static final field Companion Ltech/stit/mobile/core/api/generated/UserMeOutputBody$Companion;
+	public fun <init> (Ltech/stit/mobile/core/api/generated/UserView;)V
+	public final fun component1 ()Ltech/stit/mobile/core/api/generated/UserView;
+	public final fun copy (Ltech/stit/mobile/core/api/generated/UserView;)Ltech/stit/mobile/core/api/generated/UserMeOutputBody;
+	public static synthetic fun copy$default (Ltech/stit/mobile/core/api/generated/UserMeOutputBody;Ltech/stit/mobile/core/api/generated/UserView;ILjava/lang/Object;)Ltech/stit/mobile/core/api/generated/UserMeOutputBody;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getData ()Ltech/stit/mobile/core/api/generated/UserView;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class tech/stit/mobile/core/api/generated/UserMeOutputBody$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ltech/stit/mobile/core/api/generated/UserMeOutputBody$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ltech/stit/mobile/core/api/generated/UserMeOutputBody;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ltech/stit/mobile/core/api/generated/UserMeOutputBody;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/UserMeOutputBody$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/UserRegisterInputBody {
+	public static final field Companion Ltech/stit/mobile/core/api/generated/UserRegisterInputBody$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ltech/stit/mobile/core/api/generated/UserRegisterInputBody;
+	public static synthetic fun copy$default (Ltech/stit/mobile/core/api/generated/UserRegisterInputBody;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ltech/stit/mobile/core/api/generated/UserRegisterInputBody;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getEmail ()Ljava/lang/String;
+	public final fun getName ()Ljava/lang/String;
+	public final fun getPassword ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class tech/stit/mobile/core/api/generated/UserRegisterInputBody$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ltech/stit/mobile/core/api/generated/UserRegisterInputBody$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ltech/stit/mobile/core/api/generated/UserRegisterInputBody;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ltech/stit/mobile/core/api/generated/UserRegisterInputBody;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/UserRegisterInputBody$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/UserRegisterOutputBody {
+	public static final field Companion Ltech/stit/mobile/core/api/generated/UserRegisterOutputBody$Companion;
+	public fun <init> (Ltech/stit/mobile/core/api/generated/UserView;)V
+	public final fun component1 ()Ltech/stit/mobile/core/api/generated/UserView;
+	public final fun copy (Ltech/stit/mobile/core/api/generated/UserView;)Ltech/stit/mobile/core/api/generated/UserRegisterOutputBody;
+	public static synthetic fun copy$default (Ltech/stit/mobile/core/api/generated/UserRegisterOutputBody;Ltech/stit/mobile/core/api/generated/UserView;ILjava/lang/Object;)Ltech/stit/mobile/core/api/generated/UserRegisterOutputBody;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getData ()Ltech/stit/mobile/core/api/generated/UserView;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class tech/stit/mobile/core/api/generated/UserRegisterOutputBody$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ltech/stit/mobile/core/api/generated/UserRegisterOutputBody$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ltech/stit/mobile/core/api/generated/UserRegisterOutputBody;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ltech/stit/mobile/core/api/generated/UserRegisterOutputBody;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/UserRegisterOutputBody$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/UserUpdateInputBody {
+	public static final field Companion Ltech/stit/mobile/core/api/generated/UserUpdateInputBody$Companion;
+	public fun <init> (JLjava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (JLjava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()J
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun copy (JLjava/lang/String;Ljava/lang/String;)Ltech/stit/mobile/core/api/generated/UserUpdateInputBody;
+	public static synthetic fun copy$default (Ltech/stit/mobile/core/api/generated/UserUpdateInputBody;JLjava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ltech/stit/mobile/core/api/generated/UserUpdateInputBody;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getName ()Ljava/lang/String;
+	public final fun getStatus ()Ljava/lang/String;
+	public final fun getVersion ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class tech/stit/mobile/core/api/generated/UserUpdateInputBody$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ltech/stit/mobile/core/api/generated/UserUpdateInputBody$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ltech/stit/mobile/core/api/generated/UserUpdateInputBody;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ltech/stit/mobile/core/api/generated/UserUpdateInputBody;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/UserUpdateInputBody$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/UserUpdateOutputBody {
+	public static final field Companion Ltech/stit/mobile/core/api/generated/UserUpdateOutputBody$Companion;
+	public fun <init> (Ltech/stit/mobile/core/api/generated/UserView;)V
+	public final fun component1 ()Ltech/stit/mobile/core/api/generated/UserView;
+	public final fun copy (Ltech/stit/mobile/core/api/generated/UserView;)Ltech/stit/mobile/core/api/generated/UserUpdateOutputBody;
+	public static synthetic fun copy$default (Ltech/stit/mobile/core/api/generated/UserUpdateOutputBody;Ltech/stit/mobile/core/api/generated/UserView;ILjava/lang/Object;)Ltech/stit/mobile/core/api/generated/UserUpdateOutputBody;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getData ()Ltech/stit/mobile/core/api/generated/UserView;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class tech/stit/mobile/core/api/generated/UserUpdateOutputBody$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ltech/stit/mobile/core/api/generated/UserUpdateOutputBody$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ltech/stit/mobile/core/api/generated/UserUpdateOutputBody;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ltech/stit/mobile/core/api/generated/UserUpdateOutputBody;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/UserUpdateOutputBody$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/UserView {
+	public static final field Companion Ltech/stit/mobile/core/api/generated/UserView$Companion;
+	public fun <init> (Lkotlin/time/Instant;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/time/Instant;Ljava/lang/Long;)V
+	public synthetic fun <init> (Lkotlin/time/Instant;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/time/Instant;Ljava/lang/Long;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lkotlin/time/Instant;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun component6 ()Lkotlin/time/Instant;
+	public final fun component7 ()Ljava/lang/Long;
+	public final fun copy (Lkotlin/time/Instant;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/time/Instant;Ljava/lang/Long;)Ltech/stit/mobile/core/api/generated/UserView;
+	public static synthetic fun copy$default (Ltech/stit/mobile/core/api/generated/UserView;Lkotlin/time/Instant;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/time/Instant;Ljava/lang/Long;ILjava/lang/Object;)Ltech/stit/mobile/core/api/generated/UserView;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCreatedAt ()Lkotlin/time/Instant;
+	public final fun getEmail ()Ljava/lang/String;
+	public final fun getId ()Ljava/lang/String;
+	public final fun getName ()Ljava/lang/String;
+	public final fun getStatus ()Ljava/lang/String;
+	public final fun getUpdatedAt ()Lkotlin/time/Instant;
+	public final fun getVersion ()Ljava/lang/Long;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class tech/stit/mobile/core/api/generated/UserView$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ltech/stit/mobile/core/api/generated/UserView$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ltech/stit/mobile/core/api/generated/UserView;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ltech/stit/mobile/core/api/generated/UserView;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/api/generated/UserView$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/auth/AuthState : java/lang/Enum {
+	public static final field SignedIn Ltech/stit/mobile/core/auth/AuthState;
+	public static final field SignedOut Ltech/stit/mobile/core/auth/AuthState;
+	public static final field Unknown Ltech/stit/mobile/core/auth/AuthState;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Ltech/stit/mobile/core/auth/AuthState;
+	public static fun values ()[Ltech/stit/mobile/core/auth/AuthState;
+}
+
+public abstract interface class tech/stit/mobile/core/auth/SecureStore {
+	public abstract fun read (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun remove (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun write (Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class tech/stit/mobile/core/auth/SessionStore {
+	public static final field Companion Ltech/stit/mobile/core/auth/SessionStore$Companion;
+	public static final field REFRESH_TOKEN_KEY Ljava/lang/String;
+	public final fun clear (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun getAccessToken ()Ljava/lang/String;
+	public final fun getAuthState ()Lkotlinx/coroutines/flow/StateFlow;
+	public final fun refreshAfter (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun refreshToken (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun restore (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun signIn (Ltech/stit/mobile/core/auth/TokenPair;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun validAccessToken (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class tech/stit/mobile/core/auth/SessionStore$Companion {
+}
+
+public final class tech/stit/mobile/core/auth/TokenPair {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;J)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()J
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;J)Ltech/stit/mobile/core/auth/TokenPair;
+	public static synthetic fun copy$default (Ltech/stit/mobile/core/auth/TokenPair;Ljava/lang/String;Ljava/lang/String;JILjava/lang/Object;)Ltech/stit/mobile/core/auth/TokenPair;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAccessToken ()Ljava/lang/String;
+	public final fun getExpiresInSeconds ()J
+	public final fun getRefreshToken ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/core/config/ApiMode : java/lang/Enum {
+	public static final field Companion Ltech/stit/mobile/core/config/ApiMode$Companion;
+	public static final field Mock Ltech/stit/mobile/core/config/ApiMode;
+	public static final field Real Ltech/stit/mobile/core/config/ApiMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Ltech/stit/mobile/core/config/ApiMode;
+	public static fun values ()[Ltech/stit/mobile/core/config/ApiMode;
+}
+
+public final class tech/stit/mobile/core/config/ApiMode$Companion {
+	public final fun parse (Ljava/lang/String;)Ltech/stit/mobile/core/config/ApiMode;
+}
+
+public final class tech/stit/mobile/core/config/AppConfig {
+	public static final field Companion Ltech/stit/mobile/core/config/AppConfig$Companion;
+	public fun <init> (Ltech/stit/mobile/core/config/AppEnv;Ljava/lang/String;Ltech/stit/mobile/core/config/ApiMode;Ltech/stit/mobile/core/config/AuthMode;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ltech/stit/mobile/core/config/AppEnv;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ltech/stit/mobile/core/config/ApiMode;
+	public final fun component4 ()Ltech/stit/mobile/core/config/AuthMode;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun component6 ()Ljava/lang/String;
+	public final fun component7 ()Ljava/lang/String;
+	public final fun copy (Ltech/stit/mobile/core/config/AppEnv;Ljava/lang/String;Ltech/stit/mobile/core/config/ApiMode;Ltech/stit/mobile/core/config/AuthMode;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ltech/stit/mobile/core/config/AppConfig;
+	public static synthetic fun copy$default (Ltech/stit/mobile/core/config/AppConfig;Ltech/stit/mobile/core/config/AppEnv;Ljava/lang/String;Ltech/stit/mobile/core/config/ApiMode;Ltech/stit/mobile/core/config/AuthMode;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ltech/stit/mobile/core/config/AppConfig;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getApiBaseUrl ()Ljava/lang/String;
+	public final fun getApiMode ()Ltech/stit/mobile/core/config/ApiMode;
+	public final fun getAuthMode ()Ltech/stit/mobile/core/config/AuthMode;
+	public final fun getDeepLinkHost ()Ljava/lang/String;
+	public final fun getDeepLinkScheme ()Ljava/lang/String;
+	public final fun getEnv ()Ltech/stit/mobile/core/config/AppEnv;
+	public final fun getSentryDsn ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/core/config/AppConfig$Companion {
+	public final fun parse (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ltech/stit/mobile/core/config/AppConfig;
+}
+
 public final class tech/stit/mobile/core/config/AppEnv : java/lang/Enum {
 	public static final field Companion Ltech/stit/mobile/core/config/AppEnv$Companion;
 	public static final field Demo Ltech/stit/mobile/core/config/AppEnv;
@@ -13,6 +1351,144 @@ public final class tech/stit/mobile/core/config/AppEnv$Companion {
 	public final fun parse (Ljava/lang/String;)Ltech/stit/mobile/core/config/AppEnv;
 }
 
+public final class tech/stit/mobile/core/config/AuthMode : java/lang/Enum {
+	public static final field Bearer Ltech/stit/mobile/core/config/AuthMode;
+	public static final field Companion Ltech/stit/mobile/core/config/AuthMode$Companion;
+	public static final field Cookie Ltech/stit/mobile/core/config/AuthMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Ltech/stit/mobile/core/config/AuthMode;
+	public static fun values ()[Ltech/stit/mobile/core/config/AuthMode;
+}
+
+public final class tech/stit/mobile/core/config/AuthMode$Companion {
+	public final fun parse (Ljava/lang/String;)Ltech/stit/mobile/core/config/AuthMode;
+}
+
+public final class tech/stit/mobile/core/deeplink/DeepLinkParser {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun parse (Ljava/lang/String;)Ltech/stit/mobile/core/deeplink/Route;
+}
+
+public abstract class tech/stit/mobile/core/deeplink/Route {
+	public final fun getRequiresAuth ()Z
+}
+
+public final class tech/stit/mobile/core/deeplink/Route$Home : tech/stit/mobile/core/deeplink/Route {
+	public static final field INSTANCE Ltech/stit/mobile/core/deeplink/Route$Home;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/core/deeplink/Route$Login : tech/stit/mobile/core/deeplink/Route {
+	public static final field INSTANCE Ltech/stit/mobile/core/deeplink/Route$Login;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/core/deeplink/Route$Profile : tech/stit/mobile/core/deeplink/Route {
+	public static final field INSTANCE Ltech/stit/mobile/core/deeplink/Route$Profile;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/core/deeplink/Route$Settings : tech/stit/mobile/core/deeplink/Route {
+	public static final field INSTANCE Ltech/stit/mobile/core/deeplink/Route$Settings;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/core/deeplink/Route$TodoDetail : tech/stit/mobile/core/deeplink/Route {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Ltech/stit/mobile/core/deeplink/Route$TodoDetail;
+	public static synthetic fun copy$default (Ltech/stit/mobile/core/deeplink/Route$TodoDetail;Ljava/lang/String;ILjava/lang/Object;)Ltech/stit/mobile/core/deeplink/Route$TodoDetail;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/core/deeplink/Route$TodoList : tech/stit/mobile/core/deeplink/Route {
+	public static final field INSTANCE Ltech/stit/mobile/core/deeplink/Route$TodoList;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/core/i18n/KnownErrorCodes {
+	public static final field AUTH_ACCOUNT_LOCKED Ljava/lang/String;
+	public static final field AUTH_INVALID_CREDENTIALS Ljava/lang/String;
+	public static final field AUTH_REFRESH_EXPIRED Ljava/lang/String;
+	public static final field AUTH_REFRESH_REUSED Ljava/lang/String;
+	public static final field INSTANCE Ltech/stit/mobile/core/i18n/KnownErrorCodes;
+	public static final field INTERNAL Ljava/lang/String;
+	public static final field RATE_LIMITED Ljava/lang/String;
+	public final fun getAll ()Ljava/util/List;
+}
+
+public abstract interface class tech/stit/mobile/core/i18n/LocaleProvider {
+	public abstract fun getLanguageTag ()Ljava/lang/String;
+	public abstract fun getTimeZone ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/core/i18n/MessageKey {
+	public static final field Companion Ltech/stit/mobile/core/i18n/MessageKey$Companion;
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Ltech/stit/mobile/core/i18n/MessageKey;
+	public static synthetic fun copy$default (Ltech/stit/mobile/core/i18n/MessageKey;Ljava/lang/String;ILjava/lang/Object;)Ltech/stit/mobile/core/i18n/MessageKey;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/core/i18n/MessageKey$Companion {
+	public final fun forErrorCode (Ljava/lang/String;)Ltech/stit/mobile/core/i18n/MessageKey;
+	public final fun getNetworkError ()Ltech/stit/mobile/core/i18n/MessageKey;
+	public final fun getUnknownError ()Ltech/stit/mobile/core/i18n/MessageKey;
+	public final fun getValidationError ()Ltech/stit/mobile/core/i18n/MessageKey;
+}
+
+public final class tech/stit/mobile/core/lib/AppInfo {
+	public fun <init> (Ljava/lang/String;JLjava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()J
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;JLjava/lang/String;Ljava/lang/String;)Ltech/stit/mobile/core/lib/AppInfo;
+	public static synthetic fun copy$default (Ltech/stit/mobile/core/lib/AppInfo;Ljava/lang/String;JLjava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ltech/stit/mobile/core/lib/AppInfo;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBuild ()J
+	public final fun getDeviceModel ()Ljava/lang/String;
+	public final fun getOsVersion ()Ljava/lang/String;
+	public final fun getVersion ()Ljava/lang/String;
+	public final fun getVersionWithBuild ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class tech/stit/mobile/core/lib/ConnectivityMonitor {
+	public abstract fun getOnline ()Lkotlinx/coroutines/flow/StateFlow;
+}
+
+public final class tech/stit/mobile/core/lib/DefaultDispatchers : tech/stit/mobile/core/lib/DispatcherProvider {
+	public static final field INSTANCE Ltech/stit/mobile/core/lib/DefaultDispatchers;
+	public fun getDefault ()Lkotlinx/coroutines/CoroutineDispatcher;
+	public fun getIo ()Lkotlinx/coroutines/CoroutineDispatcher;
+	public fun getMain ()Lkotlinx/coroutines/CoroutineDispatcher;
+}
+
+public abstract interface class tech/stit/mobile/core/lib/DispatcherProvider {
+	public abstract fun getDefault ()Lkotlinx/coroutines/CoroutineDispatcher;
+	public abstract fun getIo ()Lkotlinx/coroutines/CoroutineDispatcher;
+	public abstract fun getMain ()Lkotlinx/coroutines/CoroutineDispatcher;
+}
+
 public final class tech/stit/mobile/core/lib/Platform : java/lang/Enum {
 	public static final field Android Ltech/stit/mobile/core/lib/Platform;
 	public static final field Ios Ltech/stit/mobile/core/lib/Platform;
@@ -24,5 +1500,1113 @@ public final class tech/stit/mobile/core/lib/Platform : java/lang/Enum {
 
 public final class tech/stit/mobile/core/lib/Platform_jvmKt {
 	public static final fun getCurrentPlatform ()Ltech/stit/mobile/core/lib/Platform;
+}
+
+public abstract interface class tech/stit/mobile/core/lib/Settings {
+	public abstract fun getString (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun putString (Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun remove (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class tech/stit/mobile/core/lib/SettingsKeys {
+	public static final field INSTALLATION_ID Ljava/lang/String;
+	public static final field INSTANCE Ltech/stit/mobile/core/lib/SettingsKeys;
+	public static final field LANGUAGE Ljava/lang/String;
+	public static final field MOCK_SCENARIO Ljava/lang/String;
+	public static final field PUSH_DECLINED Ljava/lang/String;
+	public static final field PUSH_REGISTRATION_PREFIX Ljava/lang/String;
+	public static final field THEME Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/core/mock/DemoMode {
+	public final fun apply (Ltech/stit/mobile/core/mock/MockScenario;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun getTransport ()Ltech/stit/mobile/core/mock/MockTransport;
+	public final fun restore (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class tech/stit/mobile/core/mock/MockScenario : java/lang/Enum {
+	public static final field Authenticated Ltech/stit/mobile/core/mock/MockScenario;
+	public static final field Companion Ltech/stit/mobile/core/mock/MockScenario$Companion;
+	public static final field Empty Ltech/stit/mobile/core/mock/MockScenario;
+	public static final field Error Ltech/stit/mobile/core/mock/MockScenario;
+	public static final field Populated Ltech/stit/mobile/core/mock/MockScenario;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun getFixtureDir ()Ljava/lang/String;
+	public final fun getSeedsSession ()Z
+	public static fun valueOf (Ljava/lang/String;)Ltech/stit/mobile/core/mock/MockScenario;
+	public static fun values ()[Ltech/stit/mobile/core/mock/MockScenario;
+}
+
+public final class tech/stit/mobile/core/mock/MockScenario$Companion {
+	public final fun parse (Ljava/lang/String;)Ltech/stit/mobile/core/mock/MockScenario;
+}
+
+public final class tech/stit/mobile/core/mock/MockTransport {
+	public static final field Companion Ltech/stit/mobile/core/mock/MockTransport$Companion;
+	public static final field SEED_REFRESH_TOKEN Ljava/lang/String;
+	public final fun getEngine ()Lio/ktor/client/engine/HttpClientEngine;
+	public final fun getLatencyMs ()J
+	public final fun getScenario ()Ltech/stit/mobile/core/mock/MockScenario;
+	public final fun reset (Ltech/stit/mobile/core/mock/MockScenario;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun setLatencyMs (J)V
+}
+
+public final class tech/stit/mobile/core/mock/MockTransport$Companion {
+}
+
+public final class tech/stit/mobile/core/observability/LogLevel : java/lang/Enum {
+	public static final field Debug Ltech/stit/mobile/core/observability/LogLevel;
+	public static final field Error Ltech/stit/mobile/core/observability/LogLevel;
+	public static final field Info Ltech/stit/mobile/core/observability/LogLevel;
+	public static final field Warn Ltech/stit/mobile/core/observability/LogLevel;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Ltech/stit/mobile/core/observability/LogLevel;
+	public static fun values ()[Ltech/stit/mobile/core/observability/LogLevel;
+}
+
+public abstract interface class tech/stit/mobile/core/observability/LogSink {
+	public abstract fun log (Ltech/stit/mobile/core/observability/LogLevel;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)V
+}
+
+public final class tech/stit/mobile/core/observability/Logger {
+	public fun <init> (Ljava/lang/String;Ltech/stit/mobile/core/observability/LogSink;)V
+	public final fun debug (Ljava/lang/String;)V
+	public final fun error (Ljava/lang/String;Ljava/lang/Throwable;)V
+	public static synthetic fun error$default (Ltech/stit/mobile/core/observability/Logger;Ljava/lang/String;Ljava/lang/Throwable;ILjava/lang/Object;)V
+	public final fun info (Ljava/lang/String;)V
+	public final fun warn (Ljava/lang/String;Ljava/lang/Throwable;)V
+	public static synthetic fun warn$default (Ltech/stit/mobile/core/observability/Logger;Ljava/lang/String;Ljava/lang/Throwable;ILjava/lang/Object;)V
+}
+
+public final class tech/stit/mobile/core/observability/NoopLogSink : tech/stit/mobile/core/observability/LogSink {
+	public static final field INSTANCE Ltech/stit/mobile/core/observability/NoopLogSink;
+	public fun log (Ltech/stit/mobile/core/observability/LogLevel;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)V
+}
+
+public final class tech/stit/mobile/core/observability/NoopTelemetrySink : tech/stit/mobile/core/observability/TelemetrySink {
+	public static final field INSTANCE Ltech/stit/mobile/core/observability/NoopTelemetrySink;
+	public fun breadcrumb (Ljava/lang/String;Ljava/lang/String;)V
+	public fun captureError (Ljava/lang/Throwable;Ljava/lang/String;)V
+	public fun setUserId (Ljava/lang/String;)V
+}
+
+public abstract interface class tech/stit/mobile/core/observability/TelemetrySink {
+	public abstract fun breadcrumb (Ljava/lang/String;Ljava/lang/String;)V
+	public abstract fun captureError (Ljava/lang/Throwable;Ljava/lang/String;)V
+	public abstract fun setUserId (Ljava/lang/String;)V
+}
+
+public final class tech/stit/mobile/core/push/DeviceRegistration {
+	public static final field Companion Ltech/stit/mobile/core/push/DeviceRegistration$Companion;
+	public fun <init> (Ltech/stit/mobile/core/push/PushProvider;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZZ)V
+	public final fun component1 ()Ltech/stit/mobile/core/push/PushProvider;
+	public final fun component10 ()Z
+	public final fun component11 ()Z
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun component6 ()Ljava/lang/String;
+	public final fun component7 ()Ljava/lang/String;
+	public final fun component8 ()Ljava/lang/String;
+	public final fun component9 ()Ljava/lang/String;
+	public final fun copy (Ltech/stit/mobile/core/push/PushProvider;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZZ)Ltech/stit/mobile/core/push/DeviceRegistration;
+	public static synthetic fun copy$default (Ltech/stit/mobile/core/push/DeviceRegistration;Ltech/stit/mobile/core/push/PushProvider;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZZILjava/lang/Object;)Ltech/stit/mobile/core/push/DeviceRegistration;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAppVersion ()Ljava/lang/String;
+	public final fun getDeviceModel ()Ljava/lang/String;
+	public final fun getInstallationId ()Ljava/lang/String;
+	public final fun getLocale ()Ljava/lang/String;
+	public final fun getOsVersion ()Ljava/lang/String;
+	public final fun getPlatform ()Ljava/lang/String;
+	public final fun getProvider ()Ltech/stit/mobile/core/push/PushProvider;
+	public final fun getPushEnabled ()Z
+	public final fun getSandbox ()Z
+	public final fun getTimeZone ()Ljava/lang/String;
+	public final fun getToken ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class tech/stit/mobile/core/push/DeviceRegistration$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ltech/stit/mobile/core/push/DeviceRegistration$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ltech/stit/mobile/core/push/DeviceRegistration;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ltech/stit/mobile/core/push/DeviceRegistration;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/push/DeviceRegistration$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public abstract interface class tech/stit/mobile/core/push/NotificationPermission {
+	public abstract fun isGranted (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun request (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class tech/stit/mobile/core/push/PushProvider : java/lang/Enum {
+	public static final field Apns Ltech/stit/mobile/core/push/PushProvider;
+	public static final field Fcm Ltech/stit/mobile/core/push/PushProvider;
+	public static final field Hms Ltech/stit/mobile/core/push/PushProvider;
+	public static final field Ntfy Ltech/stit/mobile/core/push/PushProvider;
+	public static final field Rustore Ltech/stit/mobile/core/push/PushProvider;
+	public final fun getApiName ()Ljava/lang/String;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Ltech/stit/mobile/core/push/PushProvider;
+	public static fun values ()[Ltech/stit/mobile/core/push/PushProvider;
+}
+
+public final class tech/stit/mobile/core/push/PushRegistrar {
+	public final fun installationId (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun optIn (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun optOut (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun register (ZLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun register$default (Ltech/stit/mobile/core/push/PushRegistrar;ZLkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public final fun status (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun unregister (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class tech/stit/mobile/core/push/PushStatus : java/lang/Enum {
+	public static final field Declined Ltech/stit/mobile/core/push/PushStatus;
+	public static final field Granted Ltech/stit/mobile/core/push/PushStatus;
+	public static final field NotAsked Ltech/stit/mobile/core/push/PushStatus;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Ltech/stit/mobile/core/push/PushStatus;
+	public static fun values ()[Ltech/stit/mobile/core/push/PushStatus;
+}
+
+public abstract interface class tech/stit/mobile/core/push/PushTransport {
+	public abstract fun getProvider ()Ltech/stit/mobile/core/push/PushProvider;
+	public abstract fun token (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class tech/stit/mobile/core/requirements/AppLinks {
+	public static final field Companion Ltech/stit/mobile/core/requirements/AppLinks$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ltech/stit/mobile/core/requirements/AppLinks;
+	public static synthetic fun copy$default (Ltech/stit/mobile/core/requirements/AppLinks;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ltech/stit/mobile/core/requirements/AppLinks;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAccountDeletion ()Ljava/lang/String;
+	public final fun getPrivacyPolicy ()Ljava/lang/String;
+	public final fun getSupport ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class tech/stit/mobile/core/requirements/AppLinks$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ltech/stit/mobile/core/requirements/AppLinks$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ltech/stit/mobile/core/requirements/AppLinks;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ltech/stit/mobile/core/requirements/AppLinks;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/requirements/AppLinks$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/requirements/AppRequirements {
+	public static final field Companion Ltech/stit/mobile/core/requirements/AppRequirements$Companion;
+	public fun <init> (Ltech/stit/mobile/core/requirements/RequirementsStatus;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/time/Instant;Ljava/util/Map;Ltech/stit/mobile/core/requirements/AppLinks;)V
+	public final fun component1 ()Ltech/stit/mobile/core/requirements/RequirementsStatus;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Lkotlin/time/Instant;
+	public final fun component6 ()Ljava/util/Map;
+	public final fun component7 ()Ltech/stit/mobile/core/requirements/AppLinks;
+	public final fun copy (Ltech/stit/mobile/core/requirements/RequirementsStatus;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/time/Instant;Ljava/util/Map;Ltech/stit/mobile/core/requirements/AppLinks;)Ltech/stit/mobile/core/requirements/AppRequirements;
+	public static synthetic fun copy$default (Ltech/stit/mobile/core/requirements/AppRequirements;Ltech/stit/mobile/core/requirements/RequirementsStatus;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/time/Instant;Ljava/util/Map;Ltech/stit/mobile/core/requirements/AppLinks;ILjava/lang/Object;)Ltech/stit/mobile/core/requirements/AppRequirements;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun flag (Ljava/lang/String;Z)Z
+	public static synthetic fun flag$default (Ltech/stit/mobile/core/requirements/AppRequirements;Ljava/lang/String;ZILjava/lang/Object;)Z
+	public final fun getFlags ()Ljava/util/Map;
+	public final fun getLatestVersion ()Ljava/lang/String;
+	public final fun getLinks ()Ltech/stit/mobile/core/requirements/AppLinks;
+	public final fun getMaintenanceUntil ()Lkotlin/time/Instant;
+	public final fun getMinVersion ()Ljava/lang/String;
+	public final fun getStatus ()Ltech/stit/mobile/core/requirements/RequirementsStatus;
+	public final fun getStoreUrl ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final synthetic class tech/stit/mobile/core/requirements/AppRequirements$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Ltech/stit/mobile/core/requirements/AppRequirements$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ltech/stit/mobile/core/requirements/AppRequirements;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Ltech/stit/mobile/core/requirements/AppRequirements;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/requirements/AppRequirements$Companion {
+	public final fun getDefault ()Ltech/stit/mobile/core/requirements/AppRequirements;
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/core/requirements/RequirementsClient {
+	public static final field NOT_FOUND I
+	public final fun fetch (ZLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun fetch$default (Ltech/stit/mobile/core/requirements/RequirementsClient;ZLkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public final fun getCurrent ()Lkotlinx/coroutines/flow/StateFlow;
+	public final fun restore (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class tech/stit/mobile/core/requirements/RequirementsStatus : java/lang/Enum {
+	public static final field Companion Ltech/stit/mobile/core/requirements/RequirementsStatus$Companion;
+	public static final field Maintenance Ltech/stit/mobile/core/requirements/RequirementsStatus;
+	public static final field Ok Ltech/stit/mobile/core/requirements/RequirementsStatus;
+	public static final field UpdateRecommended Ltech/stit/mobile/core/requirements/RequirementsStatus;
+	public static final field UpdateRequired Ltech/stit/mobile/core/requirements/RequirementsStatus;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Ltech/stit/mobile/core/requirements/RequirementsStatus;
+	public static fun values ()[Ltech/stit/mobile/core/requirements/RequirementsStatus;
+}
+
+public final class tech/stit/mobile/core/requirements/RequirementsStatus$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class tech/stit/mobile/entity/device/Device {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/time/Instant;Lkotlin/time/Instant;Lkotlin/time/Instant;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun component6 ()Lkotlin/time/Instant;
+	public final fun component7 ()Lkotlin/time/Instant;
+	public final fun component8 ()Lkotlin/time/Instant;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/time/Instant;Lkotlin/time/Instant;Lkotlin/time/Instant;)Ltech/stit/mobile/entity/device/Device;
+	public static synthetic fun copy$default (Ltech/stit/mobile/entity/device/Device;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/time/Instant;Lkotlin/time/Instant;Lkotlin/time/Instant;ILjava/lang/Object;)Ltech/stit/mobile/entity/device/Device;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAppVersion ()Ljava/lang/String;
+	public final fun getCreatedAt ()Lkotlin/time/Instant;
+	public final fun getDeviceModel ()Ljava/lang/String;
+	public final fun getId ()Ljava/lang/String;
+	public final fun getLastSeenAt ()Lkotlin/time/Instant;
+	public final fun getPlatform ()Ljava/lang/String;
+	public final fun getProvider ()Ljava/lang/String;
+	public final fun getRevokedAt ()Lkotlin/time/Instant;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/entity/device/DeviceRepository {
+	public final fun list (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun unregister (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class tech/stit/mobile/entity/session/Session {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/time/Instant;Lkotlin/time/Instant;Lkotlin/time/Instant;Z)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Lkotlin/time/Instant;
+	public final fun component6 ()Lkotlin/time/Instant;
+	public final fun component7 ()Lkotlin/time/Instant;
+	public final fun component8 ()Z
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/time/Instant;Lkotlin/time/Instant;Lkotlin/time/Instant;Z)Ltech/stit/mobile/entity/session/Session;
+	public static synthetic fun copy$default (Ltech/stit/mobile/entity/session/Session;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/time/Instant;Lkotlin/time/Instant;Lkotlin/time/Instant;ZILjava/lang/Object;)Ltech/stit/mobile/entity/session/Session;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAppVersion ()Ljava/lang/String;
+	public final fun getClient ()Ljava/lang/String;
+	public final fun getCurrent ()Z
+	public final fun getDeviceName ()Ljava/lang/String;
+	public final fun getExpiresAt ()Lkotlin/time/Instant;
+	public final fun getIssuedAt ()Lkotlin/time/Instant;
+	public final fun getJti ()Ljava/lang/String;
+	public final fun getLastUsedAt ()Lkotlin/time/Instant;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/entity/session/SessionRepository {
+	public final fun getAuthState ()Lkotlinx/coroutines/flow/StateFlow;
+	public final fun login (Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun logout (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun revoke (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun revokeAll (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun sessions (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class tech/stit/mobile/entity/todo/Todo {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;ZLkotlin/time/Instant;Lkotlin/time/Instant;J)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Z
+	public final fun component4 ()Lkotlin/time/Instant;
+	public final fun component5 ()Lkotlin/time/Instant;
+	public final fun component6 ()J
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;ZLkotlin/time/Instant;Lkotlin/time/Instant;J)Ltech/stit/mobile/entity/todo/Todo;
+	public static synthetic fun copy$default (Ltech/stit/mobile/entity/todo/Todo;Ljava/lang/String;Ljava/lang/String;ZLkotlin/time/Instant;Lkotlin/time/Instant;JILjava/lang/Object;)Ltech/stit/mobile/entity/todo/Todo;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCreatedAt ()Lkotlin/time/Instant;
+	public final fun getDone ()Z
+	public final fun getId ()Ljava/lang/String;
+	public final fun getTitle ()Ljava/lang/String;
+	public final fun getUpdatedAt ()Lkotlin/time/Instant;
+	public final fun getVersion ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/entity/todo/TodoRepository {
+	public final fun clear (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun create (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun delete (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun get (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun getTodos ()Lkotlinx/coroutines/flow/StateFlow;
+	public final fun refresh (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun restore (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun toggle (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class tech/stit/mobile/entity/user/User {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/time/Instant;Lkotlin/time/Instant;J)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Lkotlin/time/Instant;
+	public final fun component6 ()Lkotlin/time/Instant;
+	public final fun component7 ()J
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/time/Instant;Lkotlin/time/Instant;J)Ltech/stit/mobile/entity/user/User;
+	public static synthetic fun copy$default (Ltech/stit/mobile/entity/user/User;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/time/Instant;Lkotlin/time/Instant;JILjava/lang/Object;)Ltech/stit/mobile/entity/user/User;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCreatedAt ()Lkotlin/time/Instant;
+	public final fun getEmail ()Ljava/lang/String;
+	public final fun getId ()Ljava/lang/String;
+	public final fun getName ()Ljava/lang/String;
+	public final fun getStatus ()Ljava/lang/String;
+	public final fun getUpdatedAt ()Lkotlin/time/Instant;
+	public final fun getVersion ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/entity/user/UserRepository {
+	public final fun changePassword (Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun clear (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun deleteAccount (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun getMe ()Lkotlinx/coroutines/flow/StateFlow;
+	public final fun refresh (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun restore (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun updateName (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public abstract class tech/stit/mobile/feature/auth/DeleteAccountIntent {
+}
+
+public final class tech/stit/mobile/feature/auth/DeleteAccountIntent$ConfirmChanged : tech/stit/mobile/feature/auth/DeleteAccountIntent {
+	public fun <init> (Z)V
+	public final fun component1 ()Z
+	public final fun copy (Z)Ltech/stit/mobile/feature/auth/DeleteAccountIntent$ConfirmChanged;
+	public static synthetic fun copy$default (Ltech/stit/mobile/feature/auth/DeleteAccountIntent$ConfirmChanged;ZILjava/lang/Object;)Ltech/stit/mobile/feature/auth/DeleteAccountIntent$ConfirmChanged;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getConfirmed ()Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/feature/auth/DeleteAccountIntent$Delete : tech/stit/mobile/feature/auth/DeleteAccountIntent {
+	public static final field INSTANCE Ltech/stit/mobile/feature/auth/DeleteAccountIntent$Delete;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/feature/auth/DeleteAccountPresenter {
+	public final fun close ()V
+	public final fun dispatch (Ltech/stit/mobile/feature/auth/DeleteAccountIntent;)V
+	public final fun getState ()Lkotlinx/coroutines/flow/StateFlow;
+}
+
+public final class tech/stit/mobile/feature/auth/DeleteAccountState {
+	public fun <init> ()V
+	public fun <init> (ZZLtech/stit/mobile/core/i18n/MessageKey;Z)V
+	public synthetic fun <init> (ZZLtech/stit/mobile/core/i18n/MessageKey;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Z
+	public final fun component2 ()Z
+	public final fun component3 ()Ltech/stit/mobile/core/i18n/MessageKey;
+	public final fun component4 ()Z
+	public final fun copy (ZZLtech/stit/mobile/core/i18n/MessageKey;Z)Ltech/stit/mobile/feature/auth/DeleteAccountState;
+	public static synthetic fun copy$default (Ltech/stit/mobile/feature/auth/DeleteAccountState;ZZLtech/stit/mobile/core/i18n/MessageKey;ZILjava/lang/Object;)Ltech/stit/mobile/feature/auth/DeleteAccountState;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCanDelete ()Z
+	public final fun getConfirmed ()Z
+	public final fun getDeleted ()Z
+	public final fun getDeleting ()Z
+	public final fun getError ()Ltech/stit/mobile/core/i18n/MessageKey;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract class tech/stit/mobile/feature/auth/LoginIntent {
+}
+
+public final class tech/stit/mobile/feature/auth/LoginIntent$EmailChanged : tech/stit/mobile/feature/auth/LoginIntent {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Ltech/stit/mobile/feature/auth/LoginIntent$EmailChanged;
+	public static synthetic fun copy$default (Ltech/stit/mobile/feature/auth/LoginIntent$EmailChanged;Ljava/lang/String;ILjava/lang/Object;)Ltech/stit/mobile/feature/auth/LoginIntent$EmailChanged;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/feature/auth/LoginIntent$PasswordChanged : tech/stit/mobile/feature/auth/LoginIntent {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Ltech/stit/mobile/feature/auth/LoginIntent$PasswordChanged;
+	public static synthetic fun copy$default (Ltech/stit/mobile/feature/auth/LoginIntent$PasswordChanged;Ljava/lang/String;ILjava/lang/Object;)Ltech/stit/mobile/feature/auth/LoginIntent$PasswordChanged;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/feature/auth/LoginIntent$Submit : tech/stit/mobile/feature/auth/LoginIntent {
+	public static final field INSTANCE Ltech/stit/mobile/feature/auth/LoginIntent$Submit;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/feature/auth/LoginPresenter {
+	public final fun close ()V
+	public final fun dispatch (Ltech/stit/mobile/feature/auth/LoginIntent;)V
+	public final fun getState ()Lkotlinx/coroutines/flow/StateFlow;
+}
+
+public final class tech/stit/mobile/feature/auth/LoginState {
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;ZLtech/stit/mobile/core/i18n/MessageKey;Z)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;ZLtech/stit/mobile/core/i18n/MessageKey;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Z
+	public final fun component4 ()Ltech/stit/mobile/core/i18n/MessageKey;
+	public final fun component5 ()Z
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;ZLtech/stit/mobile/core/i18n/MessageKey;Z)Ltech/stit/mobile/feature/auth/LoginState;
+	public static synthetic fun copy$default (Ltech/stit/mobile/feature/auth/LoginState;Ljava/lang/String;Ljava/lang/String;ZLtech/stit/mobile/core/i18n/MessageKey;ZILjava/lang/Object;)Ltech/stit/mobile/feature/auth/LoginState;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCanSubmit ()Z
+	public final fun getEmail ()Ljava/lang/String;
+	public final fun getError ()Ltech/stit/mobile/core/i18n/MessageKey;
+	public final fun getPassword ()Ljava/lang/String;
+	public final fun getSignedIn ()Z
+	public final fun getSubmitting ()Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract class tech/stit/mobile/feature/auth/SessionsIntent {
+}
+
+public final class tech/stit/mobile/feature/auth/SessionsIntent$Refresh : tech/stit/mobile/feature/auth/SessionsIntent {
+	public static final field INSTANCE Ltech/stit/mobile/feature/auth/SessionsIntent$Refresh;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/feature/auth/SessionsIntent$RevokeAll : tech/stit/mobile/feature/auth/SessionsIntent {
+	public static final field INSTANCE Ltech/stit/mobile/feature/auth/SessionsIntent$RevokeAll;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/feature/auth/SessionsIntent$RevokeSession : tech/stit/mobile/feature/auth/SessionsIntent {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Ltech/stit/mobile/feature/auth/SessionsIntent$RevokeSession;
+	public static synthetic fun copy$default (Ltech/stit/mobile/feature/auth/SessionsIntent$RevokeSession;Ljava/lang/String;ILjava/lang/Object;)Ltech/stit/mobile/feature/auth/SessionsIntent$RevokeSession;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getJti ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/feature/auth/SessionsIntent$UnregisterDevice : tech/stit/mobile/feature/auth/SessionsIntent {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Ltech/stit/mobile/feature/auth/SessionsIntent$UnregisterDevice;
+	public static synthetic fun copy$default (Ltech/stit/mobile/feature/auth/SessionsIntent$UnregisterDevice;Ljava/lang/String;ILjava/lang/Object;)Ltech/stit/mobile/feature/auth/SessionsIntent$UnregisterDevice;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/feature/auth/SessionsPresenter {
+	public final fun close ()V
+	public final fun dispatch (Ltech/stit/mobile/feature/auth/SessionsIntent;)V
+	public final fun getState ()Lkotlinx/coroutines/flow/StateFlow;
+}
+
+public final class tech/stit/mobile/feature/auth/SessionsState {
+	public fun <init> ()V
+	public fun <init> (ZLjava/util/List;Ljava/util/List;Ltech/stit/mobile/core/i18n/MessageKey;Z)V
+	public synthetic fun <init> (ZLjava/util/List;Ljava/util/List;Ltech/stit/mobile/core/i18n/MessageKey;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Z
+	public final fun component2 ()Ljava/util/List;
+	public final fun component3 ()Ljava/util/List;
+	public final fun component4 ()Ltech/stit/mobile/core/i18n/MessageKey;
+	public final fun component5 ()Z
+	public final fun copy (ZLjava/util/List;Ljava/util/List;Ltech/stit/mobile/core/i18n/MessageKey;Z)Ltech/stit/mobile/feature/auth/SessionsState;
+	public static synthetic fun copy$default (Ltech/stit/mobile/feature/auth/SessionsState;ZLjava/util/List;Ljava/util/List;Ltech/stit/mobile/core/i18n/MessageKey;ZILjava/lang/Object;)Ltech/stit/mobile/feature/auth/SessionsState;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDevices ()Ljava/util/List;
+	public final fun getError ()Ltech/stit/mobile/core/i18n/MessageKey;
+	public final fun getLoading ()Z
+	public final fun getSessions ()Ljava/util/List;
+	public final fun getSignedOut ()Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract class tech/stit/mobile/feature/demo/DemoPanelIntent {
+}
+
+public final class tech/stit/mobile/feature/demo/DemoPanelIntent$SelectScenario : tech/stit/mobile/feature/demo/DemoPanelIntent {
+	public fun <init> (Ltech/stit/mobile/core/mock/MockScenario;)V
+	public final fun component1 ()Ltech/stit/mobile/core/mock/MockScenario;
+	public final fun copy (Ltech/stit/mobile/core/mock/MockScenario;)Ltech/stit/mobile/feature/demo/DemoPanelIntent$SelectScenario;
+	public static synthetic fun copy$default (Ltech/stit/mobile/feature/demo/DemoPanelIntent$SelectScenario;Ltech/stit/mobile/core/mock/MockScenario;ILjava/lang/Object;)Ltech/stit/mobile/feature/demo/DemoPanelIntent$SelectScenario;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getScenario ()Ltech/stit/mobile/core/mock/MockScenario;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/feature/demo/DemoPanelIntent$SetLatency : tech/stit/mobile/feature/demo/DemoPanelIntent {
+	public fun <init> (J)V
+	public final fun component1 ()J
+	public final fun copy (J)Ltech/stit/mobile/feature/demo/DemoPanelIntent$SetLatency;
+	public static synthetic fun copy$default (Ltech/stit/mobile/feature/demo/DemoPanelIntent$SetLatency;JILjava/lang/Object;)Ltech/stit/mobile/feature/demo/DemoPanelIntent$SetLatency;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getLatencyMs ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/feature/demo/DemoPanelIntent$Start : tech/stit/mobile/feature/demo/DemoPanelIntent {
+	public static final field INSTANCE Ltech/stit/mobile/feature/demo/DemoPanelIntent$Start;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/feature/demo/DemoPanelPresenter {
+	public final fun close ()V
+	public final fun dispatch (Ltech/stit/mobile/feature/demo/DemoPanelIntent;)V
+	public final fun getState ()Lkotlinx/coroutines/flow/StateFlow;
+}
+
+public final class tech/stit/mobile/feature/demo/DemoPanelState {
+	public fun <init> ()V
+	public fun <init> (ZLtech/stit/mobile/core/mock/MockScenario;JLjava/util/List;)V
+	public synthetic fun <init> (ZLtech/stit/mobile/core/mock/MockScenario;JLjava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Z
+	public final fun component2 ()Ltech/stit/mobile/core/mock/MockScenario;
+	public final fun component3 ()J
+	public final fun component4 ()Ljava/util/List;
+	public final fun copy (ZLtech/stit/mobile/core/mock/MockScenario;JLjava/util/List;)Ltech/stit/mobile/feature/demo/DemoPanelState;
+	public static synthetic fun copy$default (Ltech/stit/mobile/feature/demo/DemoPanelState;ZLtech/stit/mobile/core/mock/MockScenario;JLjava/util/List;ILjava/lang/Object;)Ltech/stit/mobile/feature/demo/DemoPanelState;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAvailable ()Z
+	public final fun getLatencyMs ()J
+	public final fun getScenario ()Ltech/stit/mobile/core/mock/MockScenario;
+	public final fun getScenarios ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract class tech/stit/mobile/feature/profile/ProfileIntent {
+}
+
+public final class tech/stit/mobile/feature/profile/ProfileIntent$ChangePassword : tech/stit/mobile/feature/profile/ProfileIntent {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Ltech/stit/mobile/feature/profile/ProfileIntent$ChangePassword;
+	public static synthetic fun copy$default (Ltech/stit/mobile/feature/profile/ProfileIntent$ChangePassword;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ltech/stit/mobile/feature/profile/ProfileIntent$ChangePassword;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getNewPassword ()Ljava/lang/String;
+	public final fun getOldPassword ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/feature/profile/ProfileIntent$Logout : tech/stit/mobile/feature/profile/ProfileIntent {
+	public static final field INSTANCE Ltech/stit/mobile/feature/profile/ProfileIntent$Logout;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/feature/profile/ProfileIntent$NameChanged : tech/stit/mobile/feature/profile/ProfileIntent {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Ltech/stit/mobile/feature/profile/ProfileIntent$NameChanged;
+	public static synthetic fun copy$default (Ltech/stit/mobile/feature/profile/ProfileIntent$NameChanged;Ljava/lang/String;ILjava/lang/Object;)Ltech/stit/mobile/feature/profile/ProfileIntent$NameChanged;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/feature/profile/ProfileIntent$Refresh : tech/stit/mobile/feature/profile/ProfileIntent {
+	public static final field INSTANCE Ltech/stit/mobile/feature/profile/ProfileIntent$Refresh;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/feature/profile/ProfileIntent$SaveName : tech/stit/mobile/feature/profile/ProfileIntent {
+	public static final field INSTANCE Ltech/stit/mobile/feature/profile/ProfileIntent$SaveName;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/feature/profile/ProfileIntent$Start : tech/stit/mobile/feature/profile/ProfileIntent {
+	public static final field INSTANCE Ltech/stit/mobile/feature/profile/ProfileIntent$Start;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/feature/profile/ProfilePresenter {
+	public final fun close ()V
+	public final fun dispatch (Ltech/stit/mobile/feature/profile/ProfileIntent;)V
+	public final fun getState ()Lkotlinx/coroutines/flow/StateFlow;
+}
+
+public final class tech/stit/mobile/feature/profile/ProfileState {
+	public fun <init> ()V
+	public fun <init> (Ltech/stit/mobile/entity/user/User;ZLtech/stit/mobile/core/i18n/MessageKey;Ljava/lang/String;ZZ)V
+	public synthetic fun <init> (Ltech/stit/mobile/entity/user/User;ZLtech/stit/mobile/core/i18n/MessageKey;Ljava/lang/String;ZZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ltech/stit/mobile/entity/user/User;
+	public final fun component2 ()Z
+	public final fun component3 ()Ltech/stit/mobile/core/i18n/MessageKey;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Z
+	public final fun component6 ()Z
+	public final fun copy (Ltech/stit/mobile/entity/user/User;ZLtech/stit/mobile/core/i18n/MessageKey;Ljava/lang/String;ZZ)Ltech/stit/mobile/feature/profile/ProfileState;
+	public static synthetic fun copy$default (Ltech/stit/mobile/feature/profile/ProfileState;Ltech/stit/mobile/entity/user/User;ZLtech/stit/mobile/core/i18n/MessageKey;Ljava/lang/String;ZZILjava/lang/Object;)Ltech/stit/mobile/feature/profile/ProfileState;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCanSaveName ()Z
+	public final fun getDraftName ()Ljava/lang/String;
+	public final fun getError ()Ltech/stit/mobile/core/i18n/MessageKey;
+	public final fun getLoading ()Z
+	public final fun getPasswordChanged ()Z
+	public final fun getSaving ()Z
+	public final fun getUser ()Ltech/stit/mobile/entity/user/User;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract class tech/stit/mobile/feature/push/PushOptInIntent {
+}
+
+public final class tech/stit/mobile/feature/push/PushOptInIntent$Accept : tech/stit/mobile/feature/push/PushOptInIntent {
+	public static final field INSTANCE Ltech/stit/mobile/feature/push/PushOptInIntent$Accept;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/feature/push/PushOptInIntent$Decline : tech/stit/mobile/feature/push/PushOptInIntent {
+	public static final field INSTANCE Ltech/stit/mobile/feature/push/PushOptInIntent$Decline;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/feature/push/PushOptInIntent$Start : tech/stit/mobile/feature/push/PushOptInIntent {
+	public static final field INSTANCE Ltech/stit/mobile/feature/push/PushOptInIntent$Start;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/feature/push/PushOptInPresenter {
+	public final fun close ()V
+	public final fun dispatch (Ltech/stit/mobile/feature/push/PushOptInIntent;)V
+	public final fun getState ()Lkotlinx/coroutines/flow/StateFlow;
+}
+
+public final class tech/stit/mobile/feature/push/PushOptInState {
+	public fun <init> ()V
+	public fun <init> (Ltech/stit/mobile/core/push/PushStatus;ZLtech/stit/mobile/core/i18n/MessageKey;)V
+	public synthetic fun <init> (Ltech/stit/mobile/core/push/PushStatus;ZLtech/stit/mobile/core/i18n/MessageKey;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ltech/stit/mobile/core/push/PushStatus;
+	public final fun component2 ()Z
+	public final fun component3 ()Ltech/stit/mobile/core/i18n/MessageKey;
+	public final fun copy (Ltech/stit/mobile/core/push/PushStatus;ZLtech/stit/mobile/core/i18n/MessageKey;)Ltech/stit/mobile/feature/push/PushOptInState;
+	public static synthetic fun copy$default (Ltech/stit/mobile/feature/push/PushOptInState;Ltech/stit/mobile/core/push/PushStatus;ZLtech/stit/mobile/core/i18n/MessageKey;ILjava/lang/Object;)Ltech/stit/mobile/feature/push/PushOptInState;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBusy ()Z
+	public final fun getError ()Ltech/stit/mobile/core/i18n/MessageKey;
+	public final fun getStatus ()Ltech/stit/mobile/core/push/PushStatus;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract class tech/stit/mobile/feature/requirements/RequirementsIntent {
+}
+
+public final class tech/stit/mobile/feature/requirements/RequirementsIntent$DismissRecommendation : tech/stit/mobile/feature/requirements/RequirementsIntent {
+	public static final field INSTANCE Ltech/stit/mobile/feature/requirements/RequirementsIntent$DismissRecommendation;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/feature/requirements/RequirementsIntent$Foreground : tech/stit/mobile/feature/requirements/RequirementsIntent {
+	public static final field INSTANCE Ltech/stit/mobile/feature/requirements/RequirementsIntent$Foreground;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/feature/requirements/RequirementsIntent$Retry : tech/stit/mobile/feature/requirements/RequirementsIntent {
+	public static final field INSTANCE Ltech/stit/mobile/feature/requirements/RequirementsIntent$Retry;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/feature/requirements/RequirementsIntent$Start : tech/stit/mobile/feature/requirements/RequirementsIntent {
+	public static final field INSTANCE Ltech/stit/mobile/feature/requirements/RequirementsIntent$Start;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/feature/requirements/RequirementsPresenter {
+	public final fun close ()V
+	public final fun dispatch (Ltech/stit/mobile/feature/requirements/RequirementsIntent;)V
+	public final fun getState ()Lkotlinx/coroutines/flow/StateFlow;
+}
+
+public final class tech/stit/mobile/feature/requirements/RequirementsState {
+	public fun <init> ()V
+	public fun <init> (ZLtech/stit/mobile/core/requirements/AppRequirements;Z)V
+	public synthetic fun <init> (ZLtech/stit/mobile/core/requirements/AppRequirements;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Z
+	public final fun component2 ()Ltech/stit/mobile/core/requirements/AppRequirements;
+	public final fun component3 ()Z
+	public final fun copy (ZLtech/stit/mobile/core/requirements/AppRequirements;Z)Ltech/stit/mobile/feature/requirements/RequirementsState;
+	public static synthetic fun copy$default (Ltech/stit/mobile/feature/requirements/RequirementsState;ZLtech/stit/mobile/core/requirements/AppRequirements;ZILjava/lang/Object;)Ltech/stit/mobile/feature/requirements/RequirementsState;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBlocking ()Z
+	public final fun getChecked ()Z
+	public final fun getRecommendationDismissed ()Z
+	public final fun getRequirements ()Ltech/stit/mobile/core/requirements/AppRequirements;
+	public final fun getShowRecommendation ()Z
+	public final fun getStatus ()Ltech/stit/mobile/core/requirements/RequirementsStatus;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/feature/settings/AppLanguage : java/lang/Enum {
+	public static final field En Ltech/stit/mobile/feature/settings/AppLanguage;
+	public static final field Ru Ltech/stit/mobile/feature/settings/AppLanguage;
+	public static final field System Ltech/stit/mobile/feature/settings/AppLanguage;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun getTag ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Ltech/stit/mobile/feature/settings/AppLanguage;
+	public static fun values ()[Ltech/stit/mobile/feature/settings/AppLanguage;
+}
+
+public abstract class tech/stit/mobile/feature/settings/SettingsIntent {
+}
+
+public final class tech/stit/mobile/feature/settings/SettingsIntent$SetLanguage : tech/stit/mobile/feature/settings/SettingsIntent {
+	public fun <init> (Ltech/stit/mobile/feature/settings/AppLanguage;)V
+	public final fun component1 ()Ltech/stit/mobile/feature/settings/AppLanguage;
+	public final fun copy (Ltech/stit/mobile/feature/settings/AppLanguage;)Ltech/stit/mobile/feature/settings/SettingsIntent$SetLanguage;
+	public static synthetic fun copy$default (Ltech/stit/mobile/feature/settings/SettingsIntent$SetLanguage;Ltech/stit/mobile/feature/settings/AppLanguage;ILjava/lang/Object;)Ltech/stit/mobile/feature/settings/SettingsIntent$SetLanguage;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getLanguage ()Ltech/stit/mobile/feature/settings/AppLanguage;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/feature/settings/SettingsIntent$SetNotifications : tech/stit/mobile/feature/settings/SettingsIntent {
+	public fun <init> (Z)V
+	public final fun component1 ()Z
+	public final fun copy (Z)Ltech/stit/mobile/feature/settings/SettingsIntent$SetNotifications;
+	public static synthetic fun copy$default (Ltech/stit/mobile/feature/settings/SettingsIntent$SetNotifications;ZILjava/lang/Object;)Ltech/stit/mobile/feature/settings/SettingsIntent$SetNotifications;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getEnabled ()Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/feature/settings/SettingsIntent$SetTheme : tech/stit/mobile/feature/settings/SettingsIntent {
+	public fun <init> (Ltech/stit/mobile/feature/settings/ThemeMode;)V
+	public final fun component1 ()Ltech/stit/mobile/feature/settings/ThemeMode;
+	public final fun copy (Ltech/stit/mobile/feature/settings/ThemeMode;)Ltech/stit/mobile/feature/settings/SettingsIntent$SetTheme;
+	public static synthetic fun copy$default (Ltech/stit/mobile/feature/settings/SettingsIntent$SetTheme;Ltech/stit/mobile/feature/settings/ThemeMode;ILjava/lang/Object;)Ltech/stit/mobile/feature/settings/SettingsIntent$SetTheme;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getTheme ()Ltech/stit/mobile/feature/settings/ThemeMode;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/feature/settings/SettingsIntent$Start : tech/stit/mobile/feature/settings/SettingsIntent {
+	public static final field INSTANCE Ltech/stit/mobile/feature/settings/SettingsIntent$Start;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/feature/settings/SettingsPresenter {
+	public final fun close ()V
+	public final fun dispatch (Ltech/stit/mobile/feature/settings/SettingsIntent;)V
+	public final fun getState ()Lkotlinx/coroutines/flow/StateFlow;
+}
+
+public final class tech/stit/mobile/feature/settings/SettingsState {
+	public fun <init> ()V
+	public fun <init> (Ltech/stit/mobile/feature/settings/ThemeMode;Ltech/stit/mobile/feature/settings/AppLanguage;ZLjava/lang/String;JLtech/stit/mobile/core/config/AppEnv;Ltech/stit/mobile/core/requirements/AppLinks;)V
+	public synthetic fun <init> (Ltech/stit/mobile/feature/settings/ThemeMode;Ltech/stit/mobile/feature/settings/AppLanguage;ZLjava/lang/String;JLtech/stit/mobile/core/config/AppEnv;Ltech/stit/mobile/core/requirements/AppLinks;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ltech/stit/mobile/feature/settings/ThemeMode;
+	public final fun component2 ()Ltech/stit/mobile/feature/settings/AppLanguage;
+	public final fun component3 ()Z
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()J
+	public final fun component6 ()Ltech/stit/mobile/core/config/AppEnv;
+	public final fun component7 ()Ltech/stit/mobile/core/requirements/AppLinks;
+	public final fun copy (Ltech/stit/mobile/feature/settings/ThemeMode;Ltech/stit/mobile/feature/settings/AppLanguage;ZLjava/lang/String;JLtech/stit/mobile/core/config/AppEnv;Ltech/stit/mobile/core/requirements/AppLinks;)Ltech/stit/mobile/feature/settings/SettingsState;
+	public static synthetic fun copy$default (Ltech/stit/mobile/feature/settings/SettingsState;Ltech/stit/mobile/feature/settings/ThemeMode;Ltech/stit/mobile/feature/settings/AppLanguage;ZLjava/lang/String;JLtech/stit/mobile/core/config/AppEnv;Ltech/stit/mobile/core/requirements/AppLinks;ILjava/lang/Object;)Ltech/stit/mobile/feature/settings/SettingsState;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBuild ()J
+	public final fun getEnv ()Ltech/stit/mobile/core/config/AppEnv;
+	public final fun getLanguage ()Ltech/stit/mobile/feature/settings/AppLanguage;
+	public final fun getLinks ()Ltech/stit/mobile/core/requirements/AppLinks;
+	public final fun getNotificationsEnabled ()Z
+	public final fun getTheme ()Ltech/stit/mobile/feature/settings/ThemeMode;
+	public final fun getVersion ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/feature/settings/ThemeMode : java/lang/Enum {
+	public static final field Dark Ltech/stit/mobile/feature/settings/ThemeMode;
+	public static final field Light Ltech/stit/mobile/feature/settings/ThemeMode;
+	public static final field System Ltech/stit/mobile/feature/settings/ThemeMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Ltech/stit/mobile/feature/settings/ThemeMode;
+	public static fun values ()[Ltech/stit/mobile/feature/settings/ThemeMode;
+}
+
+public abstract class tech/stit/mobile/feature/shell/ShellIntent {
+}
+
+public final class tech/stit/mobile/feature/shell/ShellIntent$OpenLink : tech/stit/mobile/feature/shell/ShellIntent {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Ltech/stit/mobile/feature/shell/ShellIntent$OpenLink;
+	public static synthetic fun copy$default (Ltech/stit/mobile/feature/shell/ShellIntent$OpenLink;Ljava/lang/String;ILjava/lang/Object;)Ltech/stit/mobile/feature/shell/ShellIntent$OpenLink;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getUrl ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/feature/shell/ShellIntent$RouteConsumed : tech/stit/mobile/feature/shell/ShellIntent {
+	public static final field INSTANCE Ltech/stit/mobile/feature/shell/ShellIntent$RouteConsumed;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/feature/shell/ShellIntent$Start : tech/stit/mobile/feature/shell/ShellIntent {
+	public static final field INSTANCE Ltech/stit/mobile/feature/shell/ShellIntent$Start;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/feature/shell/ShellPresenter {
+	public final fun close ()V
+	public final fun dispatch (Ltech/stit/mobile/feature/shell/ShellIntent;)V
+	public final fun getState ()Lkotlinx/coroutines/flow/StateFlow;
+}
+
+public final class tech/stit/mobile/feature/shell/ShellState {
+	public fun <init> ()V
+	public fun <init> (Ltech/stit/mobile/core/auth/AuthState;ZLtech/stit/mobile/core/deeplink/Route;Ltech/stit/mobile/core/deeplink/Route;)V
+	public synthetic fun <init> (Ltech/stit/mobile/core/auth/AuthState;ZLtech/stit/mobile/core/deeplink/Route;Ltech/stit/mobile/core/deeplink/Route;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ltech/stit/mobile/core/auth/AuthState;
+	public final fun component2 ()Z
+	public final fun component3 ()Ltech/stit/mobile/core/deeplink/Route;
+	public final fun component4 ()Ltech/stit/mobile/core/deeplink/Route;
+	public final fun copy (Ltech/stit/mobile/core/auth/AuthState;ZLtech/stit/mobile/core/deeplink/Route;Ltech/stit/mobile/core/deeplink/Route;)Ltech/stit/mobile/feature/shell/ShellState;
+	public static synthetic fun copy$default (Ltech/stit/mobile/feature/shell/ShellState;Ltech/stit/mobile/core/auth/AuthState;ZLtech/stit/mobile/core/deeplink/Route;Ltech/stit/mobile/core/deeplink/Route;ILjava/lang/Object;)Ltech/stit/mobile/feature/shell/ShellState;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAuth ()Ltech/stit/mobile/core/auth/AuthState;
+	public final fun getOnline ()Z
+	public final fun getPendingRoute ()Ltech/stit/mobile/core/deeplink/Route;
+	public final fun getRoute ()Ltech/stit/mobile/core/deeplink/Route;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract class tech/stit/mobile/feature/todos/TodoDetailIntent {
+}
+
+public final class tech/stit/mobile/feature/todos/TodoDetailIntent$Delete : tech/stit/mobile/feature/todos/TodoDetailIntent {
+	public static final field INSTANCE Ltech/stit/mobile/feature/todos/TodoDetailIntent$Delete;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/feature/todos/TodoDetailIntent$Start : tech/stit/mobile/feature/todos/TodoDetailIntent {
+	public static final field INSTANCE Ltech/stit/mobile/feature/todos/TodoDetailIntent$Start;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/feature/todos/TodoDetailIntent$Toggle : tech/stit/mobile/feature/todos/TodoDetailIntent {
+	public static final field INSTANCE Ltech/stit/mobile/feature/todos/TodoDetailIntent$Toggle;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/feature/todos/TodoDetailPresenter {
+	public final fun close ()V
+	public final fun dispatch (Ltech/stit/mobile/feature/todos/TodoDetailIntent;)V
+	public final fun getState ()Lkotlinx/coroutines/flow/StateFlow;
+}
+
+public final class tech/stit/mobile/feature/todos/TodoDetailState {
+	public fun <init> ()V
+	public fun <init> (Ltech/stit/mobile/entity/todo/Todo;ZLtech/stit/mobile/core/i18n/MessageKey;ZZ)V
+	public synthetic fun <init> (Ltech/stit/mobile/entity/todo/Todo;ZLtech/stit/mobile/core/i18n/MessageKey;ZZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ltech/stit/mobile/entity/todo/Todo;
+	public final fun component2 ()Z
+	public final fun component3 ()Ltech/stit/mobile/core/i18n/MessageKey;
+	public final fun component4 ()Z
+	public final fun component5 ()Z
+	public final fun copy (Ltech/stit/mobile/entity/todo/Todo;ZLtech/stit/mobile/core/i18n/MessageKey;ZZ)Ltech/stit/mobile/feature/todos/TodoDetailState;
+	public static synthetic fun copy$default (Ltech/stit/mobile/feature/todos/TodoDetailState;Ltech/stit/mobile/entity/todo/Todo;ZLtech/stit/mobile/core/i18n/MessageKey;ZZILjava/lang/Object;)Ltech/stit/mobile/feature/todos/TodoDetailState;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDeleted ()Z
+	public final fun getError ()Ltech/stit/mobile/core/i18n/MessageKey;
+	public final fun getLoading ()Z
+	public final fun getOffline ()Z
+	public final fun getTodo ()Ltech/stit/mobile/entity/todo/Todo;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract class tech/stit/mobile/feature/todos/TodoListIntent {
+}
+
+public final class tech/stit/mobile/feature/todos/TodoListIntent$Create : tech/stit/mobile/feature/todos/TodoListIntent {
+	public static final field INSTANCE Ltech/stit/mobile/feature/todos/TodoListIntent$Create;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/feature/todos/TodoListIntent$Delete : tech/stit/mobile/feature/todos/TodoListIntent {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Ltech/stit/mobile/feature/todos/TodoListIntent$Delete;
+	public static synthetic fun copy$default (Ltech/stit/mobile/feature/todos/TodoListIntent$Delete;Ljava/lang/String;ILjava/lang/Object;)Ltech/stit/mobile/feature/todos/TodoListIntent$Delete;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/feature/todos/TodoListIntent$Refresh : tech/stit/mobile/feature/todos/TodoListIntent {
+	public static final field INSTANCE Ltech/stit/mobile/feature/todos/TodoListIntent$Refresh;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/feature/todos/TodoListIntent$Start : tech/stit/mobile/feature/todos/TodoListIntent {
+	public static final field INSTANCE Ltech/stit/mobile/feature/todos/TodoListIntent$Start;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/feature/todos/TodoListIntent$TitleChanged : tech/stit/mobile/feature/todos/TodoListIntent {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Ltech/stit/mobile/feature/todos/TodoListIntent$TitleChanged;
+	public static synthetic fun copy$default (Ltech/stit/mobile/feature/todos/TodoListIntent$TitleChanged;Ljava/lang/String;ILjava/lang/Object;)Ltech/stit/mobile/feature/todos/TodoListIntent$TitleChanged;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/feature/todos/TodoListIntent$Toggle : tech/stit/mobile/feature/todos/TodoListIntent {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Ltech/stit/mobile/feature/todos/TodoListIntent$Toggle;
+	public static synthetic fun copy$default (Ltech/stit/mobile/feature/todos/TodoListIntent$Toggle;Ljava/lang/String;ILjava/lang/Object;)Ltech/stit/mobile/feature/todos/TodoListIntent$Toggle;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class tech/stit/mobile/feature/todos/TodoListPresenter {
+	public final fun close ()V
+	public final fun dispatch (Ltech/stit/mobile/feature/todos/TodoListIntent;)V
+	public final fun getState ()Lkotlinx/coroutines/flow/StateFlow;
+}
+
+public final class tech/stit/mobile/feature/todos/TodoListState {
+	public fun <init> ()V
+	public fun <init> (Ljava/util/List;ZLtech/stit/mobile/core/i18n/MessageKey;ZLjava/lang/String;)V
+	public synthetic fun <init> (Ljava/util/List;ZLtech/stit/mobile/core/i18n/MessageKey;ZLjava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun component2 ()Z
+	public final fun component3 ()Ltech/stit/mobile/core/i18n/MessageKey;
+	public final fun component4 ()Z
+	public final fun component5 ()Ljava/lang/String;
+	public final fun copy (Ljava/util/List;ZLtech/stit/mobile/core/i18n/MessageKey;ZLjava/lang/String;)Ltech/stit/mobile/feature/todos/TodoListState;
+	public static synthetic fun copy$default (Ltech/stit/mobile/feature/todos/TodoListState;Ljava/util/List;ZLtech/stit/mobile/core/i18n/MessageKey;ZLjava/lang/String;ILjava/lang/Object;)Ltech/stit/mobile/feature/todos/TodoListState;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCanCreate ()Z
+	public final fun getError ()Ltech/stit/mobile/core/i18n/MessageKey;
+	public final fun getLoading ()Z
+	public final fun getNewTitle ()Ljava/lang/String;
+	public final fun getOffline ()Z
+	public final fun getTodos ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 

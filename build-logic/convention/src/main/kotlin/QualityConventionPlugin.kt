@@ -49,6 +49,8 @@ class QualityConventionPlugin : Plugin<Project> {
         extensions.configure<SpotlessExtension> {
             kotlin {
                 target("src/**/*.kt", "build-logic/convention/src/**/*.kt")
+                // Сгенерированные модели API формирует генератор, а не ktlint: gen-check сверяет их байт в байт.
+                targetExclude("**/generated/**")
                 ktlint(ktlintVersion)
                 trimTrailingWhitespace()
                 endWithNewline()

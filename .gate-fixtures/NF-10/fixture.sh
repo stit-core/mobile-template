@@ -1,6 +1,6 @@
-# NF-10 — удалён тест общей логики: ловит пол покрытия shared 80 % (koverVerify)
+# NF-10 — удалены тесты презентеров и сущностей: ловит пол покрытия shared 80 % (koverVerify)
 EXPECT="coverage kotlin"
-TOUCHES="shared/src/commonTest/kotlin/tech/stit/mobile/core/config/AppEnvTest.kt"
+TOUCHES="shared/src/commonTest/kotlin/tech/stit/mobile/feature shared/src/commonTest/kotlin/tech/stit/mobile/entity"
 apply() {
-    rm "$TOUCHES"
+    rm -r $TOUCHES
 }

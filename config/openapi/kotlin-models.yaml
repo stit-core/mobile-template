@@ -1,0 +1,19 @@
+# Конфиг openapi-generator для scripts/tools/gen.sh (07 §2.5): генерируются только модели —
+# транспорт и auth генератора не годятся (06 §8.8), клиент пишется руками над ApiClient.
+generatorName: kotlin
+library: multiplatform
+packageName: tech.stit.mobile.core.api
+modelPackage: tech.stit.mobile.core.api.generated
+additionalProperties:
+  # date-time → kotlin.time.Instant (сериализатор — в kotlinx-serialization, зависимости не нужны)
+  dateLibrary: kotlinx-datetime
+  enumPropertyNaming: PascalCase
+# Свойство без типа в спеке (ErrorDetail.value) — JsonElement: у Any? нет сериализатора.
+typeMappings:
+  AnyType: JsonElement
+importMappings:
+  JsonElement: kotlinx.serialization.json.JsonElement
+globalProperties:
+  models: ""
+  modelDocs: "false"
+  modelTests: "false"

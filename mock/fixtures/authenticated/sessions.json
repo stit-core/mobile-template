@@ -1,0 +1,24 @@
+{
+  "data": [
+    {
+      "jti": "session-current",
+      "client": "android",
+      "device_name": "Pixel 8",
+      "app_version": "1.0.0+1000000",
+      "issued_at": "2026-09-15T07:00:00Z",
+      "expires_at": "2026-12-14T07:00:00Z",
+      "last_used_at": "2026-09-17T06:30:00Z",
+      "current": true
+    },
+    {
+      "jti": "session-web",
+      "client": "web",
+      "app_version": "1.0.0",
+      "issued_at": "2026-09-01T10:00:00Z",
+      "expires_at": "2026-10-01T10:00:00Z",
+      "last_used_at": "2026-09-16T18:45:00Z",
+      "current": false
+    }
+  ],
+  "total": 2
+}

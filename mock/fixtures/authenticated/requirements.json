@@ -1,0 +1,15 @@
+{
+  "data": {
+    "status": "ok",
+    "min_version": "1.0.0",
+    "latest_version": "1.0.0",
+    "flags": {
+      "demo_login": "true"
+    },
+    "links": {
+      "privacy_policy": "https://app.example.com/privacy",
+      "account_deletion": "https://app.example.com/account/delete",
+      "support": "https://app.example.com/support"
+    }
+  }
+}

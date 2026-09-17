@@ -1,0 +1,7 @@
+{
+  "code": "INTERNAL",
+  "detail": "internal error",
+  "status": 500,
+  "title": "Internal Server Error",
+  "type": "about:blank"
+}

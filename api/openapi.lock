@@ -1,0 +1,4 @@
+backend_commit=reference
+generator=openapi-generator-cli 7.25.0
+models_sha256=11f2cc0923d907ad7c8385dc86f2570b88b0f67ae1edc4bc8f49ded43af0c5bf
+spec_sha256=5786969c79de0742db801c4561fff4b92d33a13ca84f34498838c28c3ed54c4c

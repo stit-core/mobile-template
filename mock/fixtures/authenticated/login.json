@@ -1,0 +1,14 @@
+{
+  "user": {
+    "id": "u-1",
+    "email": "demo@example.com",
+    "name": "Демо Пользователь",
+    "role": "client"
+  },
+  "tokens": {
+    "access_token": "mock-access-0",
+    "refresh_token": "mock-refresh-0",
+    "token_type": "Bearer",
+    "expires_in": 900
+  }
+}

@@ -79,7 +79,18 @@ else
     warn "SwiftLint: не найден в PATH — понадобится вместе с iosApp/"
 fi
 
-# 6. Mac-хост: macOS-стадии идут по SSH; без MAC_HOST они честно SKIP в make check.
+# 6. Генератор моделей API: make gen и полная проверка gen-check; без него gen-check сверяет только lock.
+if [ -n "${OPENAPI_GENERATOR_JAR:-}" ] && [ -f "$OPENAPI_GENERATOR_JAR" ]; then
+    if python3 -c 'import yaml' 2>/dev/null; then
+        ok "openapi-generator: $OPENAPI_GENERATOR_JAR"
+    else
+        warn "openapi-generator: есть jar, но нет python3-yaml — make gen не подготовит спеку (пакет python3-yaml)"
+    fi
+else
+    warn "openapi-generator: OPENAPI_GENERATOR_JAR не задан — make gen недоступен, gen-check без регенерации (export OPENAPI_GENERATOR_JAR=<путь>/openapi-generator-cli-7.25.0.jar)"
+fi
+
+# 7. Mac-хост: macOS-стадии идут по SSH; без MAC_HOST они честно SKIP в make check.
 want_xcode=$(cat .xcode-version)
 if [ -n "${MAC_HOST:-}" ]; then
     have_xcode=$(ssh -o BatchMode=yes -o ConnectTimeout=5 "$MAC_HOST" xcodebuild -version 2>/dev/null | awk 'NR==1 {print $2}')

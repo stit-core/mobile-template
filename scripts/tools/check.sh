@@ -21,6 +21,8 @@ stage() {
         "screenshots")         $GRADLE "$1" verifyRoborazziDevDebug ;;
         "coverage kotlin")     $GRADLE "$1" :shared:koverVerify :androidApp:app:koverVerifyGate ;;
         "kmp")                 bash scripts/tools/kmp-check.sh ;;
+        "gen-check")           bash scripts/tools/gen-check.sh ;;
+        "mock-check")          bash scripts/tools/mock-check.sh ;;
         "shared api")          $GRADLE "$1" :shared:apiCheck ;;
         "assembleDevDebug")    $GRADLE "$1" :androidApp:app:assembleDevDebug ;;
         "assembleProdRelease") $GRADLE "$1" :androidApp:app:assembleProdRelease ;;
@@ -37,7 +39,7 @@ if [ "${FAST:-0}" = "1" ]; then
     # Пока пишу: Swift и detekt первыми — не ждать Gradle ради опечатки.
     STAGES=("format swift" "format kotlin" "detekt" "shared jvm tests")
 else
-    STAGES=("format kotlin" "format swift" "detekt" "android lint" "shared jvm tests" "android unit tests"
+    STAGES=("format kotlin" "format swift" "gen-check" "detekt" "android lint" "shared jvm tests" "mock-check" "android unit tests"
         "screenshots" "coverage kotlin" "kmp" "shared api" "assembleDevDebug")
     [ "${GATE_RELEASE:-0}" = "1" ] && STAGES+=("assembleProdRelease")
 fi

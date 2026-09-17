@@ -25,6 +25,8 @@ style:
     ignoreAnnotated: ['Preview']
   ForbiddenImport:
     active: true
+    # Единственный законный вызов android.util.Log — приёмник Logger из shared.
+    excludes: ['**/shared/src/androidMain/**/LogcatSink.kt']
     imports:
       - value: 'android.util.Log'
         reason: 'Логи — через Logger из shared core/observability, не через android.util.Log.'

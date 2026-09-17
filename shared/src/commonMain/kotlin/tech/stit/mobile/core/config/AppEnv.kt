@@ -9,7 +9,6 @@ enum class AppEnv {
     ;
 
     companion object {
-        fun parse(raw: String): AppEnv = entries.firstOrNull { it.name.equals(raw, ignoreCase = true) }
-            ?: throw IllegalArgumentException("неизвестная среда '$raw'; допустимы: ${entries.joinToString { it.name.lowercase() }}")
+        fun parse(raw: String): AppEnv = parseEnum(raw, entries, "ая среда")
     }
 }

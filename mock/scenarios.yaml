@@ -1,0 +1,17 @@
+# Сценарии mock-режима (07 §3): одни фикстуры для тестов, demo-сборки, скриншотов и Maestro.
+# Каталог — mock/fixtures/<scenario>/<entity>.json, формат — ответ API с конвертом data (строго по сгенерированным моделям).
+# mock-check сверяет этот список с каталогами, FixturesTest — каталоги с моделями и MockScenario.
+scenarios:
+  empty:
+    description: Аккаунт без данных — пустые состояния экранов
+    entities: [user, login, todos, sessions, devices, requirements]
+  populated:
+    description: Данные есть, сессии нет — вход через экран логина (любые непустые email и пароль)
+    entities: [user, login, todos, sessions, devices, requirements]
+  authenticated:
+    description: Как populated, но с посеянной сессией — экран входа пропускается
+    session: seeded
+    entities: [user, login, todos, sessions, devices, requirements]
+  error:
+    description: Каждый запрос — 500 INTERNAL (problem+json)
+    entities: [error]

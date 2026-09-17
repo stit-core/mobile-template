@@ -1,0 +1,1350 @@
+# Reference-контракт мобильного шаблона до B-12: дамп go-backend-template (cookie-only, 2026-09-17) плюс
+# Bearer-ветка auth (07 §1.3b), GET /api/app/requirements (07 §4.3), /api/v1/devices (07 §6.1) и todos как
+# reference-ресурс. После B-12 файл заменяется копией ../backend/api/openapi.yaml через `make gen`.
+components:
+  schemas:
+    AppLinksView:
+      additionalProperties: false
+      properties:
+        account_deletion:
+          format: uri
+          type: string
+        privacy_policy:
+          format: uri
+          type: string
+        support:
+          format: uri
+          type: string
+      type: object
+    AppRequirementsOutputBody:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/AppRequirementsView'
+      required:
+      - data
+      type: object
+    AppRequirementsView:
+      additionalProperties: false
+      properties:
+        flags:
+          additionalProperties:
+            type: string
+          description: 'как flagkit: строки, типизация на клиенте'
+          type: object
+        latest_version:
+          type: string
+        links:
+          $ref: '#/components/schemas/AppLinksView'
+        maintenance_until:
+          format: date-time
+          type: string
+        min_version:
+          type: string
+        status:
+          enum:
+          - ok
+          - update_recommended
+          - update_required
+          - maintenance
+          type: string
+        store_url:
+          format: uri
+          type: string
+      required:
+      - status
+      - min_version
+      - latest_version
+      - flags
+      - links
+      type: object
+    AuthUserView:
+      additionalProperties: false
+      properties:
+        email:
+          type: string
+        id:
+          type: string
+        name:
+          type: string
+        role:
+          type: string
+      required:
+      - id
+      - email
+      - name
+      - role
+      type: object
+    ChangePasswordInputBody:
+      additionalProperties: false
+      properties:
+        $schema:
+          description: A URL to the JSON Schema for this object.
+          examples:
+          - https://example.com/schemas/ChangePasswordInputBody.json
+          format: uri
+          readOnly: true
+          type: string
+        new_password:
+          minLength: 8
+          type: string
+        old_password:
+          type: string
+        user_id:
+          type: string
+      required:
+      - user_id
+      - old_password
+      - new_password
+      type: object
+    Cookie:
+      additionalProperties: false
+      properties:
+        Domain:
+          type: string
+        Expires:
+          format: date-time
+          type: string
+        HttpOnly:
+          type: boolean
+        MaxAge:
+          format: int64
+          type: integer
+        Name:
+          type: string
+        Partitioned:
+          type: boolean
+        Path:
+          type: string
+        Quoted:
+          type: boolean
+        Raw:
+          type: string
+        RawExpires:
+          type: string
+        SameSite:
+          format: int64
+          type: integer
+        Secure:
+          type: boolean
+        Unparsed:
+          items:
+            type: string
+          type:
+          - array
+          - 'null'
+        Value:
+          type: string
+      required:
+      - Name
+      - Value
+      - Quoted
+      - Path
+      - Domain
+      - Expires
+      - RawExpires
+      - MaxAge
+      - Secure
+      - HttpOnly
+      - SameSite
+      - Partitioned
+      - Raw
+      - Unparsed
+      type: object
+    DeviceListOutputBody:
+      additionalProperties: false
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/DeviceView'
+          type: array
+        total:
+          format: int64
+          type: integer
+      required:
+      - data
+      - total
+      type: object
+    DeviceOutputBody:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/DeviceView'
+      required:
+      - data
+      type: object
+    DeviceRegisterInputBody:
+      additionalProperties: false
+      properties:
+        app_version:
+          type: string
+        device_model:
+          type: string
+        installation_id:
+          description: стабильный id установки (генерируется на первом запуске; не ADID)
+          format: uuid
+          type: string
+        locale:
+          type: string
+        os_version:
+          type: string
+        platform:
+          enum:
+          - android
+          - ios
+          type: string
+        provider:
+          enum:
+          - fcm
+          - apns
+          - rustore
+          - hms
+          - ntfy
+          type: string
+        push_enabled:
+          description: разрешение на уведомления в системе
+          type: boolean
+        sandbox:
+          description: APNs sandbox (debug-сборки) / FCM dev-проект
+          type: boolean
+        timezone:
+          type: string
+        token:
+          maxLength: 4096
+          type: string
+      required:
+      - provider
+      - token
+      - platform
+      - app_version
+      - locale
+      type: object
+    DeviceView:
+      additionalProperties: false
+      properties:
+        app_version:
+          type: string
+        created_at:
+          format: date-time
+          type: string
+        device_model:
+          type: string
+        id:
+          type: string
+        last_seen_at:
+          format: date-time
+          type: string
+        platform:
+          type: string
+        provider:
+          type: string
+        revoked_at:
+          format: date-time
+          type: string
+      required:
+      - id
+      - provider
+      - platform
+      - app_version
+      - created_at
+      - last_seen_at
+      type: object
+    EmailVerifyInputBody:
+      additionalProperties: false
+      properties:
+        $schema:
+          description: A URL to the JSON Schema for this object.
+          examples:
+          - https://example.com/schemas/EmailVerifyInputBody.json
+          format: uri
+          readOnly: true
+          type: string
+        token:
+          type: string
+      required:
+      - token
+      type: object
+    ErrorDetail:
+      additionalProperties: false
+      properties:
+        location:
+          description: Where the error occurred, e.g. 'body.items[3].tags' or 'path.thing-id'
+          type: string
+        message:
+          description: Error message text
+          type: string
+        value:
+          description: The value at the given location
+      type: object
+    ErrorModel:
+      additionalProperties: false
+      properties:
+        $schema:
+          description: A URL to the JSON Schema for this object.
+          examples:
+          - https://example.com/schemas/ErrorModel.json
+          format: uri
+          readOnly: true
+          type: string
+        detail:
+          description: A human-readable explanation specific to this occurrence of the problem.
+          examples:
+          - Property foo is required but is missing.
+          type: string
+        errors:
+          description: Optional list of individual error details
+          items:
+            $ref: '#/components/schemas/ErrorDetail'
+          type:
+          - array
+          - 'null'
+        instance:
+          description: A URI reference that identifies the specific occurrence of the problem.
+          examples:
+          - https://example.com/error-log/abc123
+          format: uri
+          type: string
+        status:
+          description: HTTP status code
+          examples:
+          - 400
+          format: int64
+          type: integer
+        title:
+          description: A short, human-readable summary of the problem type. This value should not change between occurrences
+            of the error.
+          examples:
+          - Bad Request
+          type: string
+        type:
+          default: about:blank
+          description: A URI reference to human-readable documentation for the error.
+          examples:
+          - https://example.com/errors/example
+          format: uri
+          type: string
+      type: object
+    LoginInputBody:
+      additionalProperties: false
+      properties:
+        $schema:
+          description: A URL to the JSON Schema for this object.
+          examples:
+          - https://example.com/schemas/LoginInputBody.json
+          format: uri
+          readOnly: true
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+      required:
+      - email
+      - password
+      type: object
+    LoginOutputBody:
+      additionalProperties: false
+      properties:
+        $schema:
+          description: A URL to the JSON Schema for this object.
+          examples:
+          - https://example.com/schemas/LoginOutputBody.json
+          format: uri
+          readOnly: true
+          type: string
+        tokens:
+          $ref: '#/components/schemas/TokenPairBody'
+        user:
+          $ref: '#/components/schemas/AuthUserView'
+      required:
+      - user
+      type: object
+    PasswordResetConfirmInputBody:
+      additionalProperties: false
+      properties:
+        $schema:
+          description: A URL to the JSON Schema for this object.
+          examples:
+          - https://example.com/schemas/PasswordResetConfirmInputBody.json
+          format: uri
+          readOnly: true
+          type: string
+        password:
+          minLength: 8
+          type: string
+        token:
+          type: string
+      required:
+      - token
+      - password
+      type: object
+    PasswordResetRequestInputBody:
+      additionalProperties: false
+      properties:
+        $schema:
+          description: A URL to the JSON Schema for this object.
+          examples:
+          - https://example.com/schemas/PasswordResetRequestInputBody.json
+          format: uri
+          readOnly: true
+          type: string
+        email:
+          type: string
+      required:
+      - email
+      type: object
+    RefreshInputBody:
+      additionalProperties: false
+      properties:
+        refresh_token:
+          type: string
+      required:
+      - refresh_token
+      type: object
+    SessionListOutputBody:
+      additionalProperties: false
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/SessionView'
+          type: array
+        total:
+          format: int64
+          type: integer
+      required:
+      - data
+      - total
+      type: object
+    SessionView:
+      additionalProperties: false
+      properties:
+        app_version:
+          type: string
+        client:
+          enum:
+          - web
+          - android
+          - ios
+          type: string
+        current:
+          type: boolean
+        device_name:
+          type: string
+        expires_at:
+          format: date-time
+          type: string
+        issued_at:
+          format: date-time
+          type: string
+        jti:
+          type: string
+        last_used_at:
+          format: date-time
+          type: string
+      required:
+      - jti
+      - issued_at
+      - expires_at
+      - current
+      type: object
+    TodoCreateInputBody:
+      additionalProperties: false
+      properties:
+        title:
+          minLength: 1
+          type: string
+      required:
+      - title
+      type: object
+    TodoListOutputBody:
+      additionalProperties: false
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/TodoView'
+          type: array
+        page:
+          format: int64
+          type: integer
+        size:
+          format: int64
+          type: integer
+        total:
+          format: int64
+          type: integer
+      required:
+      - data
+      - total
+      - page
+      - size
+      type: object
+    TodoOutputBody:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/TodoView'
+      required:
+      - data
+      type: object
+    TodoUpdateInputBody:
+      additionalProperties: false
+      properties:
+        done:
+          type: boolean
+        title:
+          minLength: 1
+          type: string
+        version:
+          format: int64
+          type: integer
+      required:
+      - version
+      type: object
+    TodoView:
+      additionalProperties: false
+      properties:
+        created_at:
+          format: date-time
+          type: string
+        done:
+          type: boolean
+        id:
+          type: string
+        title:
+          type: string
+        updated_at:
+          format: date-time
+          type: string
+        version:
+          format: int64
+          type: integer
+      required:
+      - id
+      - title
+      - done
+      - created_at
+      - updated_at
+      - version
+      type: object
+    TokenPairBody:
+      additionalProperties: false
+      properties:
+        access_token:
+          type: string
+        expires_in:
+          description: секунды до exp access_token
+          format: int64
+          type: integer
+        refresh_token:
+          type: string
+        token_type:
+          enum:
+          - Bearer
+          type: string
+      required:
+      - access_token
+      - refresh_token
+      - token_type
+      - expires_in
+      type: object
+    UserGetOutputBody:
+      additionalProperties: false
+      properties:
+        $schema:
+          description: A URL to the JSON Schema for this object.
+          examples:
+          - https://example.com/schemas/UserGetOutputBody.json
+          format: uri
+          readOnly: true
+          type: string
+        data:
+          $ref: '#/components/schemas/UserView'
+      required:
+      - data
+      type: object
+    UserListOutputBody:
+      additionalProperties: false
+      properties:
+        $schema:
+          description: A URL to the JSON Schema for this object.
+          examples:
+          - https://example.com/schemas/UserListOutputBody.json
+          format: uri
+          readOnly: true
+          type: string
+        data:
+          items:
+            $ref: '#/components/schemas/UserView'
+          type:
+          - array
+          - 'null'
+        page:
+          format: int64
+          type: integer
+        size:
+          format: int64
+          type: integer
+        total:
+          format: int64
+          type: integer
+      required:
+      - data
+      - total
+      - page
+      - size
+      type: object
+    UserMeOutputBody:
+      additionalProperties: false
+      properties:
+        $schema:
+          description: A URL to the JSON Schema for this object.
+          examples:
+          - https://example.com/schemas/UserMeOutputBody.json
+          format: uri
+          readOnly: true
+          type: string
+        data:
+          $ref: '#/components/schemas/UserView'
+      required:
+      - data
+      type: object
+    UserRegisterInputBody:
+      additionalProperties: false
+      properties:
+        $schema:
+          description: A URL to the JSON Schema for this object.
+          examples:
+          - https://example.com/schemas/UserRegisterInputBody.json
+          format: uri
+          readOnly: true
+          type: string
+        email:
+          format: email
+          type: string
+        name:
+          minLength: 1
+          type: string
+        password:
+          minLength: 8
+          type: string
+      required:
+      - email
+      - password
+      - name
+      type: object
+    UserRegisterOutputBody:
+      additionalProperties: false
+      properties:
+        $schema:
+          description: A URL to the JSON Schema for this object.
+          examples:
+          - https://example.com/schemas/UserRegisterOutputBody.json
+          format: uri
+          readOnly: true
+          type: string
+        data:
+          $ref: '#/components/schemas/UserView'
+      required:
+      - data
+      type: object
+    UserUpdateInputBody:
+      additionalProperties: false
+      properties:
+        $schema:
+          description: A URL to the JSON Schema for this object.
+          examples:
+          - https://example.com/schemas/UserUpdateInputBody.json
+          format: uri
+          readOnly: true
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+        version:
+          format: int64
+          type: integer
+      required:
+      - version
+      type: object
+    UserUpdateOutputBody:
+      additionalProperties: false
+      properties:
+        $schema:
+          description: A URL to the JSON Schema for this object.
+          examples:
+          - https://example.com/schemas/UserUpdateOutputBody.json
+          format: uri
+          readOnly: true
+          type: string
+        data:
+          $ref: '#/components/schemas/UserView'
+      required:
+      - data
+      type: object
+    UserView:
+      additionalProperties: false
+      properties:
+        created_at:
+          format: date-time
+          type: string
+        email:
+          type: string
+        id:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+        updated_at:
+          format: date-time
+          type: string
+        version:
+          description: 'версия для UserUpdateInputBody.version (B-19: бэкенд пока не отдаёт)'
+          format: int64
+          type: integer
+      required:
+      - id
+      - email
+      - name
+      - status
+      - created_at
+      - updated_at
+      type: object
+  securitySchemes:
+    Bearer:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http
+    Cookie:
+      in: cookie
+      name: access_token
+      type: apiKey
+info:
+  title: API
+  version: 0.1.0
+openapi: 3.1.0
+paths:
+  /api/app/requirements:
+    get:
+      operationId: getAppRequirements
+      parameters:
+      - in: query
+        name: platform
+        required: true
+        schema:
+          enum:
+          - android
+          - ios
+          type: string
+      - in: query
+        name: version
+        required: true
+        schema:
+          description: semver 1.4.2
+          type: string
+      - in: query
+        name: build
+        schema:
+          format: int64
+          type: integer
+      - in: query
+        name: store
+        schema:
+          enum:
+          - play
+          - rustore
+          - appgallery
+          - appstore
+          - direct
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppRequirementsOutputBody'
+          description: OK
+        default: &id002
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+          description: Error
+      summary: Требования к версии приложения, флаги и ссылки
+      tags:
+      - app
+  /api/auth/change-password:
+    post:
+      operationId: changePassword
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordInputBody'
+        required: true
+      responses:
+        '204':
+          description: No Content
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+          description: Error
+      security: &id003
+      - Cookie: []
+      - Bearer: []
+      summary: Смена пароля
+      tags:
+      - auth
+  /api/auth/email-verify:
+    post:
+      operationId: confirmEmail
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmailVerifyInputBody'
+        required: true
+      responses:
+        '204':
+          description: No Content
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+          description: Error
+      summary: Подтверждение email
+      tags:
+      - auth
+  /api/auth/login:
+    post:
+      operationId: loginUser
+      parameters:
+      - &id001
+        description: web (default) → cookies; android|ios → tokens в теле, cookies не ставятся
+        in: header
+        name: X-Client
+        schema:
+          enum:
+          - web
+          - android
+          - ios
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginInputBody'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginOutputBody'
+          description: OK
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+          description: Error
+      summary: Аутентификация пользователя (cookie-сессия для web, tokens в теле для android|ios)
+      tags:
+      - auth
+  /api/auth/logout:
+    post:
+      operationId: logoutUser
+      parameters:
+      - *id001
+      - in: cookie
+        name: refresh_token
+        schema:
+          $ref: '#/components/schemas/Cookie'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshInputBody'
+        required: false
+      responses:
+        '204':
+          description: No Content
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+          description: Error
+      summary: Завершение сессии
+      tags:
+      - auth
+  /api/auth/password-reset/confirm:
+    post:
+      operationId: confirmPasswordReset
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetConfirmInputBody'
+        required: true
+      responses:
+        '204':
+          description: No Content
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+          description: Error
+      summary: Подтверждение сброса пароля
+      tags:
+      - auth
+  /api/auth/password-reset/request:
+    post:
+      operationId: requestPasswordReset
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetRequestInputBody'
+        required: true
+      responses:
+        '204':
+          description: No Content
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+          description: Error
+      summary: Запрос сброса пароля
+      tags:
+      - auth
+  /api/auth/refresh:
+    post:
+      operationId: refreshToken
+      parameters:
+      - *id001
+      - in: cookie
+        name: refresh_token
+        schema:
+          $ref: '#/components/schemas/Cookie'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshInputBody'
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenPairBody'
+          description: OK
+        '204':
+          description: No Content
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+          description: Error
+      summary: Ротация access + refresh (cookie для web, JSON для android|ios)
+      tags:
+      - auth
+  /api/auth/register:
+    post:
+      operationId: registerUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegisterInputBody'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserRegisterOutputBody'
+          description: Created
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+          description: Error
+      summary: Регистрация нового пользователя
+      tags:
+      - auth
+  /api/auth/sessions:
+    delete:
+      operationId: revokeAllSessions
+      responses:
+        '204':
+          description: No Content
+        default: *id002
+      security: *id003
+      summary: Выйти со всех устройств
+      tags:
+      - auth
+    get:
+      operationId: listSessions
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionListOutputBody'
+          description: OK
+        default: *id002
+      security: *id003
+      summary: Активные сессии пользователя
+      tags:
+      - auth
+  /api/auth/sessions/{jti}:
+    delete:
+      operationId: revokeSession
+      parameters:
+      - in: path
+        name: jti
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+        default: *id002
+      security: *id003
+      summary: Отозвать сессию
+      tags:
+      - auth
+  /api/todos:
+    get:
+      operationId: listTodos
+      parameters:
+      - explode: false
+        in: query
+        name: page
+        schema:
+          default: 1
+          format: int64
+          minimum: 1
+          type: integer
+      - explode: false
+        in: query
+        name: size
+        schema:
+          default: 20
+          format: int64
+          maximum: 100
+          minimum: 1
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TodoListOutputBody'
+          description: OK
+        default: *id002
+      security: *id003
+      summary: Список задач
+      tags:
+      - todos
+    post:
+      operationId: createTodo
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TodoCreateInputBody'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TodoOutputBody'
+          description: Created
+        default: *id002
+      security: *id003
+      summary: Создать задачу
+      tags:
+      - todos
+  /api/todos/{id}:
+    delete:
+      operationId: deleteTodo
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+        default: *id002
+      security: *id003
+      summary: Удалить задачу
+      tags:
+      - todos
+    get:
+      operationId: getTodo
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TodoOutputBody'
+          description: OK
+        default: *id002
+      security: *id003
+      summary: Задача по ID
+      tags:
+      - todos
+    patch:
+      operationId: updateTodo
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TodoUpdateInputBody'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TodoOutputBody'
+          description: OK
+        default: *id002
+      security: *id003
+      summary: Обновить задачу
+      tags:
+      - todos
+  /api/users:
+    get:
+      operationId: listUsers
+      parameters:
+      - explode: false
+        in: query
+        name: page
+        schema:
+          default: 1
+          format: int64
+          minimum: 1
+          type: integer
+      - explode: false
+        in: query
+        name: size
+        schema:
+          default: 20
+          format: int64
+          maximum: 100
+          minimum: 1
+          type: integer
+      - explode: false
+        in: query
+        name: status
+        schema:
+          enum:
+          - active
+          - blocked
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserListOutputBody'
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+          description: Error
+      security: *id003
+      summary: Список пользователей (admin)
+      tags:
+      - users
+  /api/users/me:
+    get:
+      operationId: getMe
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserMeOutputBody'
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+          description: Error
+      security: *id003
+      summary: Текущий пользователь
+      tags:
+      - users
+  /api/users/{id}:
+    delete:
+      operationId: deleteUser
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+          description: Error
+      security: *id003
+      summary: Удалить пользователя (soft-delete)
+      tags:
+      - users
+    get:
+      operationId: getUser
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserGetOutputBody'
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+          description: Error
+      security: *id003
+      summary: Получить пользователя по ID
+      tags:
+      - users
+    patch:
+      operationId: updateUser
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdateInputBody'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserUpdateOutputBody'
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+          description: Error
+      security: *id003
+      summary: Обновить пользователя
+      tags:
+      - users
+  /api/v1/devices:
+    get:
+      operationId: listDevices
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeviceListOutputBody'
+          description: OK
+        default: *id002
+      security: *id003
+      summary: Мои устройства
+      tags:
+      - devices
+    put:
+      operationId: registerDevice
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeviceRegisterInputBody'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeviceOutputBody'
+          description: OK
+        default: *id002
+      security: *id003
+      summary: Регистрация устройства (upsert по provider+token)
+      tags:
+      - devices
+  /api/v1/devices/{id}:
+    delete:
+      operationId: unregisterDevice
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+        default: *id002
+      security: *id003
+      summary: Отвязать устройство
+      tags:
+      - devices

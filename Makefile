@@ -1,5 +1,5 @@
 .PHONY: help fmt fmt-check detekt lint test screenshots screenshots-record cover cover-check \
-        check-fast run-android build check check-full kmp-check api-dump api-check \
+        check-fast run-android build check check-full kmp-check api-dump api-check gen gen-check mock-check \
         check-mac mac-doctor mac-build mac-test snapshot-record run-ios release-preflight release-android \
         setup doctor clean status map deps search gate-selftest
 
@@ -74,6 +74,16 @@ api-dump: ## Обновить дампы публичного API shared (JVM + 
 
 api-check: ## Сверить публичный API shared с дампами
 	@$(GRADLE_STEP) "shared api" :shared:apiCheck
+
+##@ CONTRACT
+gen: ## Скопировать api/openapi.yaml из ../backend (если есть), сгенерировать модели, обновить api/openapi.lock
+	@bash scripts/tools/gen.sh
+
+gen-check: ## Дрейф контракта: lock == спека == модели, регенерация совпадает; спека соседа отличается — WARN
+	@bash scripts/tools/gen-check.sh
+
+mock-check: ## Фикстуры mock/: сценарии == каталоги, JSON валиден, FixturesTest (строгий разбор моделями) зелёный
+	@bash scripts/tools/mock-check.sh
 
 ##@ MAC
 check-mac: ## macOS-стадии по SSH (MAC_HOST): link framework, iosSimulatorArm64Test, xcodebuild, планы Unit+Snapshot
