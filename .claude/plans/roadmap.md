@@ -77,18 +77,30 @@ S-10, S-15 (нужен Mac) и S-12 (нужны аккаунты магазин�
     секции status.sh, themes.xml) — в `docs/research/prompts/NEXT-SESSION-2.md` §1.
 
 #### Phase 2 — волна 2: shared ∥ обвязка
-- [ ] **A3:** Агент B1 — `shared/` целиком (08 §2.2–§2.7, 07): core, контракт API + кодоген
+- [x] **A3:** Агент B1 — `shared/` целиком (08 §2.2–§2.7, 07): core, контракт API + кодоген
   моделей, сущности, презентеры 8 фич, `SharedContainer`, фикстуры `mock/`, тесты, NF-11…16.
   - Verify: `make kmp-check && make test && make cover-check && make gen-check && make mock-check
     && make check` → зелёные, покрытие shared ≥ 80 %, NF-11…16 красные · Зависит от: A2
-- [ ] **A4:** Агент B3 (параллельно с A3, без Gradle) — `CLAUDE.md`, 23 правила, `settings.json`,
+  - **Done:** B1 (66 мин): 127 файлов commonMain (34 сгенерированных), 11 презентеров, 107 JVM-тестов
+    + 4 host-теста, покрытие shared 96,7 %; `make check` 109 с холодный; NF-11…16 красные; фасад в
+    `shared/api/`; коммит `feat(shared): KMP-ядро — контракт API, презентеры, mock и тесты` (7cda56c).
+- [x] **A4:** Агент B3 (параллельно с A3, без Gradle) — `CLAUDE.md`, 23 правила, `settings.json`,
   9 скиллов, агенты, `AGENTS.md`, `docs/**`, `README.md`, `LICENSE`, `SECURITY.md`.
   - Verify: `wc -l CLAUDE.md` ≤ 200; frontmatter правил с `paths:`; ссылки docs резолвятся
     (скрипт); `make check` не сломан · Зависит от: A2
-- [ ] **A5:** Протокол §4 после волны 2 (гейт, покрытие, читаемость, обвязка против кода),
+  - **Done:** B3 (50 мин): `CLAUDE.md` 191 строка, 23 правила ≤ 57 строк, `settings.json`, 9 скиллов +
+    17 references, агенты, docs (README/getting-started/contributing, reference ×8, канон strategy +
+    9 форм, stack README + 15 форм), `validate-plan`/`links-check`/`kin-diff` зелёные, `status.sh` с
+    секциями Platforms/Mac/Critical/Handoffs/Strategy; коммит `docs(harness): …`.
+- [x] **A5:** Протокол §4 после волны 2 (гейт, покрытие, читаемость, обвязка против кода),
   коммиты `feat(shared): …`, `docs(harness): …`.
   - Verify: `make check` → 0, `make gate-selftest` → NF-01…16 красные, `git status` чистый ·
     Зависит от: A3, A4
+  - **Done:** основная сессия: `make doctor` clean, `make check` тёплый 19 с (код 0, SKIP-блок),
+    `check-fast` 12 с, `gate-selftest` 16/16 красных (NF-10 перенацелена: удаление тестов
+    `commonTest/{feature,entity}` роняет покрытие до 59 %), дерево после самотеста чистое; обвязка B3
+    прочитана целиком, docs сверены с кодом `shared` коротким агентом; `GATE_RELEASE=1` после волны 2
+    не гонялся (долг — `NEXT-SESSION-3.md` §0 п. 3); код `shared` прочитан выборочно (долг там же).
 
 #### Phase 3 — волна 3: Android ∥ iOS-pure
 - [ ] **A6:** Агент B2 — `androidApp/` (08 §2.3, §2.6, §2.7, 01): core-модули, 8 фич, Nav3, Hilt,
@@ -127,6 +139,15 @@ S-10, S-15 (нужен Mac) и S-12 (нужны аккаунты магазин�
     несовместим с Kotlin 2.4.20; тёплый `make check` 19–21 с из-за swap и 12 вызовов Gradle.
   - Следующий шаг: A3 ∥ A4 (волна 2) по `docs/research/prompts/NEXT-SESSION-2.md` (блоки состояния
     для B1/B3 готовы там же).
+- **2026-09-17 · волна 2 закрыта.**
+  - Закрыто: A3, A4, A5 ✓ (коммиты `feat(shared)`, `docs(harness)`, `meta(plan)`).
+  - Обнаружено: docs, написанные по спецификации до кода, расходятся с кодом (имена презентеров,
+    expect/actual, логгер) — после каждой волны с кодом и docs нужен короткий агент «сверка docs ↔
+    код»; фикстуры самотеста перепроверять после каждой волны (NF-10 позеленела при росте покрытия);
+    сессия закончилась по контексту основной сессии — читать отчёты по разделам, полные сверки
+    делегировать.
+  - Следующий шаг: `NEXT-SESSION-3.md` §0 п. 2–3 (чтение кода `shared`, `GATE_RELEASE=1 make check`),
+    затем A6 ∥ A7 (волна 3) — блоки состояния для B2/B4 в `NEXT-SESSION-3.md` §4.
 
 ## Backlog
 
@@ -158,6 +179,7 @@ S-10, S-15 (нужен Mac) и S-12 (нужны аккаунты магазин�
 - **SKIE для Swift-фасада** — подключить в `stit.kmp.library`, когда SKIE поддержит Kotlin 2.4.20+
   (0.10.14 ограничен 2.4.10); до этого фасад плоский (`kmp-public-api`), sealed → Swift через
   Obj-C export без enum-сахара.
-- **Тёплый `make check` ≤ 15 с** — сейчас 19–21 с на занятой машине (12 вызовов Gradle по 1–2 с +
-  `spotlessCheck` 5 с); если на свободной машине > 15 с — объединить дешёвые стадии (`spotlessCheck
-  checkSortDependencies detekt lintDevDebug`) в один вызов Gradle с разбором per-task статусов.
+- **Тёплый `make check` ≤ 15 с** — на живом демоне 6 с (до волны 2), 19 с со стартом демона
+  (после); перемерить на живом демоне после волны 3 — если > 15 с, объединить дешёвые стадии
+  (`spotlessCheck checkSortDependencies detekt lintDevDebug`) в один вызов Gradle с разбором
+  per-task статусов; иначе строку закрыть.
