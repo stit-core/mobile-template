@@ -1,0 +1,7 @@
+# Maestro (вне гейта): холодный старт схемы Demo, сценарий populated — до экрана логина.
+appId: tech.stit.mobile.demo
+---
+- launchApp:
+    clearState: true
+- assertVisible:
+    id: "login.submit"

@@ -1,0 +1,129 @@
+# SwiftLint — линтер смысла; формат держит swift-format (.swift-format), поэтому правила формата здесь выключены.
+strict: true
+
+included:
+  - App
+  - Packages
+  - Tools
+  - UITests
+excluded:
+  - "**/.build"
+  - "**/__Snapshots__"
+
+# Требуют compiler log (swiftlint analyze) — только на Mac после сборки.
+analyzer_rules:
+  - unused_declaration
+  - unused_import
+
+opt_in_rules:
+  - array_init
+  - closure_spacing
+  - contains_over_filter_count
+  - empty_collection_literal
+  - empty_count
+  - empty_string
+  - explicit_init
+  - fallthrough
+  - fatal_error_message
+  - first_where
+  - force_unwrapping
+  - implicitly_unwrapped_optional
+  - last_where
+  - modifier_order
+  - overridden_super_call
+  - prefer_self_in_static_references
+  - private_action
+  - redundant_nil_coalescing
+  - shorthand_optional_binding
+  - sorted_first_last
+  - toggle_bool
+  - unneeded_parentheses_in_closure_argument
+  - unowned_variable_capture
+  - yoda_condition
+
+disabled_rules:
+  # swift-format требует висящую запятую в многострочных литералах, SwiftLint по умолчанию запрещает — иначе два фиксера спорят вечно.
+  - trailing_comma
+  - trailing_whitespace
+
+line_length:
+  warning: 120
+  error: 140
+  ignores_urls: true
+  ignores_comments: true
+
+type_body_length:
+  warning: 300
+  error: 400
+
+function_body_length:
+  warning: 60
+  error: 100
+
+identifier_name:
+  min_length: 2
+  excluded: [id, ok, db, vm, x, y]
+
+type_name:
+  min_length: 3
+
+custom_rules:
+  no_print:
+    name: "print запрещён"
+    regex: '(^|[^.\w])(print|debugPrint|dump)\s*\('
+    excluded: 'Tools/.*'
+    message: "Логи — AppFoundation.AppLogger (os.Logger), не print"
+    severity: error
+
+  no_nslog:
+    name: "NSLog запрещён"
+    regex: '\bNSLog\s*\('
+    message: "Логи — AppFoundation.AppLogger (os.Logger), не NSLog"
+    severity: error
+
+  no_combine:
+    name: "Combine запрещён"
+    regex: '^\s*(@[\w()]+\s+)*import\s+Combine\b'
+    message: "Потоки — AsyncSequence/AsyncStream, не Combine"
+    severity: error
+
+  no_raw_urlsession:
+    name: "URLSession только в SharedBridge"
+    regex: '\bURLSession\s*[.(]'
+    excluded: 'Packages/Core/Sources/SharedBridge/.*'
+    message: "Сеть — только через Shared (Core/SharedBridge), не URLSession"
+    severity: error
+
+  no_feature_import:
+    name: "фича не импортирует другую фичу"
+    regex: '^\s*(@[\w()]+\s+)*import\s+(Shell|AuthFeature|ProfileFeature|TodosFeature|SettingsFeature|Features)\b'
+    included: 'Packages/Features/Sources/(Shell|AuthFeature|ProfileFeature|TodosFeature|SettingsFeature)/.*'
+    message: "Features не зависят друг от друга: общее — в Core или композиция в App"
+    severity: error
+
+  no_platform_import_in_features:
+    name: "фича не импортирует Persistence/Platform"
+    regex: '^\s*(@[\w()]+\s+)*import\s+(Persistence|Platform)\b'
+    included: 'Packages/Features/Sources/.*'
+    message: "Реализации PlatformDeps собирает только App/AppEnvironment.swift"
+    severity: error
+
+  no_hardcoded_color:
+    name: "сырые цвета запрещены"
+    regex: '\b(Color|UIColor)\(\s*(\.sRGB|\.displayP3|red|hue|white|hex)\s*[:,]'
+    excluded: 'Packages/Core/Sources/DesignSystem/.*'
+    message: "Цвета — DesignSystem.Theme (значения — Pure/DesignSystemTokens)"
+    severity: error
+
+  no_fixed_font_size:
+    name: "фиксированный размер шрифта"
+    regex: '\.font\(\s*\.system\(\s*size\s*:'
+    excluded: 'Packages/Core/Sources/DesignSystem/.*'
+    message: "Dynamic Type: .font(.body) или Theme.typography (relativeTo:)"
+    severity: error
+
+  preconcurrency_needs_why:
+    name: "@preconcurrency без причины"
+    regex: '^\s*@preconcurrency\b(?!.*//)'
+    message: "@preconcurrency — только с комментарием-причиной в той же строке (какая библиотека, какой тип не Sendable)"
+    severity: error

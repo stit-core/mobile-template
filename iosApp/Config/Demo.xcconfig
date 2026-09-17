@@ -1,0 +1,11 @@
+#include "Base.xcconfig"
+// API_MODE=mock: в сеть не ходит (RFC 2606 .invalid), данные — mock/fixtures; сборка для App Review.
+APP_ENV = demo
+APP_DISPLAY_NAME = Stit Demo
+BUNDLE_ID_SUFFIX = .demo
+API_BASE_URL = https:/$()/api.demo.invalid
+API_MODE = mock
+DEEP_LINK_HOST = app.demo.invalid
+SENTRY_DSN =
+PUSH_PROVIDERS =
+APS_ENVIRONMENT = development

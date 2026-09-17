@@ -1,0 +1,90 @@
+{
+  "configurations": [
+    {
+      "id": "EF3F7A99-609D-5999-9584-98CAE6CE0CDC",
+      "name": "Unit",
+      "options": {}
+    }
+  ],
+  "defaultOptions": {
+    "codeCoverage": true,
+    "language": "ru",
+    "region": "RU",
+    "testExecutionOrdering": "random",
+    "testTimeoutsEnabled": true,
+    "maximumTestExecutionTimeAllowance": 120
+  },
+  "testTargets": [
+    {
+      "target": {
+        "containerPath": "container:Packages/Pure",
+        "identifier": "AppFoundationTests",
+        "name": "AppFoundationTests"
+      }
+    },
+    {
+      "target": {
+        "containerPath": "container:Packages/Pure",
+        "identifier": "DesignSystemTokensTests",
+        "name": "DesignSystemTokensTests"
+      }
+    },
+    {
+      "target": {
+        "containerPath": "container:Packages/Core",
+        "identifier": "RoutingTests",
+        "name": "RoutingTests"
+      }
+    },
+    {
+      "target": {
+        "containerPath": "container:Packages/Core",
+        "identifier": "SharedBridgeTests",
+        "name": "SharedBridgeTests"
+      }
+    },
+    {
+      "target": {
+        "containerPath": "container:Packages/Core",
+        "identifier": "DesignSystemTests",
+        "name": "DesignSystemTests"
+      }
+    },
+    {
+      "target": {
+        "containerPath": "container:Packages/Features",
+        "identifier": "ShellTests",
+        "name": "ShellTests"
+      }
+    },
+    {
+      "target": {
+        "containerPath": "container:Packages/Features",
+        "identifier": "AuthFeatureTests",
+        "name": "AuthFeatureTests"
+      }
+    },
+    {
+      "target": {
+        "containerPath": "container:Packages/Features",
+        "identifier": "ProfileFeatureTests",
+        "name": "ProfileFeatureTests"
+      }
+    },
+    {
+      "target": {
+        "containerPath": "container:Packages/Features",
+        "identifier": "TodosFeatureTests",
+        "name": "TodosFeatureTests"
+      }
+    },
+    {
+      "target": {
+        "containerPath": "container:Packages/Features",
+        "identifier": "SettingsFeatureTests",
+        "name": "SettingsFeatureTests"
+      }
+    }
+  ],
+  "version": 1
+}

@@ -1,0 +1,17 @@
+# Maestro (вне гейта): вход в demo-режиме (любые непустые email/пароль) → список задач из фикстуры populated.
+appId: tech.stit.mobile.demo
+---
+- launchApp:
+    clearState: true
+- tapOn:
+    id: "login.email"
+- inputText: "reviewer@example.com"
+- tapOn:
+    id: "login.password"
+- inputText: "demo-password"
+- tapOn:
+    id: "login.submit"
+- assertVisible:
+    id: "todos.screen"
+- assertVisible:
+    id: "todos.row.todo-1"

@@ -1,0 +1,27 @@
+{
+  "configurations": [
+    {
+      "id": "319E343F-7703-5392-9E5D-665FF3BAC41B",
+      "name": "Snapshot",
+      "options": {}
+    }
+  ],
+  "defaultOptions": {
+    "codeCoverage": false,
+    "language": "ru",
+    "region": "RU",
+    "testTimeoutsEnabled": true,
+    "maximumTestExecutionTimeAllowance": 300
+  },
+  "testTargets": [
+    {
+      "target": {
+        "containerPath": "container:Packages/Features",
+        "identifier": "SnapshotTests",
+        "name": "SnapshotTests"
+      },
+      "parallelizable": false
+    }
+  ],
+  "version": 1
+}

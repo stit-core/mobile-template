@@ -1,0 +1,11 @@
+#include "Base.xcconfig"
+APP_ENV = dev
+APP_DISPLAY_NAME = Stit Dev
+BUNDLE_ID_SUFFIX = .dev
+// `//` в xcconfig начинает комментарий — URL записывается через пустую подстановку.
+API_BASE_URL = https:/$()/api.dev.example.com
+API_MODE = real
+DEEP_LINK_HOST = app.dev.example.com
+SENTRY_DSN =
+PUSH_PROVIDERS = apns
+APS_ENVIRONMENT = development

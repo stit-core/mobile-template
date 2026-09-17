@@ -1,0 +1,25 @@
+{
+  "configurations": [
+    {
+      "id": "C7A5F00A-3057-53AA-A337-D77BAF33A404",
+      "name": "UI",
+      "options": {}
+    }
+  ],
+  "defaultOptions": {
+    "codeCoverage": false,
+    "language": "ru",
+    "region": "RU",
+    "uiTestingScreenshotsLifetime": "keepNever"
+  },
+  "testTargets": [
+    {
+      "target": {
+        "containerPath": "container:iosApp.xcodeproj",
+        "identifier": "iosAppUITests",
+        "name": "iosAppUITests"
+      }
+    }
+  ],
+  "version": 1
+}

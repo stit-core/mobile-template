@@ -1,0 +1,2 @@
+// Копия → Local.xcconfig (в .gitignore). Team ID — из Apple Developer, профили — fastlane match / Vaultwarden.
+TEAM_ID = ABCDE12345
