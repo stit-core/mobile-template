@@ -1,0 +1,86 @@
+openapi: 3.1.0
+info:
+  title: stit backend (фрагмент контракта huma/v2)
+  version: 1.0.0
+servers:
+  - url: https://api.example.tld
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: access_token
+  schemas:
+    LoginRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email: { type: string, format: email }
+        password: { type: string, minLength: 8 }
+    Todo:
+      type: object
+      required: [id, title, done]
+      properties:
+        id: { type: string }
+        title: { type: string }
+        done: { type: boolean }
+    ErrorModel:
+      type: object
+      required: [status, title]
+      properties:
+        status: { type: integer }
+        title: { type: string }
+        detail: { type: string }
+paths:
+  /api/auth/login:
+    post:
+      operationId: login
+      summary: Логин; ставит httpOnly-cookie access_token и refresh_token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/LoginRequest' }
+      responses:
+        '204':
+          description: Успех, куки выставлены
+          headers:
+            Set-Cookie:
+              schema: { type: string }
+        '401':
+          description: Неверные данные
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/ErrorModel' }
+  /api/v1/todos:
+    get:
+      operationId: listTodos
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Список задач
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Todo' }
+    post:
+      operationId: createTodo
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [title]
+              properties:
+                title: { type: string }
+      responses:
+        '201':
+          description: Создано
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Todo' }

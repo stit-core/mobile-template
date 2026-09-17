@@ -1,0 +1,14 @@
+# spike-выходы и локальные кеши (исходники spike'ов — коммитятся, сборки — нет)
+**/build/
+**/.gradle/
+**/.build/
+**/.kotlin/
+**/.idea/
+**/*.iml
+**/local.properties
+**/DerivedData/
+**/.swiftpm/
+**/xcuserdata/
+**/Pods/
+**/node_modules/
+*.log
