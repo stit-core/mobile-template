@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.Stit" parent="android:Theme.Material.Light.NoActionBar" />
+    <!-- AppCompat нужен только для per-app locale ниже API 33; всё остальное рисует Compose. -->
+    <style name="Theme.Stit" parent="Theme.AppCompat.DayNight.NoActionBar" />
 </resources>

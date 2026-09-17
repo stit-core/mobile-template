@@ -24,6 +24,10 @@ dependencyResolutionManagement {
             }
         }
         mavenCentral()
+        // RuStore Push SDK публикуется только в репозитории VK; фильтр — чтобы остальные группы туда не ходили.
+        maven("https://artifactory-external.vkpartner.ru/artifactory/maven") {
+            content { includeGroupByRegex("ru\\.rustore.*") }
+        }
     }
 }
 

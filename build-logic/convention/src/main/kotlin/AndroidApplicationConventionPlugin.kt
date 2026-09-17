@@ -15,6 +15,8 @@ import tech.stit.convention.int
 import tech.stit.convention.libs
 
 class AndroidApplicationConventionPlugin : Plugin<Project> {
+    private val outsideCoverage = setOf(":androidApp:lint", ":androidApp:core:testing")
+
     override fun apply(target: Project) = with(target) {
         pluginManager.apply("com.android.application")
         pluginManager.apply("stit.android.lint")
@@ -38,7 +40,11 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                 envFlavors().forEach { env ->
                     create(env.name) {
                         dimension = ENV_DIMENSION
-                        env.properties.forEach { (key, value) -> buildConfigField("String", key, "\"$value\"") }
+                        // Те же ключи — плейсхолдерами манифеста: intent-filter deep links берёт DEEP_LINK_HOST/SCHEME из config/env.
+                        env.properties.forEach { (key, value) ->
+                            buildConfigField("String", key, "\"$value\"")
+                            manifestPlaceholders[key] = value
+                        }
                     }
                 }
             }
@@ -73,11 +79,9 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
             }
         }
         dependencies {
-            // Листовые Android-модули: промежуточные :androidApp:core / :androidApp:feature пусты, :lint — JVM.
+            // Листовые Android-модули: промежуточные :androidApp:core / :androidApp:feature пусты; :lint — JVM, :core:testing — тестовая обвязка.
             rootProject.subprojects
-                .filter {
-                    it.path.startsWith(":androidApp:") && it.childProjects.isEmpty() && it != project && it.path != ":androidApp:lint"
-                }
+                .filter { it.path.startsWith(":androidApp:") && it.childProjects.isEmpty() && it != project && it.path !in outsideCoverage }
                 .forEach { add("kover", project(it.path)) }
         }
     }

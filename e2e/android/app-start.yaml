@@ -1,0 +1,9 @@
+# Maestro (вне гейта): demo-сборка стартует на экран входа. Элементы адресуются testTag (testTagsAsResourceId на корне).
+appId: tech.stit.mobile.demo.debug
+---
+- launchApp:
+    clearState: true
+- assertVisible:
+    id: "login_email"
+- assertVisible:
+    id: "login_submit"

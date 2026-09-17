@@ -7,7 +7,7 @@ import com.android.tools.lint.detector.api.Issue
 
 // Реестр проектных Lint-детекторов; подключён в app через lintChecks и Lint-Registry-v2 в манифесте jar.
 class StitIssueRegistry : IssueRegistry() {
-    override val issues: List<Issue> = emptyList()
+    override val issues: List<Issue> = listOf(DesignSystemDetector.ISSUE)
 
     override val api: Int = CURRENT_API
 

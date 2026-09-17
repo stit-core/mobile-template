@@ -13,6 +13,8 @@ import tech.stit.convention.libs
 class AndroidLibraryConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) = with(target) {
         pluginManager.apply("com.android.library")
+        // NavKey Navigation 3 переживают смерть процесса через kotlinx.serialization — плагин нужен модулю с маршрутами.
+        pluginManager.apply("org.jetbrains.kotlin.plugin.serialization")
         pluginManager.apply("stit.android.lint")
         pluginManager.apply("stit.quality")
 

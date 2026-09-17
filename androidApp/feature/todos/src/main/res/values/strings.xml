@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_todos_title">Tasks</string>
+    <string name="feature_todos_refresh">Refresh</string>
+    <string name="feature_todos_new_title">New task</string>
+    <string name="feature_todos_add">Add</string>
+    <string name="feature_todos_empty_title">No tasks yet</string>
+    <string name="feature_todos_empty_description">Add the first one in the field above</string>
+    <string name="feature_todos_delete">Delete</string>
+    <string name="feature_todos_detail_title">Task</string>
+    <string name="feature_todos_status_done">Done</string>
+    <string name="feature_todos_status_open">In progress</string>
+    <string name="feature_todos_created">Created %1$s</string>
+    <string name="feature_todos_updated">Updated %1$s</string>
+    <string name="feature_todos_mark_done">Mark as done</string>
+    <string name="feature_todos_mark_open">Return to progress</string>
+    <string name="feature_todos_delete_task">Delete task</string>
+</resources>

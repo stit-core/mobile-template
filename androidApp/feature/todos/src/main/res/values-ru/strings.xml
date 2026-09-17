@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_todos_title">Задачи</string>
+    <string name="feature_todos_refresh">Обновить</string>
+    <string name="feature_todos_new_title">Новая задача</string>
+    <string name="feature_todos_add">Добавить</string>
+    <string name="feature_todos_empty_title">Задач пока нет</string>
+    <string name="feature_todos_empty_description">Добавьте первую в поле выше</string>
+    <string name="feature_todos_delete">Удалить</string>
+    <string name="feature_todos_detail_title">Задача</string>
+    <string name="feature_todos_status_done">Сделано</string>
+    <string name="feature_todos_status_open">В работе</string>
+    <string name="feature_todos_created">Создана %1$s</string>
+    <string name="feature_todos_updated">Обновлена %1$s</string>
+    <string name="feature_todos_mark_done">Отметить сделанной</string>
+    <string name="feature_todos_mark_open">Вернуть в работу</string>
+    <string name="feature_todos_delete_task">Удалить задачу</string>
+</resources>

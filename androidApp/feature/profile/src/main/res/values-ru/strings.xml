@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_profile_title">Профиль</string>
+    <string name="feature_profile_refresh">Обновить</string>
+    <string name="feature_profile_name">Имя</string>
+    <string name="feature_profile_save">Сохранить</string>
+    <string name="feature_profile_password_section">Смена пароля</string>
+    <string name="feature_profile_old_password">Текущий пароль</string>
+    <string name="feature_profile_new_password">Новый пароль</string>
+    <string name="feature_profile_change_password">Сменить пароль</string>
+    <string name="feature_profile_password_changed">Пароль изменён</string>
+    <string name="feature_profile_sessions">Сессии</string>
+    <string name="feature_profile_delete_account">Удалить аккаунт</string>
+    <string name="feature_profile_logout">Выйти</string>
+</resources>

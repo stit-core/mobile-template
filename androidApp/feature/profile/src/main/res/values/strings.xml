@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_profile_title">Profile</string>
+    <string name="feature_profile_refresh">Refresh</string>
+    <string name="feature_profile_name">Name</string>
+    <string name="feature_profile_save">Save</string>
+    <string name="feature_profile_password_section">Change password</string>
+    <string name="feature_profile_old_password">Current password</string>
+    <string name="feature_profile_new_password">New password</string>
+    <string name="feature_profile_change_password">Change password</string>
+    <string name="feature_profile_password_changed">Password changed</string>
+    <string name="feature_profile_sessions">Sessions</string>
+    <string name="feature_profile_delete_account">Delete account</string>
+    <string name="feature_profile_logout">Sign out</string>
+</resources>

@@ -16,6 +16,12 @@ android {
         // demo ставится рядом с боевым приложением и в сеть не ходит (API_MODE=mock).
         getByName("demo") { applicationIdSuffix = ".demo" }
     }
+
+    androidResources {
+        // Per-app language: AGP собирает locale_config сам; localeFilters режут десятки локалей AppCompat/Play Services.
+        generateLocaleConfig = true
+        localeFilters += listOf("en", "ru")
+    }
 }
 
 dependencies {
@@ -30,9 +36,16 @@ dependencies {
     implementation(projects.androidApp.feature.todos)
     implementation(projects.shared)
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.hilt.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.navigation3.ui)
 
     testImplementation(projects.androidApp.core.testing)
+    testImplementation(libs.kotlinx.serialization.json)
 
     lintChecks(projects.androidApp.lint)
 }

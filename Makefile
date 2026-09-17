@@ -1,7 +1,8 @@
 .PHONY: help fmt fmt-check detekt lint test screenshots screenshots-record cover cover-check \
         check-fast run-android build check check-full kmp-check api-dump api-check gen gen-check mock-check \
         check-mac mac-doctor mac-build mac-test snapshot-record run-ios release-preflight release-android \
-        setup doctor clean status map deps search gate-selftest validate-plan links-check kin-diff
+        setup doctor clean status map deps search gate-selftest validate-plan links-check kin-diff \
+        swift-lint swift-test gen-tokens tokens-check i18n-check deeplinks-check e2e
 
 # Единый словарь для агента: `make <verb>`. Concise-by-default (scripts/tools/*): одна строка OK:/FAIL:
 # на шаг, полный лог — build/gate-logs/<шаг>.log. FORMAT=detailed — длиннее выжимка лога при падении,
@@ -14,7 +15,7 @@ help: ## сгруппированный список команд
 
 GRADLE_STEP = bash scripts/tools/gradle-step.sh
 SWIFT_STEP = bash scripts/tools/swift-step.sh
-IOS_SOURCES = iosApp/App iosApp/Packages iosApp/Tools
+IOS_SOURCES = iosApp/App iosApp/Packages iosApp/Tools iosApp/UITests
 
 ##@ LOOP
 fmt: ## Автоформат Kotlin (Spotless/ktlint, порядок dependencies) + Swift (swift-format) — единственные автофиксеры
@@ -31,9 +32,10 @@ detekt: ## Статический анализ Kotlin + compose-rules (без de
 lint: ## Android Lint (warningsAsErrors, checkDependencies) по всем модулям
 	@$(GRADLE_STEP) "android lint" lintDevDebug
 
-test: ## JVM-тесты: shared (jvmTest + androidHostTest), Android (Robolectric, Konsist), lint-детекторы
+test: ## JVM-тесты: shared (jvmTest + androidHostTest), Android (Robolectric, Konsist), lint-детекторы, Swift Pure
 	@$(GRADLE_STEP) "shared jvm tests" :shared:jvmTest
 	@$(GRADLE_STEP) "android unit tests" testDevDebugUnitTest :shared:testAndroidHostTest :androidApp:lint:test
+	@$(SWIFT_STEP) "swift pure build+tests" swift test --package-path iosApp/Packages/Pure --enable-code-coverage
 
 screenshots: ## Roborazzi verify (без устройства)
 	@$(GRADLE_STEP) "screenshots" verifyRoborazziDevDebug
@@ -51,19 +53,24 @@ cover-check: ## Полы покрытия: shared 80 / Android 70 (koverVerify) 
 check-fast: ## Цикл «пока пишу»: Swift-формат, Kotlin-формат, detekt, shared jvmTest
 	@FAST=1 bash scripts/tools/check.sh
 
-run-android: ## Установить devDebug на подключённый эмулятор/устройство и запустить
+run-android: ## Установить devDebug на подключённый эмулятор/устройство и запустить (applicationId — scripts/tools/app-id.sh)
 	./gradlew :androidApp:app:installDevDebug --console=plain -q
-	adb shell monkey -p tech.stit.mobile.debug -c android.intent.category.LAUNCHER 1
+	adb shell monkey -p $$(bash scripts/tools/app-id.sh dev) -c android.intent.category.LAUNCHER 1
 
 ##@ GATE
-build: ## Debug APK (dev flavor)
-	@$(GRADLE_STEP) "assembleDevDebug" :androidApp:app:assembleDevDebug
+build: ## Debug APK: app-dev-debug.apk и app-demo-debug.apk (demo — MockTransport, без сети)
+	@$(GRADLE_STEP) "assemble dev+demo debug" :androidApp:app:assembleDevDebug :androidApp:app:assembleDemoDebug
 
 check: ## Канонический gate, Linux-полный; GATE_RELEASE=1 добавит assembleProdRelease (R8)
 	@bash scripts/tools/check.sh
 
 check-full: ## check + check-mac; обязателен перед /release
 	@bash scripts/tools/check.sh && bash scripts/tools/mac.sh check
+
+e2e: ## Maestro-флоу e2e/<P> против demo-сборки (эмулятор/устройство; вне гейта; P=android)
+	@command -v maestro >/dev/null || { echo "FAIL: maestro не установлен — curl -fsSL https://get.maestro.mobile.dev | bash"; exit 2; }
+	./gradlew :androidApp:app:installDemoDebug --console=plain -q
+	maestro test e2e/$(if $(P),$(P),android)
 
 ##@ KMP
 kmp-check: ## shared → klib под iOS-таргеты + проверка каталога klib (SKIPPED ≠ OK) + запрет cinterop
@@ -84,6 +91,27 @@ gen-check: ## Дрейф контракта: lock == спека == модели,
 
 mock-check: ## Фикстуры mock/: сценарии == каталоги, JSON валиден, FixturesTest (строгий разбор моделями) зелёный
 	@bash scripts/tools/mock-check.sh
+
+gen-tokens: ## design/tokens.json → Tokens.kt (Compose) + Tokens.swift (Foundation); коммитятся, tokens-check сверяет
+	python3 scripts/tools/gen-tokens.py
+
+tokens-check: ## Паритет токенов: регенерация в temp == Tokens.kt и Tokens.swift в дереве
+	@bash scripts/tools/tokens-check.sh
+
+i18n-check: ## Ключи values/ == values-ru/ по модулям; error.<code> shared → core_ui_error_*; iOS xcstrings — advisory
+	@bash scripts/tools/i18n-check.sh
+
+deeplinks-check: ## Манифест ↔ config/env (плейсхолдеры хоста/схемы) ↔ тесты DeepLinkParser ↔ docs/stack/deep-links.md
+	@bash scripts/tools/deeplinks-check.sh
+
+##@ SWIFT (Linux-часть)
+swift-lint: ## SwiftLint --strict + archlint (граф Package.swift) — стадии swiftlint/archlint гейта
+	@$(SWIFT_STEP) "swiftlint" swiftlint lint --strict --quiet --config iosApp/.swiftlint.yml iosApp
+	@$(SWIFT_STEP) "archlint" swift run --package-path iosApp/Tools/archlint archlint iosApp/Packages
+
+swift-test: ## swift test чистых пакетов (Pure) + пол покрытия 70 % (llvm-cov по всем тест-бандлам)
+	@$(SWIFT_STEP) "swift pure build+tests" swift test --package-path iosApp/Packages/Pure --enable-code-coverage
+	@bash scripts/tools/coverage-floor.sh iosApp/Packages/Pure 70
 
 ##@ MAC
 check-mac: ## macOS-стадии по SSH (MAC_HOST): link framework, iosSimulatorArm64Test, xcodebuild, планы Unit+Snapshot
@@ -124,7 +152,7 @@ doctor: ## Fail-fast preflight: JDK 21, Android SDK, лицензии, RAM/ди�
 clean: ## Остановить демоны, снести build/ и iOS .build/
 	./gradlew --stop || true
 	./gradlew clean --console=plain -q || true
-	rm -rf iosApp/Packages/Pure/.build iosApp/Tools/archlint/.build
+	rm -rf iosApp/Packages/*/.build iosApp/Tools/archlint/.build
 
 ##@ INTEL
 status: ## Сводка для /smartdev: ветка, дерево, последний гейт, модули, план

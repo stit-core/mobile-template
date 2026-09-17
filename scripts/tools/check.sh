@@ -7,13 +7,20 @@ set -uo pipefail
 cd "$(dirname "$0")/../.."
 GRADLE="bash scripts/tools/gradle-step.sh"
 SWIFT="bash scripts/tools/swift-step.sh"
-IOS_SOURCES="iosApp/App iosApp/Packages iosApp/Tools"
+IOS_SOURCES="iosApp/App iosApp/Packages iosApp/Tools iosApp/UITests"
 
 # Стадия → команда. Порядок: от дешёвых к дорогим, формат → сборка.
 stage() {
     case "$1" in
         "format kotlin")       $GRADLE "$1" spotlessCheck checkSortDependencies ;;
         "format swift")        $SWIFT "$1" swift format lint --strict --recursive $IOS_SOURCES ;;
+        "swiftlint")           $SWIFT "$1" swiftlint lint --strict --quiet --config iosApp/.swiftlint.yml iosApp ;;
+        "archlint")            $SWIFT "$1" swift run --package-path iosApp/Tools/archlint archlint iosApp/Packages ;;
+        "swift pure build+tests") $SWIFT "$1" swift test --package-path iosApp/Packages/Pure --enable-code-coverage ;;
+        "coverage swift")      bash scripts/tools/coverage-floor.sh iosApp/Packages/Pure 70 ;;
+        "tokens-check")        bash scripts/tools/tokens-check.sh ;;
+        "i18n-check")          bash scripts/tools/i18n-check.sh ;;
+        "deeplinks-check")     bash scripts/tools/deeplinks-check.sh ;;
         "detekt")              $GRADLE "$1" detekt ;;
         "android lint")        $GRADLE "$1" lintDevDebug ;;
         "shared jvm tests")    $GRADLE "$1" :shared:jvmTest ;;
@@ -37,9 +44,12 @@ fi
 
 if [ "${FAST:-0}" = "1" ]; then
     # Пока пишу: Swift и detekt первыми — не ждать Gradle ради опечатки.
-    STAGES=("format swift" "format kotlin" "detekt" "shared jvm tests")
+    STAGES=("format swift" "swiftlint" "format kotlin" "detekt" "shared jvm tests")
 else
-    STAGES=("format kotlin" "format swift" "gen-check" "detekt" "android lint" "shared jvm tests" "mock-check" "android unit tests"
+    # Swift-стадии — до Gradle: дешёвые, без демона; красный Swift виден раньше минутных Android-стадий.
+    STAGES=("format kotlin" "format swift" "swiftlint" "archlint" "swift pure build+tests" "coverage swift"
+        "tokens-check" "i18n-check" "deeplinks-check"
+        "gen-check" "detekt" "android lint" "shared jvm tests" "mock-check" "android unit tests"
         "screenshots" "coverage kotlin" "kmp" "shared api" "assembleDevDebug")
     [ "${GATE_RELEASE:-0}" = "1" ] && STAGES+=("assembleProdRelease")
 fi

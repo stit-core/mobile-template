@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="core_platform_channel_general_name">Общие</string>
+    <string name="core_platform_channel_general_description">Обновления по задачам и аккаунту</string>
+    <string name="core_platform_push_todo_reminder_title">Напоминание о задаче</string>
+    <string name="core_platform_push_todo_reminder_body">Не забудьте: %1$s</string>
+    <string name="core_platform_biometric_title">Разблокировать</string>
+    <string name="core_platform_biometric_subtitle">Подтвердите, что это вы, чтобы открыть приложение</string>
+</resources>

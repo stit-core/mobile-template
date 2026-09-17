@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="core_ui_error_network">Нет соединения. Проверьте сеть и повторите.</string>
+    <string name="core_ui_error_unknown">Что-то пошло не так. Попробуйте ещё раз.</string>
+    <string name="core_ui_error_validation">Проверьте выделенные поля.</string>
+    <string name="core_ui_error_auth_invalid_credentials">Неверный email или пароль.</string>
+    <string name="core_ui_error_auth_refresh_expired">Сессия истекла. Войдите снова.</string>
+    <string name="core_ui_error_auth_refresh_reused">Сессия завершена на другом устройстве. Войдите снова.</string>
+    <string name="core_ui_error_auth_account_locked">Аккаунт заблокирован. Обратитесь в поддержку.</string>
+    <string name="core_ui_error_rate_limited">Слишком много запросов. Повторите через минуту.</string>
+    <string name="core_ui_error_internal">Ошибка сервера. Попробуйте позже.</string>
+    <string name="core_ui_retry">Повторить</string>
+    <string name="core_ui_loading">Загрузка</string>
+    <string name="core_ui_offline_banner">Нет сети — только чтение</string>
+    <string name="core_ui_update_required_title">Нужно обновление</string>
+    <string name="core_ui_update_required_body">Эта версия больше не поддерживается. Установите последнюю версию, чтобы продолжить.</string>
+    <string name="core_ui_update_required_action">Обновить</string>
+    <string name="core_ui_update_recommended">Доступна версия %1$s</string>
+    <string name="core_ui_maintenance_title">Технические работы</string>
+    <string name="core_ui_maintenance_body">Сервис временно недоступен. Попробуйте позже.</string>
+    <string name="core_ui_maintenance_until">Ожидаемое окончание: %1$s</string>
+    <string name="core_ui_dismiss">Скрыть</string>
+    <string name="core_ui_locked_title">Приложение заблокировано</string>
+    <string name="core_ui_locked_body">Подтвердите, что это вы, чтобы продолжить.</string>
+    <string name="core_ui_locked_action">Разблокировать</string>
+</resources>

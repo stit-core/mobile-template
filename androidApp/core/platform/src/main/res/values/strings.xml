@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="core_platform_channel_general_name">General</string>
+    <string name="core_platform_channel_general_description">Updates about your tasks and account</string>
+    <string name="core_platform_push_todo_reminder_title">Task reminder</string>
+    <string name="core_platform_push_todo_reminder_body">Don\'t forget: %1$s</string>
+    <string name="core_platform_biometric_title">Unlock</string>
+    <string name="core_platform_biometric_subtitle">Confirm it is you to open the app</string>
+</resources>

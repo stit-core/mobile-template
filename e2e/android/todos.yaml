@@ -1,0 +1,14 @@
+# Задачи из mock/fixtures/populated/todos.json: открыть, отметить сделанной, вернуться.
+appId: tech.stit.mobile.demo.debug
+---
+- runFlow: login.yaml
+- assertVisible: "Прочитать docs/reference/architecture.md"
+- tapOn:
+    id: "todo_todo-1"
+- assertVisible: "In progress"
+- tapOn:
+    id: "todo_toggle"
+- assertVisible: "Done"
+- back
+- assertVisible:
+    id: "todo_list"

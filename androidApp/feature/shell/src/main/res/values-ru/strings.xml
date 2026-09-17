@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_shell_tab_todos">Задачи</string>
+    <string name="feature_shell_tab_profile">Профиль</string>
+    <string name="feature_shell_tab_settings">Настройки</string>
+</resources>

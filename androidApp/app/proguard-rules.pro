@@ -1,1 +1,21 @@
-# Keep-правила R8 проекта. Появляются вместе с reflection/сериализацией; пустой файл — норма.
+# kotlinx.serialization в R8 full mode: NavKey переживают смерть процесса через serializer(KClass) — Companion и serializer() обязаны выжить.
+-keepattributes RuntimeVisibleAnnotations,AnnotationDefault
+-if @kotlinx.serialization.Serializable class **
+-keepclassmembers class <1> {
+    static <1>$Companion Companion;
+}
+-if @kotlinx.serialization.Serializable class ** {
+    static **$* *;
+}
+-keepclassmembers class <2>$<3> {
+    kotlinx.serialization.KSerializer serializer(...);
+}
+-if @kotlinx.serialization.Serializable class ** {
+    public static ** INSTANCE;
+}
+-keepclassmembers class <1> {
+    public static <1> INSTANCE;
+    kotlinx.serialization.KSerializer serializer(...);
+}
+# NavKeySerializer восстанавливает запись стека по имени класса.
+-keepnames class * implements androidx.navigation3.runtime.NavKey

@@ -40,6 +40,8 @@ style:
         reason: 'Material 2 запрещён — только androidx.compose.material3.'
       - value: 'retrofit2.*'
         reason: 'Сеть живёт в shared на Ktor.'
+      - value: 'androidx.navigation.*'
+        reason: 'Навигация — Navigation 3 (androidx.navigation3): NavKey + NavDisplay, без NavHost/NavController.'
       - value: 'androidx.security.crypto.*'
         reason: 'Секреты — через SecureStore из shared (Keystore AES-GCM), библиотека deprecated.'
       - value: 'androidx.compose.ui.test.junit4.createComposeRule'
@@ -61,6 +63,9 @@ style:
   MaxLineLength:
     maxLineLength: 140
     excludeCommentStatements: true
+  UnusedPrivateMember:
+    # Приватные @Preview вызывает только Android Studio — для detekt они «не используются».
+    ignoreAnnotated: ['Preview']
 
 naming:
   FunctionNaming:
@@ -76,7 +81,7 @@ Compose:
     active: true
   CompositionLocalAllowlist:
     active: true
-    allowedCompositionLocals: 'LocalStitSpacing,LocalStitColors'
+    allowedCompositionLocals: 'LocalStitColors,LocalStitTypography,LocalStitSpacing,LocalStitShapes'
   CompositionLocalNaming:
     active: true
   ContentEmitterReturningValues:

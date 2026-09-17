@@ -8,11 +8,10 @@ android {
 }
 
 dependencies {
-    implementation(projects.shared)
+    api(libs.androidx.navigation3.runtime)
 
-    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
-    implementation(libs.androidx.navigation3.runtime)
-    implementation(libs.androidx.navigation3.ui)
+    implementation(projects.shared)
+    implementation(libs.kotlinx.serialization.core)
 
     testImplementation(projects.androidApp.core.testing)
 }

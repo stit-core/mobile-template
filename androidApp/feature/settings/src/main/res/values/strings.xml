@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_settings_title">Settings</string>
+    <string name="feature_settings_theme">Theme</string>
+    <string name="feature_settings_theme_system">System</string>
+    <string name="feature_settings_theme_light">Light</string>
+    <string name="feature_settings_theme_dark">Dark</string>
+    <string name="feature_settings_language">Language</string>
+    <string name="feature_settings_language_system">System</string>
+    <string name="feature_settings_language_ru">Русский</string>
+    <string name="feature_settings_language_en">English</string>
+    <string name="feature_settings_notifications">Notifications</string>
+    <string name="feature_settings_about">About</string>
+    <string name="feature_settings_version">Version %1$s (%2$d)</string>
+    <string name="feature_settings_environment">Environment: %1$s</string>
+    <string name="feature_settings_privacy_policy">Privacy policy</string>
+    <string name="feature_settings_account_deletion">Delete account on the web</string>
+    <string name="feature_settings_support">Support</string>
+    <string name="feature_settings_demo">Demo mode</string>
+    <string name="feature_settings_demo_latency">Network delay, ms</string>
+    <string name="feature_settings_push_title">Notifications</string>
+    <string name="feature_settings_push_body">We will let you know when your tasks change. You can turn this off at any time in the system settings.</string>
+    <string name="feature_settings_push_not_asked">Not enabled yet</string>
+    <string name="feature_settings_push_granted">Enabled</string>
+    <string name="feature_settings_push_declined">Disabled</string>
+    <string name="feature_settings_push_accept">Enable</string>
+    <string name="feature_settings_push_decline">Not now</string>
+    <string name="feature_settings_push_disable">Disable</string>
+</resources>

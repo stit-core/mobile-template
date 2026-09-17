@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_auth_login_title">Вход</string>
+    <string name="feature_auth_email">Email</string>
+    <string name="feature_auth_password">Пароль</string>
+    <string name="feature_auth_sign_in">Войти</string>
+    <string name="feature_auth_open_settings">Настройки</string>
+    <string name="feature_auth_sessions_title">Сессии</string>
+    <string name="feature_auth_sessions_refresh">Обновить</string>
+    <string name="feature_auth_sessions_empty">Активных сессий нет</string>
+    <string name="feature_auth_session_current">Это устройство</string>
+    <string name="feature_auth_session_last_used">Последняя активность %1$s</string>
+    <string name="feature_auth_session_revoke">Завершить</string>
+    <string name="feature_auth_sessions_revoke_all">Выйти на всех устройствах</string>
+    <string name="feature_auth_devices_title">Устройства для уведомлений</string>
+    <string name="feature_auth_device_unregister">Удалить</string>
+    <string name="feature_auth_delete_title">Удаление аккаунта</string>
+    <string name="feature_auth_delete_body">Аккаунт и все его данные будут удалены безвозвратно. Отменить это нельзя.</string>
+    <string name="feature_auth_delete_confirm">Я понимаю, что аккаунт нельзя восстановить</string>
+    <string name="feature_auth_delete_action">Удалить аккаунт</string>
+    <string name="feature_auth_deleted">Аккаунт удалён</string>
+</resources>

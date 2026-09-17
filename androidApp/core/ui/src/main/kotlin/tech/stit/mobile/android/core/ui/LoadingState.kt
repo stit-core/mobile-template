@@ -1,0 +1,28 @@
+package tech.stit.mobile.android.core.ui
+
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.tooling.preview.Preview
+import tech.stit.mobile.android.core.designsystem.StitTheme
+
+@Composable
+fun LoadingState(modifier: Modifier = Modifier) {
+    val label = stringResource(R.string.core_ui_loading)
+    Box(modifier = modifier.fillMaxSize().testTag(UiTestTags.LOADING), contentAlignment = Alignment.Center) {
+        CircularProgressIndicator(modifier = Modifier.semantics { contentDescription = label })
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun LoadingStatePreview() {
+    StitTheme { LoadingState() }
+}

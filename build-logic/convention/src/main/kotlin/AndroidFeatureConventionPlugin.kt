@@ -21,6 +21,7 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
             add("implementation", project(":androidApp:core:ui"))
             add("implementation", project(":androidApp:core:navigation"))
             add("implementation", project(":androidApp:core:platform"))
+            add("implementation", libs.library("androidx-activity-compose"))
             add("implementation", libs.library("androidx-hilt-lifecycle-viewmodel-compose"))
             add("implementation", libs.library("androidx-lifecycle-runtime-compose"))
             add("implementation", libs.library("androidx-lifecycle-viewmodel-compose"))
