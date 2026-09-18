@@ -26,5 +26,9 @@ PRODUCT_BUNDLE_IDENTIFIER = $(BUNDLE_ID)
 DEEP_LINK_SCHEME = stit
 AUTH_MODE = bearer
 
+// Общий контейнер приложения и appex виджетов: снимок виджета лежит только здесь. Свой на каждый env — данные сред не смешиваются.
+APP_GROUP_ID = group.$(BUNDLE_ID)
+WIDGETS_BUNDLE_ID = $(BUNDLE_ID).widgets
+
 // TEAM_ID и локальные переопределения — Local.xcconfig (gitignored, образец Local.xcconfig.example); включается последним, чтобы побеждать.
 #include? "Local.xcconfig"

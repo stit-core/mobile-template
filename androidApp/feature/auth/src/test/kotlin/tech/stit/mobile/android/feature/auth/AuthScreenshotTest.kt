@@ -27,6 +27,11 @@ class AuthScreenshotTest : ScreenshotTest() {
     }
 
     @Test
+    fun `вход — доступен demo-режим`() = capture("login_demo") {
+        LoginScreen(state = LoginState(demoAvailable = true), onIntent = {}, onOpenSettings = {})
+    }
+
+    @Test
     fun `вход — тёмная тема`() = capture("login_filled_dark", darkTheme = true) {
         LoginScreen(state = filled, onIntent = {}, onOpenSettings = {})
     }

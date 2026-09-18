@@ -12,6 +12,8 @@
     <string name="core_ui_retry">Повторить</string>
     <string name="core_ui_loading">Загрузка</string>
     <string name="core_ui_offline_banner">Нет сети — только чтение</string>
+    <string name="core_ui_demo_banner">Демо-режим — данные примера</string>
+    <string name="core_ui_demo_exit">Выйти</string>
     <string name="core_ui_update_required_title">Нужно обновление</string>
     <string name="core_ui_update_required_body">Эта версия больше не поддерживается. Установите последнюю версию, чтобы продолжить.</string>
     <string name="core_ui_update_required_action">Обновить</string>

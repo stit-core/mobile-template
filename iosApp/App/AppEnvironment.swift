@@ -6,6 +6,7 @@ import Persistence
 import Platform
 import Routing
 import SharedBridge
+import Widgets
 
 // Composition root: единственное место, где Swift-реализации PlatformDeps собираются в SharedContainer.
 @Observable
@@ -17,6 +18,7 @@ final class AppEnvironment {
   let requirements: RequirementsModel
   let settings: SettingsModel
   let apns: ApnsRegistrar
+  let background: BgTaskScheduler
   private let secureStore: any SecureStore
 
   static func live() -> AppEnvironment {
@@ -34,11 +36,15 @@ final class AppEnvironment {
     self.secureStore = secureStore
     let apns = ApnsRegistrar()
     self.apns = apns
+    let background = BgTaskScheduler(bundleId: appInfo.appId)
+    self.background = background
     let platform = IosPlatformDeps(
       appInfo: appInfo,
       secureStore: secureStore,
-      filesDir: try FilesDirectory.applicationSupport(),
+      // Снимок виджета читает расширение, поэтому кеши живут в общем контейнере; без entitlement — свой каталог приложения.
+      filesDir: try AppGroupContainer.url(bundle: bundle)?.path ?? FilesDirectory.applicationSupport(),
       pushTransports: config.pushProviders.contains("apns") ? [apns] : [],
+      background: background,
       telemetry: SentryCrashReporter(
         dsn: config.sentryDsn, environment: config.appEnv, release: "\(appInfo.appId)@\(appInfo.versionWithBuild)"),
       logSink: SharedLogSink(subsystem: appInfo.appId)
@@ -52,10 +58,26 @@ final class AppEnvironment {
       deepLinkScheme: config.deepLinkScheme,
       sentryDsn: config.sentryDsn
     )
-    container = SharedContainer(platform: platform, config: sharedConfig)
+    let container = SharedContainer(platform: platform, config: sharedConfig)
+    self.container = container
+    // Планировщик и системные действия система поднимает вне процесса приложения: связь с контейнером замыкается здесь.
+    background.bind(container: container)
+    SharedSystemActionRunner.bind(container: container)
     shell = ShellModel(presenter: container.shellPresenter())
     requirements = RequirementsModel(presenter: container.requirementsPresenter())
     settings = SettingsModel(presenter: container.settingsPresenter())
+  }
+
+  // Реестр подтверждается на каждом старте: регистрация обязана уложиться в didFinishLaunching, а повторная
+  // постановка той же задачи новой работы не плодит.
+  func registerBackgroundTasks() {
+    background.register(tasks: container.backgroundTasks)
+    for task in container.backgroundTasks { background.schedule(task: task) }
+  }
+
+  // Снимок виджета живёт вне процесса приложения: его обновляет само приложение, уходя с экрана.
+  func publishWidgets() {
+    Task { [container] in await WidgetRefresh.publishAll(container: container) }
   }
 
   // Порядок старта: чистка Keychain первой установки → shell (demo → кэши → сессия → route) → requirements.
@@ -85,6 +107,7 @@ nonisolated private final class IosPlatformDeps: PlatformDeps {
   let filesDir: String
   let pushTransports: [any PushTransport]
   let notificationPermission: any NotificationPermission = NotificationCenterPermission()
+  let background: any BackgroundScheduler
   let telemetry: any TelemetrySink
   let logSink: any LogSink
   let locale: any LocaleProvider = DeviceLocale()
@@ -95,6 +118,7 @@ nonisolated private final class IosPlatformDeps: PlatformDeps {
     secureStore: any SecureStore,
     filesDir: String,
     pushTransports: [any PushTransport],
+    background: any BackgroundScheduler,
     telemetry: any TelemetrySink,
     logSink: any LogSink
   ) {
@@ -102,6 +126,7 @@ nonisolated private final class IosPlatformDeps: PlatformDeps {
     self.secureStore = secureStore
     self.filesDir = filesDir
     self.pushTransports = pushTransports
+    self.background = background
     self.telemetry = telemetry
     self.logSink = logSink
   }

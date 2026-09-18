@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import tech.stit.mobile.android.core.ui.DemoBanner
 import tech.stit.mobile.android.core.ui.LoadingState
 import tech.stit.mobile.android.core.ui.LockedState
 import tech.stit.mobile.android.core.ui.Maintenance
@@ -36,6 +37,7 @@ fun ShellScreen(
     onOpenStore: (String) -> Unit,
     onRetryRequirements: () -> Unit,
     onDismissRecommendation: () -> Unit,
+    onExitDemo: () -> Unit,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
@@ -63,6 +65,7 @@ fun ShellScreen(
                 shell.auth == AuthState.Unknown -> LoadingState()
 
                 else -> Column {
+                    if (shell.demo) DemoBanner(onExit = onExitDemo)
                     if (!shell.online) OfflineBanner()
                     if (requirements.showRecommendation) {
                         UpdateRecommendedBanner(

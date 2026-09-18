@@ -9,6 +9,7 @@ import tech.stit.mobile.feature.shell.ShellIntent
 import tech.stit.mobile.feature.shell.ShellPresenter
 import tech.stit.mobile.testing.FakeNotificationPermission
 import tech.stit.mobile.testing.FakePlatformDeps
+import tech.stit.mobile.testing.prodContainer
 import tech.stit.mobile.testing.signIn
 import tech.stit.mobile.testing.testContainer
 import kotlin.test.Test
@@ -16,6 +17,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 class ShellPresenterTest {
     @Test
@@ -70,6 +72,28 @@ class ShellPresenterTest {
         presenter.dispatch(ShellIntent.OpenLink("https://evil.invalid/todos/1"))
         assertEquals(Route.Settings, presenter.state.value.route)
         assertNull(presenter.state.value.pendingRoute)
+        presenter.close()
+    }
+
+    // Обычная сборка: баннер оболочки — единственный признак demo на экране, и он снимается вместе с режимом.
+    @Test
+    fun demoBannerFollowsTheRuntimeSwitch() = runTest {
+        val container = prodContainer()
+        val presenter = container.shellPresenter()
+        presenter.dispatch(ShellIntent.Start)
+        advanceUntilIdle()
+        assertFalse(presenter.state.value.demo)
+
+        container.requirements.fetch()
+        requireNotNull(container.demoGate).enter()
+        advanceUntilIdle()
+        assertTrue(presenter.state.value.demo)
+        assertEquals(AuthState.SignedIn, presenter.state.value.auth)
+
+        presenter.dispatch(ShellIntent.LeaveDemo)
+        advanceUntilIdle()
+        assertFalse(presenter.state.value.demo)
+        assertEquals(AuthState.SignedOut, presenter.state.value.auth)
         presenter.close()
     }
 

@@ -4,6 +4,7 @@
     <string name="feature_auth_email">Email</string>
     <string name="feature_auth_password">Password</string>
     <string name="feature_auth_sign_in">Sign in</string>
+    <string name="feature_auth_demo_sign_in">Try the demo</string>
     <string name="feature_auth_open_settings">Settings</string>
     <string name="feature_auth_sessions_title">Sessions</string>
     <string name="feature_auth_sessions_refresh">Refresh</string>

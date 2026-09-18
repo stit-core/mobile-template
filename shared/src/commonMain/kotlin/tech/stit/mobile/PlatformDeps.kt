@@ -1,6 +1,7 @@
 package tech.stit.mobile
 
 import tech.stit.mobile.core.auth.SecureStore
+import tech.stit.mobile.core.background.BackgroundScheduler
 import tech.stit.mobile.core.i18n.LocaleProvider
 import tech.stit.mobile.core.lib.AppInfo
 import tech.stit.mobile.core.lib.ConnectivityMonitor
@@ -20,6 +21,7 @@ interface PlatformDeps {
     val filesDir: String
     val pushTransports: List<PushTransport>
     val notificationPermission: NotificationPermission
+    val background: BackgroundScheduler
     val telemetry: TelemetrySink
     val logSink: LogSink
     val locale: LocaleProvider

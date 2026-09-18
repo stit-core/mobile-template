@@ -40,6 +40,25 @@ nonisolated public final class FakeNotificationPermission: NotificationPermissio
   }
 }
 
+// Планировщик ОС в тестах только запоминает заказ: расписание проверяется по scheduled, как в shared/commonTest.
+nonisolated public final class FakeBackgroundScheduler: BackgroundScheduler {
+  private let scheduledTasks = Mutex<[BackgroundTask]>([])
+  private let cancelledIds = Mutex<[String]>([])
+
+  public init() {}
+
+  public func schedule(task: BackgroundTask) {
+    scheduledTasks.withLock { $0.append(task) }
+  }
+
+  public func cancel(id: String) {
+    cancelledIds.withLock { $0.append(id) }
+  }
+
+  public var scheduled: [BackgroundTask] { scheduledTasks.withLock { $0 } }
+  public var cancelled: [String] { cancelledIds.withLock { $0 } }
+}
+
 nonisolated public final class FakeLocale: LocaleProvider {
   public let languageTag: String
   public let timeZone: String
@@ -57,6 +76,7 @@ nonisolated public final class FakePlatformDeps: PlatformDeps {
   public let filesDir: String
   public let pushTransports: [any PushTransport]
   public let notificationPermission: any NotificationPermission
+  public let background: any BackgroundScheduler
   public let telemetry: any TelemetrySink
   public let logSink: any LogSink
   public let locale: any LocaleProvider
@@ -66,6 +86,7 @@ nonisolated public final class FakePlatformDeps: PlatformDeps {
     secureStore: InMemorySecureStore = InMemorySecureStore(),
     settings: InMemorySettings = InMemorySettings(),
     notificationPermission: FakeNotificationPermission = FakeNotificationPermission(),
+    background: FakeBackgroundScheduler = FakeBackgroundScheduler(),
     connectivity: ConnectivityState = ConnectivityState(initial: true)
   ) {
     appInfo = AppInfo(
@@ -76,6 +97,7 @@ nonisolated public final class FakePlatformDeps: PlatformDeps {
     filesDir = FileManager.default.temporaryDirectory.appendingPathComponent("stit-tests-\(UUID().uuidString)").path
     pushTransports = []
     self.notificationPermission = notificationPermission
+    self.background = background
     telemetry = NoopTelemetrySink.shared
     logSink = NoopLogSink.shared
     locale = FakeLocale()

@@ -37,6 +37,9 @@ class ShellScreenshotTest : ScreenshotTest() {
     }
 
     @Test
+    fun `демо-баннер`() = capture("shell_demo") { Shell(shell = ShellState(auth = AuthState.SignedIn, demo = true)) }
+
+    @Test
     fun `биометрический замок`() = capture("shell_locked") { Shell(shell = ShellState(auth = AuthState.SignedIn), locked = true) }
 
     @Test

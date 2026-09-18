@@ -240,6 +240,22 @@
           }
         }
       }
+    },
+    "auth.login.demo": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Посмотреть демо"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Try the demo"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

@@ -8,6 +8,7 @@ import kotlinx.coroutines.test.TestScope
 import okio.fakefilesystem.FakeFileSystem
 import tech.stit.mobile.SharedContainer
 import tech.stit.mobile.core.api.ApiClient
+import tech.stit.mobile.core.api.platformHttpEngine
 import tech.stit.mobile.core.config.ApiMode
 import tech.stit.mobile.core.config.AppConfig
 import tech.stit.mobile.core.config.AppEnv
@@ -30,17 +31,35 @@ internal fun testApiClient(engine: HttpClientEngine, auth: ClientPlugin<Unit> = 
     ApiClient(testConfig(), FakePlatformDeps().appInfo, FakeLocale, engine, auth, FakeTelemetry(), Logger("test", MemoryLogSink()))
 
 // Контейнер на MockTransport и фейках платформы: сценарные тесты презентеров идут через весь стек без сети.
+// backend подставляет «настоящий» бэкенд вместо движка платформы — так тестируется обычная сборка (ApiMode.Real).
 suspend fun TestScope.testContainer(
     scenario: MockScenario = MockScenario.Populated,
     platform: FakePlatformDeps = FakePlatformDeps(),
     config: AppConfig = testConfig(),
     clock: FakeClock = FakeClock(),
     fileSystem: FakeFileSystem = FakeFileSystem(),
+    backend: FakeBackend? = null,
 ): SharedContainer {
-    val container = SharedContainer(platform, config, TestDispatchers(StandardTestDispatcher(testScheduler)), clock, fileSystem)
+    val container = SharedContainer(platform, config, TestDispatchers(StandardTestDispatcher(testScheduler)), clock, fileSystem) {
+        backend?.engine ?: platformHttpEngine()
+    }
     container.mockTransport?.reset(scenario)
     return container
 }
+
+// Обычная сборка (не demo-флейвор) на подставном бэкенде: среда prod, API_MODE=real, тот же стек shared.
+suspend fun TestScope.prodContainer(
+    platform: FakePlatformDeps = FakePlatformDeps(),
+    backend: FakeBackend = FakeBackend(StandardTestDispatcher(testScheduler)),
+    clock: FakeClock = FakeClock(),
+    fileSystem: FakeFileSystem = FakeFileSystem(),
+): SharedContainer = testContainer(
+    platform = platform,
+    config = testConfig(apiMode = ApiMode.Real, env = AppEnv.Prod),
+    clock = clock,
+    fileSystem = fileSystem,
+    backend = backend,
+)
 
 // Вход как у пользователя demo: любые непустые email и пароль принимаются MockTransport.
 suspend fun SharedContainer.signIn() = sessionRepository.login("demo@example.com", "password")

@@ -18,6 +18,58 @@ final enum class tech.stit.mobile.core.auth/AuthState : kotlin/Enum<tech.stit.mo
     final fun values(): kotlin/Array<tech.stit.mobile.core.auth/AuthState> // tech.stit.mobile.core.auth/AuthState.values|values#static(){}[0]
 }
 
+final enum class tech.stit.mobile.core.background/BackgroundCondition : kotlin/Enum<tech.stit.mobile.core.background/BackgroundCondition> { // tech.stit.mobile.core.background/BackgroundCondition|null[0]
+    enum entry Charging // tech.stit.mobile.core.background/BackgroundCondition.Charging|null[0]
+    enum entry Network // tech.stit.mobile.core.background/BackgroundCondition.Network|null[0]
+    enum entry Unmetered // tech.stit.mobile.core.background/BackgroundCondition.Unmetered|null[0]
+
+    final val entries // tech.stit.mobile.core.background/BackgroundCondition.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<tech.stit.mobile.core.background/BackgroundCondition> // tech.stit.mobile.core.background/BackgroundCondition.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): tech.stit.mobile.core.background/BackgroundCondition // tech.stit.mobile.core.background/BackgroundCondition.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<tech.stit.mobile.core.background/BackgroundCondition> // tech.stit.mobile.core.background/BackgroundCondition.values|values#static(){}[0]
+}
+
+final enum class tech.stit.mobile.core.background/BackgroundRejection : kotlin/Enum<tech.stit.mobile.core.background/BackgroundRejection> { // tech.stit.mobile.core.background/BackgroundRejection|null[0]
+    enum entry Failed // tech.stit.mobile.core.background/BackgroundRejection.Failed|null[0]
+    enum entry NothingToDo // tech.stit.mobile.core.background/BackgroundRejection.NothingToDo|null[0]
+    enum entry Offline // tech.stit.mobile.core.background/BackgroundRejection.Offline|null[0]
+    enum entry SignedOut // tech.stit.mobile.core.background/BackgroundRejection.SignedOut|null[0]
+
+    final val entries // tech.stit.mobile.core.background/BackgroundRejection.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<tech.stit.mobile.core.background/BackgroundRejection> // tech.stit.mobile.core.background/BackgroundRejection.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): tech.stit.mobile.core.background/BackgroundRejection // tech.stit.mobile.core.background/BackgroundRejection.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<tech.stit.mobile.core.background/BackgroundRejection> // tech.stit.mobile.core.background/BackgroundRejection.values|values#static(){}[0]
+}
+
+final enum class tech.stit.mobile.core.background/BackgroundTiming : kotlin/Enum<tech.stit.mobile.core.background/BackgroundTiming> { // tech.stit.mobile.core.background/BackgroundTiming|null[0]
+    enum entry Continuous // tech.stit.mobile.core.background/BackgroundTiming.Continuous|null[0]
+    enum entry Exact // tech.stit.mobile.core.background/BackgroundTiming.Exact|null[0]
+    enum entry Opportunistic // tech.stit.mobile.core.background/BackgroundTiming.Opportunistic|null[0]
+    enum entry Window // tech.stit.mobile.core.background/BackgroundTiming.Window|null[0]
+
+    final val entries // tech.stit.mobile.core.background/BackgroundTiming.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<tech.stit.mobile.core.background/BackgroundTiming> // tech.stit.mobile.core.background/BackgroundTiming.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): tech.stit.mobile.core.background/BackgroundTiming // tech.stit.mobile.core.background/BackgroundTiming.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<tech.stit.mobile.core.background/BackgroundTiming> // tech.stit.mobile.core.background/BackgroundTiming.values|values#static(){}[0]
+}
+
+final enum class tech.stit.mobile.core.background/BackgroundTrigger : kotlin/Enum<tech.stit.mobile.core.background/BackgroundTrigger> { // tech.stit.mobile.core.background/BackgroundTrigger|null[0]
+    enum entry Connectivity // tech.stit.mobile.core.background/BackgroundTrigger.Connectivity|null[0]
+    enum entry Periodic // tech.stit.mobile.core.background/BackgroundTrigger.Periodic|null[0]
+    enum entry RemoteEvent // tech.stit.mobile.core.background/BackgroundTrigger.RemoteEvent|null[0]
+    enum entry Time // tech.stit.mobile.core.background/BackgroundTrigger.Time|null[0]
+    enum entry UserStarted // tech.stit.mobile.core.background/BackgroundTrigger.UserStarted|null[0]
+
+    final val entries // tech.stit.mobile.core.background/BackgroundTrigger.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<tech.stit.mobile.core.background/BackgroundTrigger> // tech.stit.mobile.core.background/BackgroundTrigger.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): tech.stit.mobile.core.background/BackgroundTrigger // tech.stit.mobile.core.background/BackgroundTrigger.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<tech.stit.mobile.core.background/BackgroundTrigger> // tech.stit.mobile.core.background/BackgroundTrigger.values|values#static(){}[0]
+}
+
 final enum class tech.stit.mobile.core.config/ApiMode : kotlin/Enum<tech.stit.mobile.core.config/ApiMode> { // tech.stit.mobile.core.config/ApiMode|null[0]
     enum entry Mock // tech.stit.mobile.core.config/ApiMode.Mock|null[0]
     enum entry Real // tech.stit.mobile.core.config/ApiMode.Real|null[0]
@@ -173,6 +225,20 @@ final enum class tech.stit.mobile.core.requirements/RequirementsStatus : kotlin/
     }
 }
 
+final enum class tech.stit.mobile.core.widget/WidgetState : kotlin/Enum<tech.stit.mobile.core.widget/WidgetState> { // tech.stit.mobile.core.widget/WidgetState|null[0]
+    enum entry Empty // tech.stit.mobile.core.widget/WidgetState.Empty|null[0]
+    enum entry Placeholder // tech.stit.mobile.core.widget/WidgetState.Placeholder|null[0]
+    enum entry Populated // tech.stit.mobile.core.widget/WidgetState.Populated|null[0]
+    enum entry SignedOut // tech.stit.mobile.core.widget/WidgetState.SignedOut|null[0]
+    enum entry Stale // tech.stit.mobile.core.widget/WidgetState.Stale|null[0]
+
+    final val entries // tech.stit.mobile.core.widget/WidgetState.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<tech.stit.mobile.core.widget/WidgetState> // tech.stit.mobile.core.widget/WidgetState.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): tech.stit.mobile.core.widget/WidgetState // tech.stit.mobile.core.widget/WidgetState.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<tech.stit.mobile.core.widget/WidgetState> // tech.stit.mobile.core.widget/WidgetState.values|values#static(){}[0]
+}
+
 final enum class tech.stit.mobile.feature.settings/AppLanguage : kotlin/Enum<tech.stit.mobile.feature.settings/AppLanguage> { // tech.stit.mobile.feature.settings/AppLanguage|null[0]
     enum entry En // tech.stit.mobile.feature.settings/AppLanguage.En|null[0]
     enum entry Ru // tech.stit.mobile.feature.settings/AppLanguage.Ru|null[0]
@@ -203,6 +269,15 @@ abstract interface tech.stit.mobile.core.auth/SecureStore { // tech.stit.mobile.
     abstract suspend fun read(kotlin/String): kotlin/String? // tech.stit.mobile.core.auth/SecureStore.read|read(kotlin.String){}[0]
     abstract suspend fun remove(kotlin/String) // tech.stit.mobile.core.auth/SecureStore.remove|remove(kotlin.String){}[0]
     abstract suspend fun write(kotlin/String, kotlin/String) // tech.stit.mobile.core.auth/SecureStore.write|write(kotlin.String;kotlin.String){}[0]
+}
+
+abstract interface tech.stit.mobile.core.background/BackgroundRunner { // tech.stit.mobile.core.background/BackgroundRunner|null[0]
+    abstract suspend fun run(): tech.stit.mobile.core.background/BackgroundResult // tech.stit.mobile.core.background/BackgroundRunner.run|run(){}[0]
+}
+
+abstract interface tech.stit.mobile.core.background/BackgroundScheduler { // tech.stit.mobile.core.background/BackgroundScheduler|null[0]
+    abstract fun cancel(kotlin/String) // tech.stit.mobile.core.background/BackgroundScheduler.cancel|cancel(kotlin.String){}[0]
+    abstract fun schedule(tech.stit.mobile.core.background/BackgroundTask) // tech.stit.mobile.core.background/BackgroundScheduler.schedule|schedule(tech.stit.mobile.core.background.BackgroundTask){}[0]
 }
 
 abstract interface tech.stit.mobile.core.i18n/LocaleProvider { // tech.stit.mobile.core.i18n/LocaleProvider|null[0]
@@ -257,6 +332,8 @@ abstract interface tech.stit.mobile.core.push/PushTransport { // tech.stit.mobil
 abstract interface tech.stit.mobile/PlatformDeps { // tech.stit.mobile/PlatformDeps|null[0]
     abstract val appInfo // tech.stit.mobile/PlatformDeps.appInfo|{}appInfo[0]
         abstract fun <get-appInfo>(): tech.stit.mobile.core.lib/AppInfo // tech.stit.mobile/PlatformDeps.appInfo.<get-appInfo>|<get-appInfo>(){}[0]
+    abstract val background // tech.stit.mobile/PlatformDeps.background|{}background[0]
+        abstract fun <get-background>(): tech.stit.mobile.core.background/BackgroundScheduler // tech.stit.mobile/PlatformDeps.background.<get-background>|<get-background>(){}[0]
     abstract val connectivity // tech.stit.mobile/PlatformDeps.connectivity|{}connectivity[0]
         abstract fun <get-connectivity>(): tech.stit.mobile.core.lib/ConnectivityMonitor // tech.stit.mobile/PlatformDeps.connectivity.<get-connectivity>|<get-connectivity>(){}[0]
     abstract val filesDir // tech.stit.mobile/PlatformDeps.filesDir|{}filesDir[0]
@@ -1594,6 +1671,34 @@ final class tech.stit.mobile.core.auth/TokenPair { // tech.stit.mobile.core.auth
     final fun toString(): kotlin/String // tech.stit.mobile.core.auth/TokenPair.toString|toString(){}[0]
 }
 
+final class tech.stit.mobile.core.background/BackgroundTask { // tech.stit.mobile.core.background/BackgroundTask|null[0]
+    constructor <init>(kotlin/String, tech.stit.mobile.core.background/BackgroundTrigger, tech.stit.mobile.core.background/BackgroundTiming, kotlin.collections/List<tech.stit.mobile.core.background/BackgroundCondition> = ..., kotlin/Long = ..., kotlin.time/Instant? = ...) // tech.stit.mobile.core.background/BackgroundTask.<init>|<init>(kotlin.String;tech.stit.mobile.core.background.BackgroundTrigger;tech.stit.mobile.core.background.BackgroundTiming;kotlin.collections.List<tech.stit.mobile.core.background.BackgroundCondition>;kotlin.Long;kotlin.time.Instant?){}[0]
+
+    final val at // tech.stit.mobile.core.background/BackgroundTask.at|{}at[0]
+        final fun <get-at>(): kotlin.time/Instant? // tech.stit.mobile.core.background/BackgroundTask.at.<get-at>|<get-at>(){}[0]
+    final val conditions // tech.stit.mobile.core.background/BackgroundTask.conditions|{}conditions[0]
+        final fun <get-conditions>(): kotlin.collections/List<tech.stit.mobile.core.background/BackgroundCondition> // tech.stit.mobile.core.background/BackgroundTask.conditions.<get-conditions>|<get-conditions>(){}[0]
+    final val id // tech.stit.mobile.core.background/BackgroundTask.id|{}id[0]
+        final fun <get-id>(): kotlin/String // tech.stit.mobile.core.background/BackgroundTask.id.<get-id>|<get-id>(){}[0]
+    final val periodMinutes // tech.stit.mobile.core.background/BackgroundTask.periodMinutes|{}periodMinutes[0]
+        final fun <get-periodMinutes>(): kotlin/Long // tech.stit.mobile.core.background/BackgroundTask.periodMinutes.<get-periodMinutes>|<get-periodMinutes>(){}[0]
+    final val timing // tech.stit.mobile.core.background/BackgroundTask.timing|{}timing[0]
+        final fun <get-timing>(): tech.stit.mobile.core.background/BackgroundTiming // tech.stit.mobile.core.background/BackgroundTask.timing.<get-timing>|<get-timing>(){}[0]
+    final val trigger // tech.stit.mobile.core.background/BackgroundTask.trigger|{}trigger[0]
+        final fun <get-trigger>(): tech.stit.mobile.core.background/BackgroundTrigger // tech.stit.mobile.core.background/BackgroundTask.trigger.<get-trigger>|<get-trigger>(){}[0]
+
+    final fun component1(): kotlin/String // tech.stit.mobile.core.background/BackgroundTask.component1|component1(){}[0]
+    final fun component2(): tech.stit.mobile.core.background/BackgroundTrigger // tech.stit.mobile.core.background/BackgroundTask.component2|component2(){}[0]
+    final fun component3(): tech.stit.mobile.core.background/BackgroundTiming // tech.stit.mobile.core.background/BackgroundTask.component3|component3(){}[0]
+    final fun component4(): kotlin.collections/List<tech.stit.mobile.core.background/BackgroundCondition> // tech.stit.mobile.core.background/BackgroundTask.component4|component4(){}[0]
+    final fun component5(): kotlin/Long // tech.stit.mobile.core.background/BackgroundTask.component5|component5(){}[0]
+    final fun component6(): kotlin.time/Instant? // tech.stit.mobile.core.background/BackgroundTask.component6|component6(){}[0]
+    final fun copy(kotlin/String = ..., tech.stit.mobile.core.background/BackgroundTrigger = ..., tech.stit.mobile.core.background/BackgroundTiming = ..., kotlin.collections/List<tech.stit.mobile.core.background/BackgroundCondition> = ..., kotlin/Long = ..., kotlin.time/Instant? = ...): tech.stit.mobile.core.background/BackgroundTask // tech.stit.mobile.core.background/BackgroundTask.copy|copy(kotlin.String;tech.stit.mobile.core.background.BackgroundTrigger;tech.stit.mobile.core.background.BackgroundTiming;kotlin.collections.List<tech.stit.mobile.core.background.BackgroundCondition>;kotlin.Long;kotlin.time.Instant?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // tech.stit.mobile.core.background/BackgroundTask.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // tech.stit.mobile.core.background/BackgroundTask.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // tech.stit.mobile.core.background/BackgroundTask.toString|toString(){}[0]
+}
+
 final class tech.stit.mobile.core.config/AppConfig { // tech.stit.mobile.core.config/AppConfig|null[0]
     constructor <init>(tech.stit.mobile.core.config/AppEnv, kotlin/String, tech.stit.mobile.core.config/ApiMode, tech.stit.mobile.core.config/AuthMode, kotlin/String, kotlin/String, kotlin/String) // tech.stit.mobile.core.config/AppConfig.<init>|<init>(tech.stit.mobile.core.config.AppEnv;kotlin.String;tech.stit.mobile.core.config.ApiMode;tech.stit.mobile.core.config.AuthMode;kotlin.String;kotlin.String;kotlin.String){}[0]
 
@@ -2112,10 +2217,12 @@ final class tech.stit.mobile.feature.auth/LoginPresenter { // tech.stit.mobile.f
 }
 
 final class tech.stit.mobile.feature.auth/LoginState { // tech.stit.mobile.feature.auth/LoginState|null[0]
-    constructor <init>(kotlin/String = ..., kotlin/String = ..., kotlin/Boolean = ..., tech.stit.mobile.core.i18n/MessageKey? = ..., kotlin/Boolean = ...) // tech.stit.mobile.feature.auth/LoginState.<init>|<init>(kotlin.String;kotlin.String;kotlin.Boolean;tech.stit.mobile.core.i18n.MessageKey?;kotlin.Boolean){}[0]
+    constructor <init>(kotlin/String = ..., kotlin/String = ..., kotlin/Boolean = ..., tech.stit.mobile.core.i18n/MessageKey? = ..., kotlin/Boolean = ..., kotlin/Boolean = ...) // tech.stit.mobile.feature.auth/LoginState.<init>|<init>(kotlin.String;kotlin.String;kotlin.Boolean;tech.stit.mobile.core.i18n.MessageKey?;kotlin.Boolean;kotlin.Boolean){}[0]
 
     final val canSubmit // tech.stit.mobile.feature.auth/LoginState.canSubmit|{}canSubmit[0]
         final fun <get-canSubmit>(): kotlin/Boolean // tech.stit.mobile.feature.auth/LoginState.canSubmit.<get-canSubmit>|<get-canSubmit>(){}[0]
+    final val demoAvailable // tech.stit.mobile.feature.auth/LoginState.demoAvailable|{}demoAvailable[0]
+        final fun <get-demoAvailable>(): kotlin/Boolean // tech.stit.mobile.feature.auth/LoginState.demoAvailable.<get-demoAvailable>|<get-demoAvailable>(){}[0]
     final val email // tech.stit.mobile.feature.auth/LoginState.email|{}email[0]
         final fun <get-email>(): kotlin/String // tech.stit.mobile.feature.auth/LoginState.email.<get-email>|<get-email>(){}[0]
     final val error // tech.stit.mobile.feature.auth/LoginState.error|{}error[0]
@@ -2132,7 +2239,8 @@ final class tech.stit.mobile.feature.auth/LoginState { // tech.stit.mobile.featu
     final fun component3(): kotlin/Boolean // tech.stit.mobile.feature.auth/LoginState.component3|component3(){}[0]
     final fun component4(): tech.stit.mobile.core.i18n/MessageKey? // tech.stit.mobile.feature.auth/LoginState.component4|component4(){}[0]
     final fun component5(): kotlin/Boolean // tech.stit.mobile.feature.auth/LoginState.component5|component5(){}[0]
-    final fun copy(kotlin/String = ..., kotlin/String = ..., kotlin/Boolean = ..., tech.stit.mobile.core.i18n/MessageKey? = ..., kotlin/Boolean = ...): tech.stit.mobile.feature.auth/LoginState // tech.stit.mobile.feature.auth/LoginState.copy|copy(kotlin.String;kotlin.String;kotlin.Boolean;tech.stit.mobile.core.i18n.MessageKey?;kotlin.Boolean){}[0]
+    final fun component6(): kotlin/Boolean // tech.stit.mobile.feature.auth/LoginState.component6|component6(){}[0]
+    final fun copy(kotlin/String = ..., kotlin/String = ..., kotlin/Boolean = ..., tech.stit.mobile.core.i18n/MessageKey? = ..., kotlin/Boolean = ..., kotlin/Boolean = ...): tech.stit.mobile.feature.auth/LoginState // tech.stit.mobile.feature.auth/LoginState.copy|copy(kotlin.String;kotlin.String;kotlin.Boolean;tech.stit.mobile.core.i18n.MessageKey?;kotlin.Boolean;kotlin.Boolean){}[0]
     final fun equals(kotlin/Any?): kotlin/Boolean // tech.stit.mobile.feature.auth/LoginState.equals|equals(kotlin.Any?){}[0]
     final fun hashCode(): kotlin/Int // tech.stit.mobile.feature.auth/LoginState.hashCode|hashCode(){}[0]
     final fun toString(): kotlin/String // tech.stit.mobile.feature.auth/LoginState.toString|toString(){}[0]
@@ -2347,10 +2455,12 @@ final class tech.stit.mobile.feature.shell/ShellPresenter { // tech.stit.mobile.
 }
 
 final class tech.stit.mobile.feature.shell/ShellState { // tech.stit.mobile.feature.shell/ShellState|null[0]
-    constructor <init>(tech.stit.mobile.core.auth/AuthState = ..., kotlin/Boolean = ..., tech.stit.mobile.core.deeplink/Route? = ..., tech.stit.mobile.core.deeplink/Route? = ...) // tech.stit.mobile.feature.shell/ShellState.<init>|<init>(tech.stit.mobile.core.auth.AuthState;kotlin.Boolean;tech.stit.mobile.core.deeplink.Route?;tech.stit.mobile.core.deeplink.Route?){}[0]
+    constructor <init>(tech.stit.mobile.core.auth/AuthState = ..., kotlin/Boolean = ..., tech.stit.mobile.core.deeplink/Route? = ..., tech.stit.mobile.core.deeplink/Route? = ..., kotlin/Boolean = ...) // tech.stit.mobile.feature.shell/ShellState.<init>|<init>(tech.stit.mobile.core.auth.AuthState;kotlin.Boolean;tech.stit.mobile.core.deeplink.Route?;tech.stit.mobile.core.deeplink.Route?;kotlin.Boolean){}[0]
 
     final val auth // tech.stit.mobile.feature.shell/ShellState.auth|{}auth[0]
         final fun <get-auth>(): tech.stit.mobile.core.auth/AuthState // tech.stit.mobile.feature.shell/ShellState.auth.<get-auth>|<get-auth>(){}[0]
+    final val demo // tech.stit.mobile.feature.shell/ShellState.demo|{}demo[0]
+        final fun <get-demo>(): kotlin/Boolean // tech.stit.mobile.feature.shell/ShellState.demo.<get-demo>|<get-demo>(){}[0]
     final val online // tech.stit.mobile.feature.shell/ShellState.online|{}online[0]
         final fun <get-online>(): kotlin/Boolean // tech.stit.mobile.feature.shell/ShellState.online.<get-online>|<get-online>(){}[0]
     final val pendingRoute // tech.stit.mobile.feature.shell/ShellState.pendingRoute|{}pendingRoute[0]
@@ -2362,10 +2472,101 @@ final class tech.stit.mobile.feature.shell/ShellState { // tech.stit.mobile.feat
     final fun component2(): kotlin/Boolean // tech.stit.mobile.feature.shell/ShellState.component2|component2(){}[0]
     final fun component3(): tech.stit.mobile.core.deeplink/Route? // tech.stit.mobile.feature.shell/ShellState.component3|component3(){}[0]
     final fun component4(): tech.stit.mobile.core.deeplink/Route? // tech.stit.mobile.feature.shell/ShellState.component4|component4(){}[0]
-    final fun copy(tech.stit.mobile.core.auth/AuthState = ..., kotlin/Boolean = ..., tech.stit.mobile.core.deeplink/Route? = ..., tech.stit.mobile.core.deeplink/Route? = ...): tech.stit.mobile.feature.shell/ShellState // tech.stit.mobile.feature.shell/ShellState.copy|copy(tech.stit.mobile.core.auth.AuthState;kotlin.Boolean;tech.stit.mobile.core.deeplink.Route?;tech.stit.mobile.core.deeplink.Route?){}[0]
+    final fun component5(): kotlin/Boolean // tech.stit.mobile.feature.shell/ShellState.component5|component5(){}[0]
+    final fun copy(tech.stit.mobile.core.auth/AuthState = ..., kotlin/Boolean = ..., tech.stit.mobile.core.deeplink/Route? = ..., tech.stit.mobile.core.deeplink/Route? = ..., kotlin/Boolean = ...): tech.stit.mobile.feature.shell/ShellState // tech.stit.mobile.feature.shell/ShellState.copy|copy(tech.stit.mobile.core.auth.AuthState;kotlin.Boolean;tech.stit.mobile.core.deeplink.Route?;tech.stit.mobile.core.deeplink.Route?;kotlin.Boolean){}[0]
     final fun equals(kotlin/Any?): kotlin/Boolean // tech.stit.mobile.feature.shell/ShellState.equals|equals(kotlin.Any?){}[0]
     final fun hashCode(): kotlin/Int // tech.stit.mobile.feature.shell/ShellState.hashCode|hashCode(){}[0]
     final fun toString(): kotlin/String // tech.stit.mobile.feature.shell/ShellState.toString|toString(){}[0]
+}
+
+final class tech.stit.mobile.feature.todos/AddTodoAction { // tech.stit.mobile.feature.todos/AddTodoAction|null[0]
+    final suspend fun run(kotlin/String): tech.stit.mobile.feature.todos/AddTodoResult // tech.stit.mobile.feature.todos/AddTodoAction.run|run(kotlin.String){}[0]
+}
+
+final class tech.stit.mobile.feature.todos/CompleteTodoAction { // tech.stit.mobile.feature.todos/CompleteTodoAction|null[0]
+    final suspend fun run(kotlin/String): tech.stit.mobile.feature.todos/CompleteTodoResult // tech.stit.mobile.feature.todos/CompleteTodoAction.run|run(kotlin.String){}[0]
+}
+
+final class tech.stit.mobile.feature.todos/TodayTodosWidgetItem { // tech.stit.mobile.feature.todos/TodayTodosWidgetItem|null[0]
+    constructor <init>(kotlin/String, kotlin/String, kotlin.time/Instant, kotlin/Boolean) // tech.stit.mobile.feature.todos/TodayTodosWidgetItem.<init>|<init>(kotlin.String;kotlin.String;kotlin.time.Instant;kotlin.Boolean){}[0]
+
+    final val done // tech.stit.mobile.feature.todos/TodayTodosWidgetItem.done|{}done[0]
+        final fun <get-done>(): kotlin/Boolean // tech.stit.mobile.feature.todos/TodayTodosWidgetItem.done.<get-done>|<get-done>(){}[0]
+    final val id // tech.stit.mobile.feature.todos/TodayTodosWidgetItem.id|{}id[0]
+        final fun <get-id>(): kotlin/String // tech.stit.mobile.feature.todos/TodayTodosWidgetItem.id.<get-id>|<get-id>(){}[0]
+    final val title // tech.stit.mobile.feature.todos/TodayTodosWidgetItem.title|{}title[0]
+        final fun <get-title>(): kotlin/String // tech.stit.mobile.feature.todos/TodayTodosWidgetItem.title.<get-title>|<get-title>(){}[0]
+    final val updatedAt // tech.stit.mobile.feature.todos/TodayTodosWidgetItem.updatedAt|{}updatedAt[0]
+        final fun <get-updatedAt>(): kotlin.time/Instant // tech.stit.mobile.feature.todos/TodayTodosWidgetItem.updatedAt.<get-updatedAt>|<get-updatedAt>(){}[0]
+
+    final fun component1(): kotlin/String // tech.stit.mobile.feature.todos/TodayTodosWidgetItem.component1|component1(){}[0]
+    final fun component2(): kotlin/String // tech.stit.mobile.feature.todos/TodayTodosWidgetItem.component2|component2(){}[0]
+    final fun component3(): kotlin.time/Instant // tech.stit.mobile.feature.todos/TodayTodosWidgetItem.component3|component3(){}[0]
+    final fun component4(): kotlin/Boolean // tech.stit.mobile.feature.todos/TodayTodosWidgetItem.component4|component4(){}[0]
+    final fun copy(kotlin/String = ..., kotlin/String = ..., kotlin.time/Instant = ..., kotlin/Boolean = ...): tech.stit.mobile.feature.todos/TodayTodosWidgetItem // tech.stit.mobile.feature.todos/TodayTodosWidgetItem.copy|copy(kotlin.String;kotlin.String;kotlin.time.Instant;kotlin.Boolean){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // tech.stit.mobile.feature.todos/TodayTodosWidgetItem.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // tech.stit.mobile.feature.todos/TodayTodosWidgetItem.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // tech.stit.mobile.feature.todos/TodayTodosWidgetItem.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<tech.stit.mobile.feature.todos/TodayTodosWidgetItem> { // tech.stit.mobile.feature.todos/TodayTodosWidgetItem.$serializer|null[0]
+        final val descriptor // tech.stit.mobile.feature.todos/TodayTodosWidgetItem.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // tech.stit.mobile.feature.todos/TodayTodosWidgetItem.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // tech.stit.mobile.feature.todos/TodayTodosWidgetItem.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): tech.stit.mobile.feature.todos/TodayTodosWidgetItem // tech.stit.mobile.feature.todos/TodayTodosWidgetItem.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, tech.stit.mobile.feature.todos/TodayTodosWidgetItem) // tech.stit.mobile.feature.todos/TodayTodosWidgetItem.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;tech.stit.mobile.feature.todos.TodayTodosWidgetItem){}[0]
+    }
+
+    final object Companion { // tech.stit.mobile.feature.todos/TodayTodosWidgetItem.Companion|null[0]
+        final fun serializer(): kotlinx.serialization/KSerializer<tech.stit.mobile.feature.todos/TodayTodosWidgetItem> // tech.stit.mobile.feature.todos/TodayTodosWidgetItem.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final class tech.stit.mobile.feature.todos/TodayTodosWidgetProvider { // tech.stit.mobile.feature.todos/TodayTodosWidgetProvider|null[0]
+    final suspend fun publish(): tech.stit.mobile.feature.todos/TodayTodosWidgetSnapshot // tech.stit.mobile.feature.todos/TodayTodosWidgetProvider.publish|publish(){}[0]
+    final suspend fun snapshot(): tech.stit.mobile.feature.todos/TodayTodosWidgetSnapshot // tech.stit.mobile.feature.todos/TodayTodosWidgetProvider.snapshot|snapshot(){}[0]
+
+    final object Companion { // tech.stit.mobile.feature.todos/TodayTodosWidgetProvider.Companion|null[0]
+        final const val SLUG // tech.stit.mobile.feature.todos/TodayTodosWidgetProvider.Companion.SLUG|{}SLUG[0]
+            final fun <get-SLUG>(): kotlin/String // tech.stit.mobile.feature.todos/TodayTodosWidgetProvider.Companion.SLUG.<get-SLUG>|<get-SLUG>(){}[0]
+    }
+}
+
+final class tech.stit.mobile.feature.todos/TodayTodosWidgetSnapshot { // tech.stit.mobile.feature.todos/TodayTodosWidgetSnapshot|null[0]
+    constructor <init>(tech.stit.mobile.core.widget/WidgetState, kotlin.collections/List<tech.stit.mobile.feature.todos/TodayTodosWidgetItem>, kotlin.time/Instant, kotlin/String) // tech.stit.mobile.feature.todos/TodayTodosWidgetSnapshot.<init>|<init>(tech.stit.mobile.core.widget.WidgetState;kotlin.collections.List<tech.stit.mobile.feature.todos.TodayTodosWidgetItem>;kotlin.time.Instant;kotlin.String){}[0]
+
+    final val generatedAt // tech.stit.mobile.feature.todos/TodayTodosWidgetSnapshot.generatedAt|{}generatedAt[0]
+        final fun <get-generatedAt>(): kotlin.time/Instant // tech.stit.mobile.feature.todos/TodayTodosWidgetSnapshot.generatedAt.<get-generatedAt>|<get-generatedAt>(){}[0]
+    final val items // tech.stit.mobile.feature.todos/TodayTodosWidgetSnapshot.items|{}items[0]
+        final fun <get-items>(): kotlin.collections/List<tech.stit.mobile.feature.todos/TodayTodosWidgetItem> // tech.stit.mobile.feature.todos/TodayTodosWidgetSnapshot.items.<get-items>|<get-items>(){}[0]
+    final val state // tech.stit.mobile.feature.todos/TodayTodosWidgetSnapshot.state|{}state[0]
+        final fun <get-state>(): tech.stit.mobile.core.widget/WidgetState // tech.stit.mobile.feature.todos/TodayTodosWidgetSnapshot.state.<get-state>|<get-state>(){}[0]
+    final val tapUrl // tech.stit.mobile.feature.todos/TodayTodosWidgetSnapshot.tapUrl|{}tapUrl[0]
+        final fun <get-tapUrl>(): kotlin/String // tech.stit.mobile.feature.todos/TodayTodosWidgetSnapshot.tapUrl.<get-tapUrl>|<get-tapUrl>(){}[0]
+
+    final fun component1(): tech.stit.mobile.core.widget/WidgetState // tech.stit.mobile.feature.todos/TodayTodosWidgetSnapshot.component1|component1(){}[0]
+    final fun component2(): kotlin.collections/List<tech.stit.mobile.feature.todos/TodayTodosWidgetItem> // tech.stit.mobile.feature.todos/TodayTodosWidgetSnapshot.component2|component2(){}[0]
+    final fun component3(): kotlin.time/Instant // tech.stit.mobile.feature.todos/TodayTodosWidgetSnapshot.component3|component3(){}[0]
+    final fun component4(): kotlin/String // tech.stit.mobile.feature.todos/TodayTodosWidgetSnapshot.component4|component4(){}[0]
+    final fun copy(tech.stit.mobile.core.widget/WidgetState = ..., kotlin.collections/List<tech.stit.mobile.feature.todos/TodayTodosWidgetItem> = ..., kotlin.time/Instant = ..., kotlin/String = ...): tech.stit.mobile.feature.todos/TodayTodosWidgetSnapshot // tech.stit.mobile.feature.todos/TodayTodosWidgetSnapshot.copy|copy(tech.stit.mobile.core.widget.WidgetState;kotlin.collections.List<tech.stit.mobile.feature.todos.TodayTodosWidgetItem>;kotlin.time.Instant;kotlin.String){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // tech.stit.mobile.feature.todos/TodayTodosWidgetSnapshot.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // tech.stit.mobile.feature.todos/TodayTodosWidgetSnapshot.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // tech.stit.mobile.feature.todos/TodayTodosWidgetSnapshot.toString|toString(){}[0]
+
+    final object $serializer : kotlinx.serialization.internal/GeneratedSerializer<tech.stit.mobile.feature.todos/TodayTodosWidgetSnapshot> { // tech.stit.mobile.feature.todos/TodayTodosWidgetSnapshot.$serializer|null[0]
+        final val descriptor // tech.stit.mobile.feature.todos/TodayTodosWidgetSnapshot.$serializer.descriptor|{}descriptor[0]
+            final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // tech.stit.mobile.feature.todos/TodayTodosWidgetSnapshot.$serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+        final fun childSerializers(): kotlin/Array<kotlinx.serialization/KSerializer<*>> // tech.stit.mobile.feature.todos/TodayTodosWidgetSnapshot.$serializer.childSerializers|childSerializers(){}[0]
+        final fun deserialize(kotlinx.serialization.encoding/Decoder): tech.stit.mobile.feature.todos/TodayTodosWidgetSnapshot // tech.stit.mobile.feature.todos/TodayTodosWidgetSnapshot.$serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+        final fun serialize(kotlinx.serialization.encoding/Encoder, tech.stit.mobile.feature.todos/TodayTodosWidgetSnapshot) // tech.stit.mobile.feature.todos/TodayTodosWidgetSnapshot.$serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;tech.stit.mobile.feature.todos.TodayTodosWidgetSnapshot){}[0]
+    }
+
+    final object Companion { // tech.stit.mobile.feature.todos/TodayTodosWidgetSnapshot.Companion|null[0]
+        final val $childSerializers // tech.stit.mobile.feature.todos/TodayTodosWidgetSnapshot.Companion.$childSerializers|{}$childSerializers[0]
+
+        final fun serializer(): kotlinx.serialization/KSerializer<tech.stit.mobile.feature.todos/TodayTodosWidgetSnapshot> // tech.stit.mobile.feature.todos/TodayTodosWidgetSnapshot.Companion.serializer|serializer(){}[0]
+    }
 }
 
 final class tech.stit.mobile.feature.todos/TodoDetailPresenter { // tech.stit.mobile.feature.todos/TodoDetailPresenter|null[0]
@@ -2439,6 +2640,8 @@ final class tech.stit.mobile.feature.todos/TodoListState { // tech.stit.mobile.f
 final class tech.stit.mobile/SharedContainer { // tech.stit.mobile/SharedContainer|null[0]
     constructor <init>(tech.stit.mobile/PlatformDeps, tech.stit.mobile.core.config/AppConfig) // tech.stit.mobile/SharedContainer.<init>|<init>(tech.stit.mobile.PlatformDeps;tech.stit.mobile.core.config.AppConfig){}[0]
 
+    final val backgroundTasks // tech.stit.mobile/SharedContainer.backgroundTasks|{}backgroundTasks[0]
+        final fun <get-backgroundTasks>(): kotlin.collections/List<tech.stit.mobile.core.background/BackgroundTask> // tech.stit.mobile/SharedContainer.backgroundTasks.<get-backgroundTasks>|<get-backgroundTasks>(){}[0]
     final val config // tech.stit.mobile/SharedContainer.config|{}config[0]
         final fun <get-config>(): tech.stit.mobile.core.config/AppConfig // tech.stit.mobile/SharedContainer.config.<get-config>|<get-config>(){}[0]
     final val deepLinkParser // tech.stit.mobile/SharedContainer.deepLinkParser|{}deepLinkParser[0]
@@ -2462,6 +2665,9 @@ final class tech.stit.mobile/SharedContainer { // tech.stit.mobile/SharedContain
     final val userRepository // tech.stit.mobile/SharedContainer.userRepository|{}userRepository[0]
         final fun <get-userRepository>(): tech.stit.mobile.entity.user/UserRepository // tech.stit.mobile/SharedContainer.userRepository.<get-userRepository>|<get-userRepository>(){}[0]
 
+    final fun addTodoAction(): tech.stit.mobile.feature.todos/AddTodoAction // tech.stit.mobile/SharedContainer.addTodoAction|addTodoAction(){}[0]
+    final fun backgroundRunner(kotlin/String): tech.stit.mobile.core.background/BackgroundRunner? // tech.stit.mobile/SharedContainer.backgroundRunner|backgroundRunner(kotlin.String){}[0]
+    final fun completeTodoAction(): tech.stit.mobile.feature.todos/CompleteTodoAction // tech.stit.mobile/SharedContainer.completeTodoAction|completeTodoAction(){}[0]
     final fun deleteAccountPresenter(): tech.stit.mobile.feature.auth/DeleteAccountPresenter // tech.stit.mobile/SharedContainer.deleteAccountPresenter|deleteAccountPresenter(){}[0]
     final fun demoPanelPresenter(): tech.stit.mobile.feature.demo/DemoPanelPresenter // tech.stit.mobile/SharedContainer.demoPanelPresenter|demoPanelPresenter(){}[0]
     final fun loginPresenter(): tech.stit.mobile.feature.auth/LoginPresenter // tech.stit.mobile/SharedContainer.loginPresenter|loginPresenter(){}[0]
@@ -2471,8 +2677,10 @@ final class tech.stit.mobile/SharedContainer { // tech.stit.mobile/SharedContain
     final fun sessionsPresenter(): tech.stit.mobile.feature.auth/SessionsPresenter // tech.stit.mobile/SharedContainer.sessionsPresenter|sessionsPresenter(){}[0]
     final fun settingsPresenter(): tech.stit.mobile.feature.settings/SettingsPresenter // tech.stit.mobile/SharedContainer.settingsPresenter|settingsPresenter(){}[0]
     final fun shellPresenter(): tech.stit.mobile.feature.shell/ShellPresenter // tech.stit.mobile/SharedContainer.shellPresenter|shellPresenter(){}[0]
+    final fun todayTodosWidgetProvider(): tech.stit.mobile.feature.todos/TodayTodosWidgetProvider // tech.stit.mobile/SharedContainer.todayTodosWidgetProvider|todayTodosWidgetProvider(){}[0]
     final fun todoDetailPresenter(kotlin/String): tech.stit.mobile.feature.todos/TodoDetailPresenter // tech.stit.mobile/SharedContainer.todoDetailPresenter|todoDetailPresenter(kotlin.String){}[0]
     final fun todoListPresenter(): tech.stit.mobile.feature.todos/TodoListPresenter // tech.stit.mobile/SharedContainer.todoListPresenter|todoListPresenter(){}[0]
+    final fun todoReminderTask(kotlin/String, kotlin.time/Instant): tech.stit.mobile.core.background/BackgroundTask // tech.stit.mobile/SharedContainer.todoReminderTask|todoReminderTask(kotlin.String;kotlin.time.Instant){}[0]
 }
 
 sealed class tech.stit.mobile.core.api/ApiError : kotlin/Exception { // tech.stit.mobile.core.api/ApiError|null[0]
@@ -2496,6 +2704,68 @@ sealed class tech.stit.mobile.core.api/ApiError : kotlin/Exception { // tech.sti
 
     final class Network : tech.stit.mobile.core.api/ApiError { // tech.stit.mobile.core.api/ApiError.Network|null[0]
         constructor <init>(kotlin/Throwable) // tech.stit.mobile.core.api/ApiError.Network.<init>|<init>(kotlin.Throwable){}[0]
+    }
+}
+
+sealed class tech.stit.mobile.core.background/BackgroundResult { // tech.stit.mobile.core.background/BackgroundResult|null[0]
+    final class Notify : tech.stit.mobile.core.background/BackgroundResult { // tech.stit.mobile.core.background/BackgroundResult.Notify|null[0]
+        constructor <init>(kotlin/String, kotlin/String, kotlin/String, kotlin.collections/List<kotlin/String>, kotlin/String?, kotlin/String) // tech.stit.mobile.core.background/BackgroundResult.Notify.<init>|<init>(kotlin.String;kotlin.String;kotlin.String;kotlin.collections.List<kotlin.String>;kotlin.String?;kotlin.String){}[0]
+
+        final val args // tech.stit.mobile.core.background/BackgroundResult.Notify.args|{}args[0]
+            final fun <get-args>(): kotlin.collections/List<kotlin/String> // tech.stit.mobile.core.background/BackgroundResult.Notify.args.<get-args>|<get-args>(){}[0]
+        final val bodyKey // tech.stit.mobile.core.background/BackgroundResult.Notify.bodyKey|{}bodyKey[0]
+            final fun <get-bodyKey>(): kotlin/String // tech.stit.mobile.core.background/BackgroundResult.Notify.bodyKey.<get-bodyKey>|<get-bodyKey>(){}[0]
+        final val category // tech.stit.mobile.core.background/BackgroundResult.Notify.category|{}category[0]
+            final fun <get-category>(): kotlin/String // tech.stit.mobile.core.background/BackgroundResult.Notify.category.<get-category>|<get-category>(){}[0]
+        final val deepLink // tech.stit.mobile.core.background/BackgroundResult.Notify.deepLink|{}deepLink[0]
+            final fun <get-deepLink>(): kotlin/String? // tech.stit.mobile.core.background/BackgroundResult.Notify.deepLink.<get-deepLink>|<get-deepLink>(){}[0]
+        final val notificationId // tech.stit.mobile.core.background/BackgroundResult.Notify.notificationId|{}notificationId[0]
+            final fun <get-notificationId>(): kotlin/String // tech.stit.mobile.core.background/BackgroundResult.Notify.notificationId.<get-notificationId>|<get-notificationId>(){}[0]
+        final val titleKey // tech.stit.mobile.core.background/BackgroundResult.Notify.titleKey|{}titleKey[0]
+            final fun <get-titleKey>(): kotlin/String // tech.stit.mobile.core.background/BackgroundResult.Notify.titleKey.<get-titleKey>|<get-titleKey>(){}[0]
+
+        final fun component1(): kotlin/String // tech.stit.mobile.core.background/BackgroundResult.Notify.component1|component1(){}[0]
+        final fun component2(): kotlin/String // tech.stit.mobile.core.background/BackgroundResult.Notify.component2|component2(){}[0]
+        final fun component3(): kotlin/String // tech.stit.mobile.core.background/BackgroundResult.Notify.component3|component3(){}[0]
+        final fun component4(): kotlin.collections/List<kotlin/String> // tech.stit.mobile.core.background/BackgroundResult.Notify.component4|component4(){}[0]
+        final fun component5(): kotlin/String? // tech.stit.mobile.core.background/BackgroundResult.Notify.component5|component5(){}[0]
+        final fun component6(): kotlin/String // tech.stit.mobile.core.background/BackgroundResult.Notify.component6|component6(){}[0]
+        final fun copy(kotlin/String = ..., kotlin/String = ..., kotlin/String = ..., kotlin.collections/List<kotlin/String> = ..., kotlin/String? = ..., kotlin/String = ...): tech.stit.mobile.core.background/BackgroundResult.Notify // tech.stit.mobile.core.background/BackgroundResult.Notify.copy|copy(kotlin.String;kotlin.String;kotlin.String;kotlin.collections.List<kotlin.String>;kotlin.String?;kotlin.String){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // tech.stit.mobile.core.background/BackgroundResult.Notify.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // tech.stit.mobile.core.background/BackgroundResult.Notify.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // tech.stit.mobile.core.background/BackgroundResult.Notify.toString|toString(){}[0]
+    }
+
+    final class RefreshWidget : tech.stit.mobile.core.background/BackgroundResult { // tech.stit.mobile.core.background/BackgroundResult.RefreshWidget|null[0]
+        constructor <init>(kotlin/String) // tech.stit.mobile.core.background/BackgroundResult.RefreshWidget.<init>|<init>(kotlin.String){}[0]
+
+        final val slug // tech.stit.mobile.core.background/BackgroundResult.RefreshWidget.slug|{}slug[0]
+            final fun <get-slug>(): kotlin/String // tech.stit.mobile.core.background/BackgroundResult.RefreshWidget.slug.<get-slug>|<get-slug>(){}[0]
+
+        final fun component1(): kotlin/String // tech.stit.mobile.core.background/BackgroundResult.RefreshWidget.component1|component1(){}[0]
+        final fun copy(kotlin/String = ...): tech.stit.mobile.core.background/BackgroundResult.RefreshWidget // tech.stit.mobile.core.background/BackgroundResult.RefreshWidget.copy|copy(kotlin.String){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // tech.stit.mobile.core.background/BackgroundResult.RefreshWidget.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // tech.stit.mobile.core.background/BackgroundResult.RefreshWidget.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // tech.stit.mobile.core.background/BackgroundResult.RefreshWidget.toString|toString(){}[0]
+    }
+
+    final class Rejected : tech.stit.mobile.core.background/BackgroundResult { // tech.stit.mobile.core.background/BackgroundResult.Rejected|null[0]
+        constructor <init>(tech.stit.mobile.core.background/BackgroundRejection) // tech.stit.mobile.core.background/BackgroundResult.Rejected.<init>|<init>(tech.stit.mobile.core.background.BackgroundRejection){}[0]
+
+        final val reason // tech.stit.mobile.core.background/BackgroundResult.Rejected.reason|{}reason[0]
+            final fun <get-reason>(): tech.stit.mobile.core.background/BackgroundRejection // tech.stit.mobile.core.background/BackgroundResult.Rejected.reason.<get-reason>|<get-reason>(){}[0]
+
+        final fun component1(): tech.stit.mobile.core.background/BackgroundRejection // tech.stit.mobile.core.background/BackgroundResult.Rejected.component1|component1(){}[0]
+        final fun copy(tech.stit.mobile.core.background/BackgroundRejection = ...): tech.stit.mobile.core.background/BackgroundResult.Rejected // tech.stit.mobile.core.background/BackgroundResult.Rejected.copy|copy(tech.stit.mobile.core.background.BackgroundRejection){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // tech.stit.mobile.core.background/BackgroundResult.Rejected.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // tech.stit.mobile.core.background/BackgroundResult.Rejected.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // tech.stit.mobile.core.background/BackgroundResult.Rejected.toString|toString(){}[0]
+    }
+
+    final object FreshData : tech.stit.mobile.core.background/BackgroundResult { // tech.stit.mobile.core.background/BackgroundResult.FreshData|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // tech.stit.mobile.core.background/BackgroundResult.FreshData.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // tech.stit.mobile.core.background/BackgroundResult.FreshData.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // tech.stit.mobile.core.background/BackgroundResult.FreshData.toString|toString(){}[0]
     }
 }
 
@@ -2593,6 +2863,18 @@ sealed class tech.stit.mobile.feature.auth/LoginIntent { // tech.stit.mobile.fea
         final fun equals(kotlin/Any?): kotlin/Boolean // tech.stit.mobile.feature.auth/LoginIntent.PasswordChanged.equals|equals(kotlin.Any?){}[0]
         final fun hashCode(): kotlin/Int // tech.stit.mobile.feature.auth/LoginIntent.PasswordChanged.hashCode|hashCode(){}[0]
         final fun toString(): kotlin/String // tech.stit.mobile.feature.auth/LoginIntent.PasswordChanged.toString|toString(){}[0]
+    }
+
+    final object EnterDemo : tech.stit.mobile.feature.auth/LoginIntent { // tech.stit.mobile.feature.auth/LoginIntent.EnterDemo|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // tech.stit.mobile.feature.auth/LoginIntent.EnterDemo.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // tech.stit.mobile.feature.auth/LoginIntent.EnterDemo.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // tech.stit.mobile.feature.auth/LoginIntent.EnterDemo.toString|toString(){}[0]
+    }
+
+    final object Start : tech.stit.mobile.feature.auth/LoginIntent { // tech.stit.mobile.feature.auth/LoginIntent.Start|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // tech.stit.mobile.feature.auth/LoginIntent.Start.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // tech.stit.mobile.feature.auth/LoginIntent.Start.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // tech.stit.mobile.feature.auth/LoginIntent.Start.toString|toString(){}[0]
     }
 
     final object Submit : tech.stit.mobile.feature.auth/LoginIntent { // tech.stit.mobile.feature.auth/LoginIntent.Submit|null[0]
@@ -2838,6 +3120,12 @@ sealed class tech.stit.mobile.feature.shell/ShellIntent { // tech.stit.mobile.fe
         final fun toString(): kotlin/String // tech.stit.mobile.feature.shell/ShellIntent.OpenLink.toString|toString(){}[0]
     }
 
+    final object LeaveDemo : tech.stit.mobile.feature.shell/ShellIntent { // tech.stit.mobile.feature.shell/ShellIntent.LeaveDemo|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // tech.stit.mobile.feature.shell/ShellIntent.LeaveDemo.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // tech.stit.mobile.feature.shell/ShellIntent.LeaveDemo.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // tech.stit.mobile.feature.shell/ShellIntent.LeaveDemo.toString|toString(){}[0]
+    }
+
     final object RouteConsumed : tech.stit.mobile.feature.shell/ShellIntent { // tech.stit.mobile.feature.shell/ShellIntent.RouteConsumed|null[0]
         final fun equals(kotlin/Any?): kotlin/Boolean // tech.stit.mobile.feature.shell/ShellIntent.RouteConsumed.equals|equals(kotlin.Any?){}[0]
         final fun hashCode(): kotlin/Int // tech.stit.mobile.feature.shell/ShellIntent.RouteConsumed.hashCode|hashCode(){}[0]
@@ -2848,6 +3136,87 @@ sealed class tech.stit.mobile.feature.shell/ShellIntent { // tech.stit.mobile.fe
         final fun equals(kotlin/Any?): kotlin/Boolean // tech.stit.mobile.feature.shell/ShellIntent.Start.equals|equals(kotlin.Any?){}[0]
         final fun hashCode(): kotlin/Int // tech.stit.mobile.feature.shell/ShellIntent.Start.hashCode|hashCode(){}[0]
         final fun toString(): kotlin/String // tech.stit.mobile.feature.shell/ShellIntent.Start.toString|toString(){}[0]
+    }
+}
+
+sealed class tech.stit.mobile.feature.todos/AddTodoResult { // tech.stit.mobile.feature.todos/AddTodoResult|null[0]
+    final class Added : tech.stit.mobile.feature.todos/AddTodoResult { // tech.stit.mobile.feature.todos/AddTodoResult.Added|null[0]
+        constructor <init>(kotlin/String) // tech.stit.mobile.feature.todos/AddTodoResult.Added.<init>|<init>(kotlin.String){}[0]
+
+        final val title // tech.stit.mobile.feature.todos/AddTodoResult.Added.title|{}title[0]
+            final fun <get-title>(): kotlin/String // tech.stit.mobile.feature.todos/AddTodoResult.Added.title.<get-title>|<get-title>(){}[0]
+
+        final fun component1(): kotlin/String // tech.stit.mobile.feature.todos/AddTodoResult.Added.component1|component1(){}[0]
+        final fun copy(kotlin/String = ...): tech.stit.mobile.feature.todos/AddTodoResult.Added // tech.stit.mobile.feature.todos/AddTodoResult.Added.copy|copy(kotlin.String){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // tech.stit.mobile.feature.todos/AddTodoResult.Added.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // tech.stit.mobile.feature.todos/AddTodoResult.Added.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // tech.stit.mobile.feature.todos/AddTodoResult.Added.toString|toString(){}[0]
+    }
+
+    final class Failed : tech.stit.mobile.feature.todos/AddTodoResult { // tech.stit.mobile.feature.todos/AddTodoResult.Failed|null[0]
+        constructor <init>(tech.stit.mobile.core.i18n/MessageKey) // tech.stit.mobile.feature.todos/AddTodoResult.Failed.<init>|<init>(tech.stit.mobile.core.i18n.MessageKey){}[0]
+
+        final val error // tech.stit.mobile.feature.todos/AddTodoResult.Failed.error|{}error[0]
+            final fun <get-error>(): tech.stit.mobile.core.i18n/MessageKey // tech.stit.mobile.feature.todos/AddTodoResult.Failed.error.<get-error>|<get-error>(){}[0]
+
+        final fun component1(): tech.stit.mobile.core.i18n/MessageKey // tech.stit.mobile.feature.todos/AddTodoResult.Failed.component1|component1(){}[0]
+        final fun copy(tech.stit.mobile.core.i18n/MessageKey = ...): tech.stit.mobile.feature.todos/AddTodoResult.Failed // tech.stit.mobile.feature.todos/AddTodoResult.Failed.copy|copy(tech.stit.mobile.core.i18n.MessageKey){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // tech.stit.mobile.feature.todos/AddTodoResult.Failed.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // tech.stit.mobile.feature.todos/AddTodoResult.Failed.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // tech.stit.mobile.feature.todos/AddTodoResult.Failed.toString|toString(){}[0]
+    }
+
+    final object SignedOut : tech.stit.mobile.feature.todos/AddTodoResult { // tech.stit.mobile.feature.todos/AddTodoResult.SignedOut|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // tech.stit.mobile.feature.todos/AddTodoResult.SignedOut.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // tech.stit.mobile.feature.todos/AddTodoResult.SignedOut.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // tech.stit.mobile.feature.todos/AddTodoResult.SignedOut.toString|toString(){}[0]
+    }
+}
+
+sealed class tech.stit.mobile.feature.todos/CompleteTodoResult { // tech.stit.mobile.feature.todos/CompleteTodoResult|null[0]
+    final class AlreadyDone : tech.stit.mobile.feature.todos/CompleteTodoResult { // tech.stit.mobile.feature.todos/CompleteTodoResult.AlreadyDone|null[0]
+        constructor <init>(kotlin/String) // tech.stit.mobile.feature.todos/CompleteTodoResult.AlreadyDone.<init>|<init>(kotlin.String){}[0]
+
+        final val title // tech.stit.mobile.feature.todos/CompleteTodoResult.AlreadyDone.title|{}title[0]
+            final fun <get-title>(): kotlin/String // tech.stit.mobile.feature.todos/CompleteTodoResult.AlreadyDone.title.<get-title>|<get-title>(){}[0]
+
+        final fun component1(): kotlin/String // tech.stit.mobile.feature.todos/CompleteTodoResult.AlreadyDone.component1|component1(){}[0]
+        final fun copy(kotlin/String = ...): tech.stit.mobile.feature.todos/CompleteTodoResult.AlreadyDone // tech.stit.mobile.feature.todos/CompleteTodoResult.AlreadyDone.copy|copy(kotlin.String){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // tech.stit.mobile.feature.todos/CompleteTodoResult.AlreadyDone.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // tech.stit.mobile.feature.todos/CompleteTodoResult.AlreadyDone.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // tech.stit.mobile.feature.todos/CompleteTodoResult.AlreadyDone.toString|toString(){}[0]
+    }
+
+    final class Done : tech.stit.mobile.feature.todos/CompleteTodoResult { // tech.stit.mobile.feature.todos/CompleteTodoResult.Done|null[0]
+        constructor <init>(kotlin/String) // tech.stit.mobile.feature.todos/CompleteTodoResult.Done.<init>|<init>(kotlin.String){}[0]
+
+        final val title // tech.stit.mobile.feature.todos/CompleteTodoResult.Done.title|{}title[0]
+            final fun <get-title>(): kotlin/String // tech.stit.mobile.feature.todos/CompleteTodoResult.Done.title.<get-title>|<get-title>(){}[0]
+
+        final fun component1(): kotlin/String // tech.stit.mobile.feature.todos/CompleteTodoResult.Done.component1|component1(){}[0]
+        final fun copy(kotlin/String = ...): tech.stit.mobile.feature.todos/CompleteTodoResult.Done // tech.stit.mobile.feature.todos/CompleteTodoResult.Done.copy|copy(kotlin.String){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // tech.stit.mobile.feature.todos/CompleteTodoResult.Done.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // tech.stit.mobile.feature.todos/CompleteTodoResult.Done.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // tech.stit.mobile.feature.todos/CompleteTodoResult.Done.toString|toString(){}[0]
+    }
+
+    final class Failed : tech.stit.mobile.feature.todos/CompleteTodoResult { // tech.stit.mobile.feature.todos/CompleteTodoResult.Failed|null[0]
+        constructor <init>(tech.stit.mobile.core.i18n/MessageKey) // tech.stit.mobile.feature.todos/CompleteTodoResult.Failed.<init>|<init>(tech.stit.mobile.core.i18n.MessageKey){}[0]
+
+        final val error // tech.stit.mobile.feature.todos/CompleteTodoResult.Failed.error|{}error[0]
+            final fun <get-error>(): tech.stit.mobile.core.i18n/MessageKey // tech.stit.mobile.feature.todos/CompleteTodoResult.Failed.error.<get-error>|<get-error>(){}[0]
+
+        final fun component1(): tech.stit.mobile.core.i18n/MessageKey // tech.stit.mobile.feature.todos/CompleteTodoResult.Failed.component1|component1(){}[0]
+        final fun copy(tech.stit.mobile.core.i18n/MessageKey = ...): tech.stit.mobile.feature.todos/CompleteTodoResult.Failed // tech.stit.mobile.feature.todos/CompleteTodoResult.Failed.copy|copy(tech.stit.mobile.core.i18n.MessageKey){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // tech.stit.mobile.feature.todos/CompleteTodoResult.Failed.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // tech.stit.mobile.feature.todos/CompleteTodoResult.Failed.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // tech.stit.mobile.feature.todos/CompleteTodoResult.Failed.toString|toString(){}[0]
+    }
+
+    final object SignedOut : tech.stit.mobile.feature.todos/CompleteTodoResult { // tech.stit.mobile.feature.todos/CompleteTodoResult.SignedOut|null[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // tech.stit.mobile.feature.todos/CompleteTodoResult.SignedOut.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // tech.stit.mobile.feature.todos/CompleteTodoResult.SignedOut.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // tech.stit.mobile.feature.todos/CompleteTodoResult.SignedOut.toString|toString(){}[0]
     }
 }
 
@@ -2958,6 +3327,8 @@ final object tech.stit.mobile.core.lib/DefaultDispatchers : tech.stit.mobile.cor
 }
 
 final object tech.stit.mobile.core.lib/SettingsKeys { // tech.stit.mobile.core.lib/SettingsKeys|null[0]
+    final const val DEMO_ACTIVE // tech.stit.mobile.core.lib/SettingsKeys.DEMO_ACTIVE|{}DEMO_ACTIVE[0]
+        final fun <get-DEMO_ACTIVE>(): kotlin/String // tech.stit.mobile.core.lib/SettingsKeys.DEMO_ACTIVE.<get-DEMO_ACTIVE>|<get-DEMO_ACTIVE>(){}[0]
     final const val INSTALLATION_ID // tech.stit.mobile.core.lib/SettingsKeys.INSTALLATION_ID|{}INSTALLATION_ID[0]
         final fun <get-INSTALLATION_ID>(): kotlin/String // tech.stit.mobile.core.lib/SettingsKeys.INSTALLATION_ID.<get-INSTALLATION_ID>|<get-INSTALLATION_ID>(){}[0]
     final const val LANGUAGE // tech.stit.mobile.core.lib/SettingsKeys.LANGUAGE|{}LANGUAGE[0]

@@ -6,4 +6,6 @@ sealed class ShellIntent {
     data class OpenLink(val url: String) : ShellIntent()
 
     data object RouteConsumed : ShellIntent()
+
+    data object LeaveDemo : ShellIntent()
 }

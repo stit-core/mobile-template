@@ -4,3 +4,4 @@
 @_exported public import SettingsFeature
 @_exported public import Shell
 @_exported public import TodosFeature
+@_exported public import WidgetsFeature

@@ -10,10 +10,12 @@ import tech.stit.mobile.core.api.toMessageKey
 import tech.stit.mobile.core.lib.DispatcherProvider
 import tech.stit.mobile.core.lib.attempt
 import tech.stit.mobile.core.lib.presenterScope
+import tech.stit.mobile.core.mock.DemoGate
 import tech.stit.mobile.entity.session.SessionRepository
 
 class LoginPresenter internal constructor(
     private val sessions: SessionRepository,
+    private val demo: DemoGate?,
     dispatchers: DispatcherProvider,
 ) {
     private val scope = presenterScope(dispatchers)
@@ -22,13 +24,20 @@ class LoginPresenter internal constructor(
 
     fun dispatch(intent: LoginIntent) {
         when (intent) {
+            LoginIntent.Start -> start()
             is LoginIntent.EmailChanged -> _state.update { it.copy(email = intent.value, error = null) }
             is LoginIntent.PasswordChanged -> _state.update { it.copy(password = intent.value, error = null) }
             LoginIntent.Submit -> submit()
+            LoginIntent.EnterDemo -> enterDemo()
         }
     }
 
     fun close() = scope.cancel()
+
+    private fun start() {
+        val gate = demo ?: return
+        scope.launch { gate.available.collect { available -> _state.update { it.copy(demoAvailable = available) } } }
+    }
 
     private fun submit() {
         val current = _state.value
@@ -38,6 +47,17 @@ class LoginPresenter internal constructor(
             attempt { sessions.login(current.email.trim(), current.password) }
                 .onSuccess { _state.update { it.copy(submitting = false, password = "", signedIn = true) } }
                 .onFailure { e -> _state.update { it.copy(submitting = false, error = e.toMessageKey()) } }
+        }
+    }
+
+    // Форма блокируется на время переключения: демо-сессия поднимается тем же порядком, что и обычный вход.
+    private fun enterDemo() {
+        val gate = demo ?: return
+        if (!_state.value.demoAvailable || _state.value.submitting) return
+        _state.update { it.copy(submitting = true, error = null) }
+        scope.launch {
+            attempt { gate.enter() }
+            _state.update { it.copy(submitting = false, password = "") }
         }
     }
 }

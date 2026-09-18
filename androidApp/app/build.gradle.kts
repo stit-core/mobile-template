@@ -34,6 +34,7 @@ dependencies {
     implementation(projects.androidApp.feature.settings)
     implementation(projects.androidApp.feature.shell)
     implementation(projects.androidApp.feature.todos)
+    implementation(projects.androidApp.widget)
     implementation(projects.shared)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)
@@ -43,6 +44,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.navigation3)
     implementation(libs.androidx.navigation3.runtime)
     implementation(libs.androidx.navigation3.ui)
+    implementation(libs.kotlinx.coroutines.android)
 
     testImplementation(projects.androidApp.core.testing)
     testImplementation(libs.kotlinx.serialization.json)

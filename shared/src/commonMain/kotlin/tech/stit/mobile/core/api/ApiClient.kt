@@ -52,7 +52,7 @@ internal class ApiClient(
     appInfo: AppInfo,
     private val locale: LocaleProvider,
     engine: HttpClientEngine,
-    auth: ClientPlugin<Unit>,
+    private val auth: ClientPlugin<Unit>,
     private val telemetry: TelemetrySink,
     private val logger: Logger,
     private val json: Json = ApiJson,
@@ -62,7 +62,20 @@ internal class ApiClient(
     // Формат 07 §2.6: acme-mobile/1.4.2+1004002 (Android 16; Pixel 8; android).
     private val userAgent = "${appInfo.appId}/${appInfo.versionWithBuild} (${appInfo.osVersion}; ${appInfo.deviceModel}; $client)"
 
-    val http: HttpClient = HttpClient(engine) {
+    // По клиенту на движок: demo в рантайме уходит на MockTransport и возвращается на тот же живой движок платформы,
+    // поэтому клиенты переиспользуются, а не закрываются под уже летящими запросами.
+    private val clients = mutableMapOf<HttpClientEngine, HttpClient>()
+
+    var http: HttpClient = clientFor(engine)
+        private set
+
+    fun useEngine(engine: HttpClientEngine) {
+        http = clientFor(engine)
+    }
+
+    private fun clientFor(engine: HttpClientEngine): HttpClient = clients.getOrPut(engine) { newClient(engine) }
+
+    private fun newClient(engine: HttpClientEngine): HttpClient = HttpClient(engine) {
         expectSuccess = false
         install(ContentNegotiation) { json(json) }
         install(HttpTimeout) {

@@ -10,4 +10,6 @@ data class ShellState(
     val route: Route? = null,
     // Deep link, который ждёт входа (07 §5.3).
     val pendingRoute: Route? = null,
+    // Приложение идёт на фикстурах по флагу demo_login: баннер с выходом поверх контента.
+    val demo: Boolean = false,
 )

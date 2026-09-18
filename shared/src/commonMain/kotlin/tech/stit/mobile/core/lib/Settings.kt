@@ -17,4 +17,7 @@ object SettingsKeys {
     const val PUSH_REGISTRATION_PREFIX = "push.registration."
     const val INSTALLATION_ID = "app.installation_id"
     const val MOCK_SCENARIO = "app.mock.scenario"
+
+    // Единственный след demo-режима на реальной стороне: по нему старт после убитого в demo процесса чистит кеши.
+    const val DEMO_ACTIVE = "app.demo.active"
 }

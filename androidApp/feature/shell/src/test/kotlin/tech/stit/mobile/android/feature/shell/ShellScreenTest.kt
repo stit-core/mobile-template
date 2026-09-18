@@ -77,6 +77,24 @@ class ShellScreenTest {
     }
 
     @Test
+    fun `demo-баннер показывает выход из режима`() {
+        var exits = 0
+        composeRule.setContent {
+            StitTheme { Shell(shell = ShellState(auth = AuthState.SignedIn, demo = true), onExitDemo = { exits++ }) }
+        }
+        composeRule.onNodeWithTag(UiTestTags.DEMO_BANNER).assertIsDisplayed()
+        composeRule.onNodeWithText("Exit").performClick()
+        composeRule.waitForIdle()
+        assertEquals(1, exits)
+    }
+
+    @Test
+    fun `без demo-режима баннера нет`() {
+        composeRule.setContent { StitTheme { Shell(shell = ShellState(auth = AuthState.SignedIn)) } }
+        composeRule.onNodeWithTag(UiTestTags.DEMO_BANNER).assertDoesNotExist()
+    }
+
+    @Test
     fun `рекомендация обновиться скрывается, вкладка переключается`() {
         var dismissed = 0
         var selected: ShellTab? = null
@@ -110,6 +128,7 @@ internal fun Shell(
     onUnlock: () -> Unit = {},
     onRetryRequirements: () -> Unit = {},
     onDismissRecommendation: () -> Unit = {},
+    onExitDemo: () -> Unit = {},
 ) {
     ShellScreen(
         shell = shell,
@@ -121,5 +140,6 @@ internal fun Shell(
         onOpenStore = {},
         onRetryRequirements = onRetryRequirements,
         onDismissRecommendation = onDismissRecommendation,
+        onExitDemo = onExitDemo,
     ) { Text(text = "content") }
 }

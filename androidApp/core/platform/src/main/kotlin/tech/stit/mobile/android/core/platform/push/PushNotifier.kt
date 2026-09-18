@@ -10,6 +10,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import tech.stit.mobile.android.core.platform.R
+import tech.stit.mobile.android.core.platform.action.NotificationActionReceiver
 
 // Тап по уведомлению открывает deep link тем же intent-filter, что и ссылка из веба: роутер один (rule deep-links-and-push).
 object PushNotifier {
@@ -21,9 +22,18 @@ object PushNotifier {
             .setContentText(message.body)
             .setAutoCancel(true)
             .setContentIntent(message.deepLink?.let { deepLinkIntent(context, it) })
+            .apply { actions(context, message).forEach(::addAction) }
             .build()
         NotificationManagerCompat.from(context).notify(message.notificationId, notification)
     }
+
+    // Кнопки категории (system-actions канала notification:<slug>): у напоминания о задаче — «Готово».
+    private fun actions(context: Context, message: PushMessage): List<NotificationCompat.Action> =
+        if (message.channel == NotificationChannels.TODO_REMINDER && message.deepLink != null) {
+            listOf(NotificationActionReceiver.completeTodoButton(context, message.deepLink, message.notificationId))
+        } else {
+            emptyList()
+        }
 
     private fun deepLinkIntent(context: Context, deepLink: String): PendingIntent {
         val intent = Intent(Intent.ACTION_VIEW, deepLink.toUri()).setPackage(context.packageName)

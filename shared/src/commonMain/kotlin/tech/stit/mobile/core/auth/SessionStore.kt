@@ -79,6 +79,17 @@ class SessionStore internal constructor(
 
     suspend fun clear() = mutex.withLock { signOutLocked() }
 
+    // Смена владельца сессии (вход в demo и выход из него): access прежнего владельца забываем, кеши сущностей
+    // чистим, состояние читаем заново из хранилища нового владельца — токены сторон друг друга не видят.
+    internal suspend fun reset(): AuthState {
+        mutex.withLock {
+            access = null
+            _authState.value = AuthState.Unknown
+        }
+        onSignedOut()
+        return restore()
+    }
+
     // Для POST /api/auth/logout: сервер отзывает refresh до локальной очистки.
     suspend fun refreshToken(): String? = if (mode == AuthMode.Bearer) secureStore.read(REFRESH_TOKEN_KEY) else null
 
@@ -119,3 +130,7 @@ class SessionStore internal constructor(
         private val EXPIRY_LEEWAY = 30.seconds
     }
 }
+
+// Вне экранов сессию никто не восстанавливал: холодный процесс читает её сам, прежде чем решать про SignedOut.
+internal suspend fun SessionStore.signedIn(): Boolean =
+    (authState.value.takeIf { it != AuthState.Unknown } ?: restore()) == AuthState.SignedIn

@@ -4,6 +4,7 @@
     <string name="feature_auth_email">Email</string>
     <string name="feature_auth_password">Пароль</string>
     <string name="feature_auth_sign_in">Войти</string>
+    <string name="feature_auth_demo_sign_in">Посмотреть демо</string>
     <string name="feature_auth_open_settings">Настройки</string>
     <string name="feature_auth_sessions_title">Сессии</string>
     <string name="feature_auth_sessions_refresh">Обновить</string>

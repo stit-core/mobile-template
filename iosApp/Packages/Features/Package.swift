@@ -4,6 +4,10 @@ import PackageDescription
 // Новая фича = таргет через feature(_:) + строка в umbrella "Features"; .pbxproj не трогается.
 let featureNames = ["Shell", "AuthFeature", "ProfileFeature", "TodosFeature", "SettingsFeature"]
 
+// Вью виджетов системы стоят отдельно от экранов: они рисуют Codable-снимок из App Group и Shared не линкуют,
+// иначе Kotlin-фреймворк уехал бы внутрь расширения.
+let widgetsFeatureName = "WidgetsFeature"
+
 func feature(_ name: String) -> Target {
   .target(
     name: name,
@@ -24,6 +28,18 @@ func featureTests(_ name: String) -> Target {
   )
 }
 
+func widgetsFeature() -> Target {
+  .target(
+    name: widgetsFeatureName,
+    dependencies: [
+      .product(name: "DesignSystem", package: "Core"),
+      .product(name: "Widgets", package: "Core"),
+      .product(name: "AppFoundation", package: "Pure"),
+    ],
+    resources: [.process("Resources")]
+  )
+}
+
 let package = Package(
   name: "Features",
   defaultLocalization: "ru",
@@ -35,10 +51,23 @@ let package = Package(
     .package(path: "../TestSupport"),
   ],
   targets: featureNames.map(feature) + featureNames.map(featureTests) + [
-    .target(name: "Features", dependencies: featureNames.map { .target(name: $0) }),
+    widgetsFeature(),
+    // Тест вью виджета обходится без TestSupport: сценариев MockTransport у снимка нет, есть запись из App Group.
+    .testTarget(
+      name: "\(widgetsFeatureName)Tests",
+      dependencies: [.target(name: widgetsFeatureName), .product(name: "Widgets", package: "Core")]
+    ),
+    .target(
+      name: "Features",
+      dependencies: (featureNames + [widgetsFeatureName]).map { .target(name: $0) }
+    ),
     .testTarget(
       name: "SnapshotTests",
-      dependencies: ["Features", .product(name: "TestSupport", package: "TestSupport")]
+      dependencies: [
+        "Features",
+        .product(name: "Widgets", package: "Core"),
+        .product(name: "TestSupport", package: "TestSupport"),
+      ]
     ),
   ]
 )

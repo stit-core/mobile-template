@@ -5,6 +5,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import tech.stit.mobile.PlatformDeps
 import tech.stit.mobile.core.auth.SecureStore
+import tech.stit.mobile.core.background.BackgroundScheduler
+import tech.stit.mobile.core.background.BackgroundTask
 import tech.stit.mobile.core.i18n.LocaleProvider
 import tech.stit.mobile.core.lib.AppInfo
 import tech.stit.mobile.core.lib.ConnectivityMonitor
@@ -80,6 +82,19 @@ class FakeNotificationPermission(var granted: Boolean = false, var answer: Boole
     }
 }
 
+class FakeBackgroundScheduler : BackgroundScheduler {
+    val scheduled = mutableListOf<BackgroundTask>()
+    val cancelled = mutableListOf<String>()
+
+    override fun schedule(task: BackgroundTask) {
+        scheduled += task
+    }
+
+    override fun cancel(id: String) {
+        cancelled += id
+    }
+}
+
 class FakeTelemetry : TelemetrySink {
     val breadcrumbs = mutableListOf<String>()
     val userIds = mutableListOf<String?>()
@@ -114,6 +129,7 @@ class FakePlatformDeps(
     override val connectivity: FakeConnectivity = FakeConnectivity(),
     override val pushTransports: List<PushTransport> = listOf(FakePushTransport(PushProvider.Fcm, "fcm-token-1")),
     override val notificationPermission: FakeNotificationPermission = FakeNotificationPermission(),
+    override val background: FakeBackgroundScheduler = FakeBackgroundScheduler(),
     override val telemetry: FakeTelemetry = FakeTelemetry(),
     override val logSink: MemoryLogSink = MemoryLogSink(),
 ) : PlatformDeps {

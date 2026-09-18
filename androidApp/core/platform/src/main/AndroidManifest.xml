@@ -6,8 +6,34 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+    <!-- Только SCHEDULE_EXACT_ALARM: USE_EXACT_ALARM магазины отдают будильникам и календарям. С Android 14 разрешение
+         по умолчанию не выдано — планировщик проверяет canScheduleExactAlarms и уходит на неточный будильник. -->
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
 
     <application>
+        <receiver
+            android:name=".background.BackgroundAlarmReceiver"
+            android:exported="false" />
+        <receiver
+            android:name=".action.NotificationActionReceiver"
+            android:exported="false" />
+        <!-- Сервис и XML-описание генерирует компилятор AppFunctions по BaseStitAppFunctionService; реестр действий
+             читает система Android 16 и ниже сервис не поднимает. Bind-разрешение пускает к нему только систему. -->
+        <service
+            android:name=".action.StitAppFunctionService"
+            android:exported="true"
+            android:permission="android.permission.BIND_APP_FUNCTION_SERVICE"
+            tools:targetApi="36">
+            <property
+                android:name="android.app.appfunctions.schema"
+                android:value="app_functions_schema.xsd" />
+            <property
+                android:name="android.app.appfunctions.v2"
+                android:value="stit_app_functions.xml" />
+            <intent-filter>
+                <action android:name="android.app.appfunctions.AppFunctionService" />
+            </intent-filter>
+        </service>
         <service
             android:name=".push.StitFirebaseMessagingService"
             android:exported="false">

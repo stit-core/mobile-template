@@ -13,7 +13,7 @@ import tech.stit.mobile.core.lib.ConnectivityMonitor
 import tech.stit.mobile.core.lib.DispatcherProvider
 import tech.stit.mobile.core.lib.attempt
 import tech.stit.mobile.core.lib.presenterScope
-import tech.stit.mobile.core.mock.DemoMode
+import tech.stit.mobile.core.mock.DemoControl
 import tech.stit.mobile.core.observability.Logger
 import tech.stit.mobile.core.push.PushRegistrar
 import tech.stit.mobile.entity.todo.TodoRepository
@@ -21,7 +21,7 @@ import tech.stit.mobile.entity.user.UserRepository
 
 // Старт приложения одним сценарием: demo-режим → кеши → сессия; затем auth-gate, offline и pending route.
 class ShellPresenter internal constructor(
-    private val demo: DemoMode?,
+    private val demo: DemoControl,
     private val sessionStore: SessionStore,
     private val users: UserRepository,
     private val todos: TodoRepository,
@@ -40,16 +40,18 @@ class ShellPresenter internal constructor(
             ShellIntent.Start -> start()
             is ShellIntent.OpenLink -> openLink(intent.url)
             ShellIntent.RouteConsumed -> _state.update { it.copy(route = null) }
+            ShellIntent.LeaveDemo -> scope.launch { demo.leave() }
         }
     }
 
     fun close() = scope.cancel()
 
     private fun start() {
+        scope.launch { demo.active.collect { active -> _state.update { it.copy(demo = active) } } }
         scope.launch { connectivity.online.collect { online -> _state.update { it.copy(online = online) } } }
         scope.launch { sessionStore.authState.collect(::onAuthChanged) }
         scope.launch {
-            demo?.restore()
+            demo.restore()
             users.restore()
             todos.restore()
             sessionStore.restore()

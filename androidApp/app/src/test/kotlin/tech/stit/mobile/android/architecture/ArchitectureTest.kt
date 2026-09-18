@@ -2,7 +2,9 @@ package tech.stit.mobile.android.architecture
 
 import com.lemonappdev.konsist.api.Konsist
 import com.lemonappdev.konsist.api.ext.list.withAnnotationNamed
+import com.lemonappdev.konsist.api.ext.list.withNameEndingWith
 import com.lemonappdev.konsist.api.ext.list.withParentClassNamed
+import com.lemonappdev.konsist.api.ext.list.withParentInterfaceNamed
 import com.lemonappdev.konsist.api.verify.assertEmpty
 import com.lemonappdev.konsist.api.verify.assertTrue
 import org.junit.Test
@@ -63,6 +65,52 @@ class ArchitectureTest {
             .withAnnotationNamed("Composable")
             .filter { it.text.contains("hiltViewModel(") }
             .assertTrue { it.name.endsWith("Route") || it.path.contains("/androidApp/app/") }
+    }
+
+    @Test
+    fun `воркеры и приёмники системных событий живут в core-platform или в модуле виджетов`() {
+        androidApp.classes()
+            .filter { it.name.endsWith("Worker") || it.name.endsWith("Receiver") }
+            .filterNot { it.path.contains("/androidApp/core/platform/") || it.path.contains("/androidApp/widget/") }
+            .assertEmpty()
+    }
+
+    @Test
+    fun `модуль виджетов не импортирует feature-модули`() {
+        androidApp.files
+            .filter { it.path.contains("/androidApp/widget/") }
+            .flatMap { it.imports }
+            .filter { it.name.startsWith(FEATURE_PACKAGE) }
+            .assertEmpty()
+    }
+
+    @Test
+    fun `виджеты системы — классы Widget в модуле виджетов`() {
+        androidApp.classes()
+            .withParentClassNamed("GlanceAppWidget")
+            .filterNot { it.name.endsWith("Widget") && it.path.contains("/androidApp/widget/") }
+            .assertEmpty()
+    }
+
+    @Test
+    fun `обработчики каналов системных действий живут в core-platform`() {
+        androidApp.classes()
+            .withNameEndingWith("ActionHandler")
+            .filterNot { it.path.contains("/androidApp/core/platform/") }
+            .assertEmpty()
+    }
+
+    @Test
+    fun `кнопки поверхностей вне экранов зовут обработчик, а не пишут свои правила`() {
+        // Колбэк кнопки виджета — только в модуле виджетов, объявление AppFunctions — только в core-platform.
+        androidApp.classes()
+            .withParentInterfaceNamed("ActionCallback")
+            .filterNot { it.name.endsWith("WidgetAction") && it.path.contains("/androidApp/widget/") }
+            .assertEmpty()
+        androidApp.classes()
+            .withParentClassNamed("AppFunctionService")
+            .filterNot { it.path.contains("/androidApp/core/platform/action/") }
+            .assertEmpty()
     }
 
     @Test

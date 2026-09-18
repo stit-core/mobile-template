@@ -3,6 +3,7 @@ package tech.stit.mobile
 import com.lemonappdev.konsist.api.Konsist
 import com.lemonappdev.konsist.api.declaration.KoClassDeclaration
 import com.lemonappdev.konsist.api.ext.list.withNameEndingWith
+import com.lemonappdev.konsist.api.ext.list.withParentInterfaceNamed
 import com.lemonappdev.konsist.api.verify.assertEmpty
 import com.lemonappdev.konsist.api.verify.assertTrue
 import kotlin.test.Test
@@ -59,6 +60,85 @@ class ArchitectureTest {
                     presenter.hasPropertyWithName("state") &&
                     presenter.hasFunctionWithName("dispatch")
             }
+    }
+
+    @Test
+    fun `раннеры фоновых задач — final классы Task в feature`() {
+        common.classes()
+            .withParentInterfaceNamed("BackgroundRunner")
+            .filterNot { runner ->
+                runner.name.endsWith("Task") &&
+                    "/feature/" in runner.path &&
+                    !runner.hasOpenModifier &&
+                    !runner.hasAbstractModifier &&
+                    runner.typeParameters.isEmpty() &&
+                    runner.hasFunctionWithName("run")
+            }
+            .assertEmpty()
+    }
+
+    @Test
+    fun `системные действия — final классы Action в feature с run и internal-конструктором`() {
+        common.classes()
+            .withNameEndingWith("Action")
+            .filterNot { action ->
+                "/feature/" in action.path &&
+                    !action.hasOpenModifier &&
+                    !action.hasAbstractModifier &&
+                    action.typeParameters.isEmpty() &&
+                    action.hasFunctionWithName("run") &&
+                    action.primaryConstructor?.hasInternalModifier == true
+            }
+            .assertEmpty()
+    }
+
+    @Test
+    fun `результат действия — sealed с вариантом SignedOut, сессия наружу не отдаётся`() {
+        common.classes()
+            .withNameEndingWith("Result")
+            .filter { "/feature/" in it.path }
+            .assertTrue { result ->
+                result.hasSealedModifier && result.hasObjectWithName("SignedOut", includeNested = true)
+            }
+    }
+
+    @Test
+    fun `контракт фона — только sealed, data и enum`() {
+        common.classes()
+            .filter { "/core/background/" in it.path }
+            .filterNot { it.hasSealedModifier || it.hasDataModifier || it.hasEnumModifier }
+            .assertEmpty()
+    }
+
+    @Test
+    fun `словарь состояний виджета — enum в core-widget`() {
+        common.classes()
+            .filter { "/core/widget/" in it.path }
+            .filterNot { it.hasEnumModifier }
+            .assertEmpty()
+    }
+
+    @Test
+    fun `снимок виджета — data class в feature, без generic'ов`() {
+        common.classes()
+            .withNameEndingWith("WidgetSnapshot")
+            .filterNot { snapshot -> snapshot.hasDataModifier && "/feature/" in snapshot.path && snapshot.typeParameters.isEmpty() }
+            .assertEmpty()
+    }
+
+    @Test
+    fun `провайдеры виджетов — final классы в feature со snapshot и publish`() {
+        common.classes()
+            .withNameEndingWith("WidgetProvider")
+            .filterNot { provider ->
+                "/feature/" in provider.path &&
+                    !provider.hasOpenModifier &&
+                    !provider.hasAbstractModifier &&
+                    provider.typeParameters.isEmpty() &&
+                    provider.hasFunctionWithName("snapshot") &&
+                    provider.hasFunctionWithName("publish")
+            }
+            .assertEmpty()
     }
 
     @Test

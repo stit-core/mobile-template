@@ -1,0 +1,54 @@
+{
+  "sourceLanguage": "ru",
+  "strings": {
+    "action.complete-todo.button": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Готово"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Done"
+          }
+        }
+      }
+    },
+    "push.todo.reminder.body": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не забудьте: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Don't forget: %@"
+          }
+        }
+      }
+    },
+    "push.todo.reminder.title": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Напоминание о задаче"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Task reminder"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

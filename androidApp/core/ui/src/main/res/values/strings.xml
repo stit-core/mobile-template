@@ -12,6 +12,8 @@
     <string name="core_ui_retry">Retry</string>
     <string name="core_ui_loading">Loading</string>
     <string name="core_ui_offline_banner">No connection — read-only mode</string>
+    <string name="core_ui_demo_banner">Demo mode — sample data</string>
+    <string name="core_ui_demo_exit">Exit</string>
     <string name="core_ui_update_required_title">Update required</string>
     <string name="core_ui_update_required_body">This version is no longer supported. Install the latest version to continue.</string>
     <string name="core_ui_update_required_action">Update</string>

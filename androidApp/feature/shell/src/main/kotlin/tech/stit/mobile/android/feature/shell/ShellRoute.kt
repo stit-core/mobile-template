@@ -59,6 +59,7 @@ fun ShellRoute(
         onOpenStore = uriHandler::openUri,
         onRetryRequirements = { requirementsViewModel.dispatch(RequirementsIntent.Retry) },
         onDismissRecommendation = { requirementsViewModel.dispatch(RequirementsIntent.DismissRecommendation) },
+        onExitDemo = { shellViewModel.dispatch(ShellIntent.LeaveDemo) },
         modifier = modifier,
         content = content,
     )

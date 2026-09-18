@@ -64,6 +64,19 @@ fun LoginScreen(state: LoginState, onIntent: (LoginIntent) -> Unit, onOpenSettin
             enabled = state.canSubmit,
             loading = state.submitting,
         )
+        // Вход для ревьюера магазина: показывается только когда бэкенд разрешил флагом demo_login (05 L-17).
+        if (state.demoAvailable) {
+            TextButton(
+                onClick = { onIntent(LoginIntent.EnterDemo) },
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(top = StitTheme.spacing.sm)
+                    .testTag(AuthTestTags.LOGIN_DEMO),
+                enabled = !state.submitting,
+            ) {
+                Text(text = stringResource(R.string.feature_auth_demo_sign_in))
+            }
+        }
         TextButton(onClick = onOpenSettings, modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = StitTheme.spacing.sm)) {
             Text(text = stringResource(R.string.feature_auth_open_settings))
         }

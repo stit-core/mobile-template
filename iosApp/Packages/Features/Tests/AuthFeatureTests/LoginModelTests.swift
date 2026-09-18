@@ -30,6 +30,18 @@ struct LoginModelTests {
     #expect(model.state.error == nil)
   }
 
+  // Вход в demo открывает флаг requirements.demo_login обычной сборки; сама demo-схема его не показывает.
+  @Test("в demo-схеме вход в demo не предлагается и ничего не переключает")
+  func demoEntryHiddenInTheDemoBuild() async throws {
+    let container = try await Scenario.container(.populated)
+    let model = LoginModel(presenter: container.loginPresenter())
+    model.start()
+    #expect(!model.state.demoAvailable)
+    model.enterDemo()
+    try await waitUntil("idle") { !model.state.submitting }
+    #expect(!model.state.demoAvailable)
+  }
+
   @Test("сценарий error даёт MessageKey ошибки")
   func errorScenarioShowsError() async throws {
     let container = try await Scenario.container(.error)

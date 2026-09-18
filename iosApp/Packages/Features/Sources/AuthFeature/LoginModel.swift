@@ -5,7 +5,9 @@ public final class LoginModel: PresenterModel<LoginState, LoginIntent> {
     super.init(stateFlow: presenter.state, dispatch: presenter.dispatch(intent:), close: presenter.close)
   }
 
+  public func start() { dispatch(LoginIntentStart.shared) }
   public func emailChanged(_ value: String) { dispatch(LoginIntentEmailChanged(value: value)) }
   public func passwordChanged(_ value: String) { dispatch(LoginIntentPasswordChanged(value: value)) }
   public func submit() { dispatch(LoginIntentSubmit.shared) }
+  public func enterDemo() { dispatch(LoginIntentEnterDemo.shared) }
 }

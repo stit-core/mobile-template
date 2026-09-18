@@ -52,6 +52,20 @@
     },
     {
       "target": {
+        "containerPath": "container:Packages/Core",
+        "identifier": "SystemActionsTests",
+        "name": "SystemActionsTests"
+      }
+    },
+    {
+      "target": {
+        "containerPath": "container:Packages/Core",
+        "identifier": "WidgetsTests",
+        "name": "WidgetsTests"
+      }
+    },
+    {
+      "target": {
         "containerPath": "container:Packages/Features",
         "identifier": "ShellTests",
         "name": "ShellTests"
@@ -83,6 +97,13 @@
         "containerPath": "container:Packages/Features",
         "identifier": "SettingsFeatureTests",
         "name": "SettingsFeatureTests"
+      }
+    },
+    {
+      "target": {
+        "containerPath": "container:Packages/Features",
+        "identifier": "WidgetsFeatureTests",
+        "name": "WidgetsFeatureTests"
       }
     }
   ],

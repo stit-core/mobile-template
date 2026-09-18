@@ -9,4 +9,5 @@ public final class ShellModel: PresenterModel<ShellState, ShellIntent> {
   public func start() { dispatch(ShellIntentStart.shared) }
   public func open(url: URL) { dispatch(ShellIntentOpenLink(url: url.absoluteString)) }
   public func routeConsumed() { dispatch(ShellIntentRouteConsumed.shared) }
+  public func leaveDemo() { dispatch(ShellIntentLeaveDemo.shared) }
 }

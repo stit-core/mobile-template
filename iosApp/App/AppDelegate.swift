@@ -3,7 +3,7 @@ import SharedBridge
 import UIKit
 import UserNotifications
 
-// APNs-токен и тап по уведомлению приходят только через делегат: остальное живёт в SwiftUI-сцене.
+// APNs-токен, тап по уведомлению и регистрация фоновых задач приходят только через делегат: остальное живёт в SwiftUI-сцене.
 final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {
   let environment = AppEnvironment.live()
   private let deduplicator = NotificationDeduplicator()
@@ -14,6 +14,8 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
   ) -> Bool {
     UNUserNotificationCenter.current().delegate = self
     NotificationCategories.register()
+    // BGTaskScheduler принимает регистрацию только до конца запуска — позже система задачу уже не поднимет.
+    environment.registerBackgroundTasks()
     return true
   }
 
@@ -36,9 +38,15 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
   }
 
   func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) async {
-    guard let payload = PushPayload(userInfo: response.notification.request.content.userInfo),
-      let link = payload.deepLink
-    else { return }
+    let request = response.notification.request
+    let payload = PushPayload(userInfo: request.content.userInfo)
+    let handled = await NotificationActions.handle(
+      action: response.actionIdentifier,
+      payload: payload,
+      notificationId: request.identifier,
+      container: environment.container
+    )
+    guard !handled, let link = payload?.deepLink else { return }
     environment.shell.open(url: link)
   }
 }

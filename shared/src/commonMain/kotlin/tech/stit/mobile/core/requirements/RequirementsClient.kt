@@ -46,6 +46,14 @@ class RequirementsClient internal constructor(
         cache.read()?.let { _current.value = it }
     }
 
+    // Смена режима (demo ↔ обычный): снимок прежнего режима нельзя ни показывать, ни оставлять в кеше —
+    // иначе флаги и правовые ссылки фикстур пережили бы выход из demo.
+    internal suspend fun reset() {
+        cache.clear()
+        fetchedAt = null
+        _current.value = AppRequirements.Default
+    }
+
     private suspend fun fallback(e: ApiError): AppRequirements {
         logger.warn("requirements недоступны, берём кеш", e)
         return cache.read() ?: AppRequirements.Default

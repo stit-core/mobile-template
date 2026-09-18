@@ -41,7 +41,18 @@ public struct LoginView: View {
       .buttonStyle(PrimaryButtonStyle())
       .disabled(!state.canSubmit || state.submitting)
       .accessibilityIdentifier("login.submit")
+      // Вход для ревьюера магазина: показывается, только когда бэкенд разрешил флагом demo_login.
+      if state.demoAvailable {
+        Button {
+          model.enterDemo()
+        } label: {
+          Text("auth.login.demo", bundle: .module)
+        }
+        .disabled(state.submitting)
+        .accessibilityIdentifier("login.demo")
+      }
     }
+    .task { model.start() }
     .textFieldStyle(.roundedBorder)
     .padding(theme.metrics.spaceLg)
     .frame(maxWidth: .infinity, maxHeight: .infinity)

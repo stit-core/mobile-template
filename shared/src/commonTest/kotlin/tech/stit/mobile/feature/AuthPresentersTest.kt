@@ -10,6 +10,7 @@ import tech.stit.mobile.feature.auth.DeleteAccountIntent
 import tech.stit.mobile.feature.auth.LoginIntent
 import tech.stit.mobile.feature.auth.LoginState
 import tech.stit.mobile.feature.auth.SessionsIntent
+import tech.stit.mobile.testing.prodContainer
 import tech.stit.mobile.testing.signIn
 import tech.stit.mobile.testing.testContainer
 import kotlin.test.Test
@@ -53,6 +54,39 @@ class AuthPresentersTest {
         assertFalse(state.signedIn)
         presenter.dispatch(LoginIntent.EmailChanged("x@y"))
         assertNull(presenter.state.value.error)
+        presenter.close()
+    }
+
+    // Обычная сборка: вход в demo на экране логина открывает только флаг requirements.demo_login.
+    @Test
+    fun loginShowsDemoEntryOnlyWithTheFlag() = runTest {
+        val container = prodContainer()
+        val presenter = container.loginPresenter()
+        presenter.dispatch(LoginIntent.Start)
+        advanceUntilIdle()
+        assertFalse(presenter.state.value.demoAvailable)
+
+        container.requirements.fetch()
+        advanceUntilIdle()
+        assertTrue(presenter.state.value.demoAvailable)
+
+        presenter.dispatch(LoginIntent.EnterDemo)
+        advanceUntilIdle()
+        assertTrue(requireNotNull(container.demoGate).active.value)
+        assertEquals(AuthState.SignedIn, container.sessionStore.authState.value)
+        assertFalse(presenter.state.value.submitting)
+        presenter.close()
+    }
+
+    @Test
+    fun loginHidesDemoEntryInTheDemoBuild() = runTest {
+        val presenter = testContainer().loginPresenter()
+        presenter.dispatch(LoginIntent.Start)
+        advanceUntilIdle()
+        assertFalse(presenter.state.value.demoAvailable)
+        presenter.dispatch(LoginIntent.EnterDemo)
+        advanceUntilIdle()
+        assertFalse(presenter.state.value.submitting)
         presenter.close()
     }
 

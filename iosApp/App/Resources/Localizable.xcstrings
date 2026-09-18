@@ -1,18 +1,34 @@
 {
   "sourceLanguage": "ru",
   "strings": {
-    "shell.tab.todos": {
+    "action.add-todo.short_title": {
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Задачи"
+            "value": "Задача"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Todos"
+            "value": "Task"
+          }
+        }
+      }
+    },
+    "Добавь задачу в ${applicationName}": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Добавь задачу в ${applicationName}"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add a task to ${applicationName}"
           }
         }
       }
@@ -45,6 +61,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "Settings"
+          }
+        }
+      }
+    },
+    "shell.tab.todos": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Задачи"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Todos"
           }
         }
       }

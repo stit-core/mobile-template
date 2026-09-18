@@ -2,8 +2,17 @@
 <resources>
     <string name="core_platform_channel_general_name">Общие</string>
     <string name="core_platform_channel_general_description">Обновления по задачам и аккаунту</string>
+    <string name="core_platform_channel_todo_reminder_name">Напоминания о задачах</string>
+    <string name="core_platform_channel_todo_reminder_description">Напоминания в выбранное вами время</string>
     <string name="core_platform_push_todo_reminder_title">Напоминание о задаче</string>
     <string name="core_platform_push_todo_reminder_body">Не забудьте: %1$s</string>
+    <string name="core_platform_action_complete_todo_done">Готово</string>
+    <string name="core_platform_action_complete_todo_title">Задача не отмечена</string>
+    <string name="core_platform_action_complete_todo_signed_out">Войдите, чтобы отмечать задачи.</string>
+    <string name="core_platform_action_complete_todo_failed">Не удалось отметить задачу. Откройте приложение и попробуйте снова.</string>
+    <string name="core_platform_action_add_todo_added">Добавил: %1$s</string>
+    <string name="core_platform_action_add_todo_signed_out">Войдите в приложение, чтобы добавлять задачи.</string>
+    <string name="core_platform_action_add_todo_failed">Не удалось добавить задачу. Попробуйте позже.</string>
     <string name="core_platform_biometric_title">Разблокировать</string>
     <string name="core_platform_biometric_subtitle">Подтвердите, что это вы, чтобы открыть приложение</string>
 </resources>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_today_todos_name">Ближайшие задачи</string>
+    <string name="widget_today_todos_title">Ближайшие задачи</string>
+    <string name="widget_today_todos_placeholder">Загружаем задачи…</string>
+    <string name="widget_today_todos_empty">Задач нет</string>
+    <string name="widget_today_todos_signed_out">Войдите, чтобы увидеть задачи</string>
+    <string name="widget_today_todos_stale">Данные могли устареть</string>
+    <string name="widget_today_todos_status_done">Сделано</string>
+    <string name="widget_today_todos_complete">Отметить</string>
+    <string name="widget_today_todos_updated">Обновлена %1$s</string>
+</resources>

@@ -47,7 +47,13 @@
 	</dict>
 	<key>UIBackgroundModes</key>
 	<array>
+		<string>fetch</string>
+		<string>processing</string>
 		<string>remote-notification</string>
+	</array>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>$(BUNDLE_ID).refresh-todos</string>
 	</array>
 	<key>UILaunchScreen</key>
 	<dict/>
@@ -80,5 +86,7 @@
 	<string>$(SENTRY_DSN)</string>
 	<key>PUSH_PROVIDERS</key>
 	<string>$(PUSH_PROVIDERS)</string>
+	<key>APP_GROUP_ID</key>
+	<string>$(APP_GROUP_ID)</string>
 </dict>
 </plist>

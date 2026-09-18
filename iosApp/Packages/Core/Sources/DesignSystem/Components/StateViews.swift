@@ -83,6 +83,37 @@ public struct ErrorText: View {
   }
 }
 
+// Приложение идёт на фикстурах по флагу demo_login: пользователь видит, что данные ненастоящие, и выходит
+// одним нажатием — иначе demo-режим не отличить от сломанного бэкенда.
+public struct DemoBanner: View {
+  @Environment(\.theme) private var theme
+  private let onExit: () -> Void
+
+  public init(onExit: @escaping () -> Void) {
+    self.onExit = onExit
+  }
+
+  public var body: some View {
+    HStack {
+      Label {
+        Text("common.demo", bundle: .module)
+      } icon: {
+        Image(systemName: "theatermasks")
+      }
+      Spacer()
+      Button(action: onExit) { Text("common.demo.exit", bundle: .module) }
+        .accessibilityIdentifier("banner.demo.exit")
+    }
+    .font(theme.typography.bodySm)
+    .foregroundStyle(theme.colors.appFg)
+    .padding(.horizontal, theme.metrics.spaceMd)
+    .padding(.vertical, theme.metrics.spaceSm)
+    .frame(maxWidth: .infinity)
+    .background(theme.colors.warning.opacity(0.35))
+    .accessibilityIdentifier("banner.demo")
+  }
+}
+
 public struct OfflineBanner: View {
   @Environment(\.theme) private var theme
 

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_today_todos_name">Nearest tasks</string>
+    <string name="widget_today_todos_title">Nearest tasks</string>
+    <string name="widget_today_todos_placeholder">Loading tasks…</string>
+    <string name="widget_today_todos_empty">No tasks</string>
+    <string name="widget_today_todos_signed_out">Sign in to see tasks</string>
+    <string name="widget_today_todos_stale">Data may be outdated</string>
+    <string name="widget_today_todos_status_done">Done</string>
+    <string name="widget_today_todos_complete">Mark done</string>
+    <string name="widget_today_todos_updated">Updated %1$s</string>
+</resources>

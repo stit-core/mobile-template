@@ -15,3 +15,11 @@ extension DemoPanelState: @retroactive @unchecked Sendable {}
 
 // Kotlin-holder вызывается из очереди NWPathMonitor: объект потокобезопасен (new memory model K/N).
 extension ConnectivityState: @retroactive @unchecked Sendable {}
+
+// Носители вне экранов система поднимает своими потоками (BGTaskScheduler, делегат уведомлений, интенты),
+// поэтому контейнер, описание задачи и её результат пересекают акторы; под новой моделью памяти K/N это безопасно.
+extension SharedContainer: @retroactive @unchecked Sendable {}
+extension BackgroundTask: @retroactive @unchecked Sendable {}
+extension BackgroundResult: @retroactive @unchecked Sendable {}
+extension CompleteTodoResult: @retroactive @unchecked Sendable {}
+extension AddTodoResult: @retroactive @unchecked Sendable {}

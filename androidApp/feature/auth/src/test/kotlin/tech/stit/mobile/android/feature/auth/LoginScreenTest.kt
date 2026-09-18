@@ -48,6 +48,21 @@ class LoginScreenTest {
     }
 
     @Test
+    fun `вход в demo виден только при разрешающем флаге`() {
+        composeRule.setContent { StitTheme { LoginScreen(state = LoginState(), onIntent = intents::add, onOpenSettings = {}) } }
+        composeRule.onNodeWithTag(AuthTestTags.LOGIN_DEMO).assertDoesNotExist()
+    }
+
+    @Test
+    fun `нажатие demo уходит интентом EnterDemo`() {
+        val state = LoginState(demoAvailable = true)
+        composeRule.setContent { StitTheme { LoginScreen(state = state, onIntent = intents::add, onOpenSettings = {}) } }
+        composeRule.onNodeWithTag(AuthTestTags.LOGIN_DEMO).assertIsEnabled().performClick()
+        composeRule.waitForIdle()
+        assertEquals(listOf<LoginIntent>(LoginIntent.EnterDemo), intents)
+    }
+
+    @Test
     fun `во время отправки поля и кнопка выключены, настройки открываются`() {
         var settings = 0
         val state = LoginState(email = "demo@example.com", password = "secret", submitting = true)

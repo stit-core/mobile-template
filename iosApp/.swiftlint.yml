@@ -6,6 +6,7 @@ included:
   - Packages
   - Tools
   - UITests
+  - Widgets
 excluded:
   - "**/.build"
   - "**/__Snapshots__"
@@ -96,8 +97,8 @@ custom_rules:
 
   no_feature_import:
     name: "фича не импортирует другую фичу"
-    regex: '^\s*(@[\w()]+\s+)*import\s+(Shell|AuthFeature|ProfileFeature|TodosFeature|SettingsFeature|Features)\b'
-    included: 'Packages/Features/Sources/(Shell|AuthFeature|ProfileFeature|TodosFeature|SettingsFeature)/.*'
+    regex: '^\s*(@[\w()]+\s+)*import\s+(Shell|AuthFeature|ProfileFeature|TodosFeature|SettingsFeature|WidgetsFeature|Features)\b'
+    included: 'Packages/Features/Sources/(Shell|AuthFeature|ProfileFeature|TodosFeature|SettingsFeature|WidgetsFeature)/.*'
     message: "Features не зависят друг от друга: общее — в Core или композиция в App"
     severity: error
 

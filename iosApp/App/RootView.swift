@@ -11,13 +11,19 @@ struct RootView: View {
 
   var body: some View {
     ZStack {
-      switch env.shell.state.auth {
-      case .unknown:
-        LoadingStateView()
-      case .signedOut:
-        Screen(env.loginModel) { LoginView(model: $0) }
-      default:
-        tabs()
+      VStack(spacing: 0) {
+        // Баннер живёт над содержимым оболочки, а не внутри экрана: demo-режим переживает любую навигацию.
+        if env.shell.state.demo {
+          DemoBanner(onExit: env.shell.leaveDemo)
+        }
+        switch env.shell.state.auth {
+        case .unknown:
+          LoadingStateView()
+        case .signedOut:
+          Screen(env.loginModel) { LoginView(model: $0) }
+        default:
+          tabs()
+        }
       }
       RequirementsOverlayView(model: env.requirements)
     }
@@ -30,6 +36,8 @@ struct RootView: View {
     }
     .onChange(of: scenePhase) { _, phase in
       if phase == .active { env.requirements.foreground() }
+      // Уход с экрана — момент, когда снимок виджета обязан догнать данные: сессия уже известна, а виджет вот-вот покажут.
+      if phase == .background { env.publishWidgets() }
     }
   }
 

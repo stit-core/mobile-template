@@ -2,8 +2,10 @@ package tech.stit.mobile.android.core.platform
 
 import android.content.Context
 import tech.stit.mobile.PlatformDeps
+import tech.stit.mobile.android.core.platform.background.AndroidBackgroundScheduler
 import tech.stit.mobile.core.auth.KeystoreSecureStore
 import tech.stit.mobile.core.auth.SecureStore
+import tech.stit.mobile.core.background.BackgroundScheduler
 import tech.stit.mobile.core.i18n.LocaleProvider
 import tech.stit.mobile.core.lib.AppInfo
 import tech.stit.mobile.core.lib.ConnectivityMonitor
@@ -26,6 +28,7 @@ class AndroidPlatformDeps(
     override val secureStore: SecureStore = KeystoreSecureStore(context)
     override val settings: Settings = DataStoreSettings(context)
     override val filesDir: String = context.filesDir.absolutePath
+    override val background: BackgroundScheduler = AndroidBackgroundScheduler(context)
     override val locale: LocaleProvider = AndroidLocaleProvider
     override val connectivity: ConnectivityMonitor = AndroidConnectivityMonitor(context)
 }

@@ -48,5 +48,6 @@ private fun Shell(shell: ShellState, requirements: RequirementsState = Requireme
         onOpenStore = {},
         onRetryRequirements = {},
         onDismissRecommendation = {},
+        onExitDemo = {},
     ) { Text(text = "content") }
 }

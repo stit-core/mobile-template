@@ -2,8 +2,17 @@
 <resources>
     <string name="core_platform_channel_general_name">General</string>
     <string name="core_platform_channel_general_description">Updates about your tasks and account</string>
+    <string name="core_platform_channel_todo_reminder_name">Task reminders</string>
+    <string name="core_platform_channel_todo_reminder_description">Reminders at the time you chose</string>
     <string name="core_platform_push_todo_reminder_title">Task reminder</string>
     <string name="core_platform_push_todo_reminder_body">Don\'t forget: %1$s</string>
+    <string name="core_platform_action_complete_todo_done">Done</string>
+    <string name="core_platform_action_complete_todo_title">Task is still open</string>
+    <string name="core_platform_action_complete_todo_signed_out">Sign in to mark tasks as done.</string>
+    <string name="core_platform_action_complete_todo_failed">Could not mark the task. Open the app and try again.</string>
+    <string name="core_platform_action_add_todo_added">Added: %1$s</string>
+    <string name="core_platform_action_add_todo_signed_out">Sign in to the app to add tasks.</string>
+    <string name="core_platform_action_add_todo_failed">Could not add the task. Try again later.</string>
     <string name="core_platform_biometric_title">Unlock</string>
     <string name="core_platform_biometric_subtitle">Confirm it is you to open the app</string>
 </resources>

@@ -13,6 +13,10 @@ class LoginViewModel @Inject constructor(container: SharedContainer) : ViewModel
     private val presenter = container.loginPresenter()
     val state: StateFlow<LoginState> = presenter.state
 
+    init {
+        presenter.dispatch(LoginIntent.Start)
+    }
+
     fun dispatch(intent: LoginIntent) = presenter.dispatch(intent)
 
     override fun onCleared() = presenter.close()

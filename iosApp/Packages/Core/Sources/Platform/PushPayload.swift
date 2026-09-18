@@ -1,9 +1,10 @@
+import AppFoundation
 public import Foundation
 import Synchronization
 import UserNotifications
 
 // Payload data-first (docs/stack/push.md): текст строит клиент, deep_link — https-URL из таблицы deep-links.
-public struct PushPayload: Equatable, Sendable {
+nonisolated public struct PushPayload: Equatable, Sendable {
   public let notificationId: String?
   public let category: String?
   public let deepLink: URL?
@@ -16,13 +17,26 @@ public struct PushPayload: Equatable, Sendable {
   }
 }
 
-public enum NotificationCategories {
+nonisolated public enum NotificationCategories {
   public static let general = "GENERAL"
+  public static let todoReminder = "TODO_REMINDER"
+  // Канал notification:complete-todo: кнопку рисует категория, ответ разбирает делегат уведомлений приложения.
+  public static let completeTodo = "COMPLETE_TODO"
 
   public static func register(in center: UNUserNotificationCenter = .current()) {
     center.setNotificationCategories([
-      UNNotificationCategory(identifier: general, actions: [], intentIdentifiers: [])
+      UNNotificationCategory(identifier: general, actions: [], intentIdentifiers: []),
+      UNNotificationCategory(identifier: todoReminder, actions: [completeTodoButton()], intentIdentifiers: []),
     ])
+  }
+
+  // Действие меняет данные пользователя, поэтому с заблокированного экрана система сначала просит разблокировку.
+  private static func completeTodoButton() -> UNNotificationAction {
+    UNNotificationAction(
+      identifier: completeTodo,
+      title: AppStrings.text("action.complete-todo.button", bundle: .module),
+      options: [.authenticationRequired]
+    )
   }
 }
 
