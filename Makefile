@@ -2,7 +2,7 @@
         check-fast run-android build check check-full kmp-check api-dump api-check gen gen-check mock-check \
         check-mac mac-doctor mac-build mac-test snapshot-record run-ios release-preflight release-android \
         setup doctor clean status map deps search gate-selftest validate-plan links-check kin-diff \
-        swift-lint swift-test gen-tokens tokens-check i18n-check deeplinks-check e2e
+        swift-lint swift-test gen-tokens tokens-check i18n-check deeplinks-check capability-check e2e
 
 # Единый словарь для агента: `make <verb>`. Concise-by-default (scripts/tools/*): одна строка OK:/FAIL:
 # на шаг, полный лог — build/gate-logs/<шаг>.log. FORMAT=detailed — длиннее выжимка лога при падении,
@@ -15,7 +15,7 @@ help: ## сгруппированный список команд
 
 GRADLE_STEP = bash scripts/tools/gradle-step.sh
 SWIFT_STEP = bash scripts/tools/swift-step.sh
-IOS_SOURCES = iosApp/App iosApp/Packages iosApp/Tools iosApp/UITests
+IOS_SOURCES = iosApp/App iosApp/Widgets iosApp/Packages iosApp/Tools iosApp/UITests
 
 ##@ LOOP
 fmt: ## Автоформат Kotlin (Spotless/ktlint, порядок dependencies) + Swift (swift-format) — единственные автофиксеры
@@ -103,6 +103,9 @@ i18n-check: ## Ключи values/ == values-ru/ по модулям; error.<code
 
 deeplinks-check: ## Манифест ↔ config/env (плейсхолдеры хоста/схемы) ↔ тесты DeepLinkParser ↔ docs/stack/deep-links.md
 	@bash scripts/tools/deeplinks-check.sh
+
+capability-check: ## Вне экранов: задачи shared ↔ исполнители, тесты и BGTaskSchedulerPermittedIdentifiers; виджеты ↔ эталоны состояний; действия ↔ строки обоих values
+	@bash scripts/tools/capability-check.sh
 
 ##@ SWIFT (Linux-часть)
 swift-lint: ## SwiftLint --strict + archlint (граф Package.swift) — стадии swiftlint/archlint гейта

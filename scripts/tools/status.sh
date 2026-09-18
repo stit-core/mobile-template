@@ -165,7 +165,7 @@ else
     kinds=$(ls "$map"/*.md 2>/dev/null | wc -l | tr -d ' ')
     stable=$(grep -hE '^\|.*\| *`stable` *\|$' "$map"/*.md 2>/dev/null | wc -l | tr -d ' ')
     draft=$(grep -hE '^\|.*\| *`draft` *\|$' "$map"/*.md 2>/dev/null | wc -l | tr -d ' ')
-    echo "$strategy: mobile/$surface/ — $kinds/9 kinds, $stable stable, $draft draft"
+    echo "$strategy: mobile/$surface/ — $kinds/12 kinds, $stable stable, $draft draft"
 fi
 echo
 

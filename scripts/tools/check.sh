@@ -7,7 +7,7 @@ set -uo pipefail
 cd "$(dirname "$0")/../.."
 GRADLE="bash scripts/tools/gradle-step.sh"
 SWIFT="bash scripts/tools/swift-step.sh"
-IOS_SOURCES="iosApp/App iosApp/Packages iosApp/Tools iosApp/UITests"
+IOS_SOURCES="iosApp/App iosApp/Widgets iosApp/Packages iosApp/Tools iosApp/UITests"
 
 # Стадия → команда. Порядок: от дешёвых к дорогим, формат → сборка.
 stage() {
@@ -21,6 +21,7 @@ stage() {
         "tokens-check")        bash scripts/tools/tokens-check.sh ;;
         "i18n-check")          bash scripts/tools/i18n-check.sh ;;
         "deeplinks-check")     bash scripts/tools/deeplinks-check.sh ;;
+        "capability-check")    bash scripts/tools/capability-check.sh ;;
         "detekt")              $GRADLE "$1" detekt ;;
         "android lint")        $GRADLE "$1" lintDevDebug ;;
         "shared jvm tests")    $GRADLE "$1" :shared:jvmTest ;;
@@ -48,7 +49,7 @@ if [ "${FAST:-0}" = "1" ]; then
 else
     # Swift-стадии — до Gradle: дешёвые, без демона; красный Swift виден раньше минутных Android-стадий.
     STAGES=("format kotlin" "format swift" "swiftlint" "archlint" "swift pure build+tests" "coverage swift"
-        "tokens-check" "i18n-check" "deeplinks-check"
+        "tokens-check" "i18n-check" "deeplinks-check" "capability-check"
         "gen-check" "detekt" "android lint" "shared jvm tests" "mock-check" "android unit tests"
         "screenshots" "coverage kotlin" "kmp" "shared api" "assembleDevDebug")
     [ "${GATE_RELEASE:-0}" = "1" ] && STAGES+=("assembleProdRelease")
