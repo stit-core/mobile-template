@@ -66,22 +66,28 @@ none`, схема deep link (`<scheme>://`), языки (`ru` default), влад
      cp -r docs/reference/strategy-mobile-canon/. ../strategy/docs/projects/_template/mobile/
      mkdir -p ../strategy/docs/projects/<slug>/mobile/<surface>
      cp ../strategy/docs/projects/_template/mobile/_template/*.md ../strategy/docs/projects/<slug>/mobile/<surface>/
+     ls ../strategy/docs/projects/<slug>/mobile/<surface>/*.md | wc -l   # 12 форм
      ```
      + строка в roadmap `## Backlog`: «S-1 канон слоя mobile/ в strategy».
   2. **Канон есть, папки поверхности нет** → «спроектируй через `/mobile-deep-dive <slug> <surface>`
      в `<org>/strategy` и вернись»; можно продолжать стадии 4–5, `/de-template` подождёт.
   3. **Соседа нет вообще** → `strategy-path` не задан; `/scaffold` работает в режиме
      `--from-args` с предупреждением; строка в roadmap «завести карту».
-- Если канон в strategy есть — сравни его с `docs/reference/strategy-mobile-canon/`
-  (`diff -r`); расхождение — WARN юзеру (источник правды — strategy).
+- Если канон в strategy есть — сверь формы с копией:
+  `diff -r docs/reference/strategy-mobile-canon/_template
+  <strategy-path>/docs/projects/_template/mobile/_template` — 12 форм (entities · screens ·
+  flows · features · shell · entry-points · permissions · system-actions · widgets ·
+  background-tasks · shared-api · shared-lib). Расхождение или нехватка форм — WARN юзеру
+  (источник правды — strategy). README копии несёт свой абзац про источник правды — это не
+  расхождение, сверять её целиком не нужно.
 - Запиши `strategy-path` / `surface` в `service.md`.
 
 ### 4. Черновики stack → `/stack-deep-dive`
 
-Разложи недостающие kinds из `docs/stack/_templates/` (13 обязательных + `analytics`/`payments`
+Разложи недостающие kinds из `docs/stack/_templates/` (14 обязательных + `analytics`/`payments`
 по пресету) с подставленными значениями стадий 1–2, `status: draft`. **Чейнь в
 `/stack-deep-dive`** — волны W1…W8 до `status: stable` всех обязательных kinds с непустой
-`## Generates`. Gate: все обязательные kinds `stable`, cross-kind-инварианты 1–7
+`## Generates`. Gate: все обязательные kinds `stable`, cross-kind-инварианты 1–8
 (`docs/stack/README.md`) выполнены, `state/` без `**blocker**`.
 
 ### 5. Handoffs соседям → `/infra-handoff`

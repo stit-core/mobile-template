@@ -1,6 +1,6 @@
 ---
 name: scaffold
-description: Добавить строительный блок в существующий проект по конвенциям шаблона, читая stable-запись карты mobile/<surface>/ в соседнем <org>/strategy и выводя пути в трёх местах (shared / androidApp / iosApp). Варианты — entity, feature, screen, flow, entry-point (deep link / push), permission, api (ресурс), stack/rule/skill (из шаблонов). Активируй когда юзер говорит "добавь экран/фичу/сущность/deep link/push-категорию/permission/ресурс API", "scaffold …", "новый маршрут", "заведи kind/правило/скилл". Для правки уже существующего блока scaffold НЕ нужен — это прямая правка.
+description: Добавить строительный блок в существующий проект по конвенциям шаблона, читая stable-запись карты mobile/<surface>/ в соседнем <org>/strategy и выводя пути в трёх местах (shared / androidApp / iosApp). Варианты — entity, feature, screen, flow, entry-point (deep link / push / виджетный тап), permission, system-action (голос, автоматизация, кнопка виджета или уведомления), widget (главный экран / экран блокировки / живое событие / плитка), background-task (синхронизация, напоминание, обновление виджета), api (ресурс), stack/rule/skill (из шаблонов). Активируй когда юзер говорит "добавь экран/фичу/сущность/deep link/push-категорию/permission/ресурс API", "добавь виджет", "сделай напоминание/фоновую синхронизацию", "голосовая команда", "кнопка в уведомлении", "scaffold …", "новый маршрут", "заведи kind/правило/скилл". Для правки уже существующего блока scaffold НЕ нужен — это прямая правка.
 ---
 
 # Skill: scaffold (роутер)
@@ -20,13 +20,24 @@ kind + slug (`docs/reference/strategy-mapping.md`). `--from-args` — без к�
 | Фича: презентер + State/Intent (+ use-case) в `shared` | `feature <slug>` | `references/feature.md` | `features.md` |
 | Экран на обеих платформах с превью/скриншотами/снапшотами | `screen <Key> --feature <slug>` | `references/screen.md` | `screens.md` |
 | Навигационный сценарий: Maestro-флоу + сценарный тест | `flow <slug>` | `references/flow.md` | `flows.md` |
-| Deep link / push-категория: `Route`, парсер, intent-filter/AASA, `deep-links.md`/`push.md` | `entry-point <slug>` | `references/entry-point.md` | `entry-points.md` |
+| Deep link / push-категория / тап по виджету: `Route`, парсер, intent-filter/AASA, `deep-links.md`/`push.md` | `entry-point <slug>` | `references/entry-point.md` | `entry-points.md` |
 | Разрешение: rationale-экран, манифест/`Info.plist`, `compliance.md` | `permission <slug>` | `references/permission.md` | `permissions.md` |
+| Действие вне экранов: `<Slug>Action` в `shared` + канал (голос, автоматизация, кнопка виджета или уведомления) | `system-action <slug>` | `references/system-action.md` | `system-actions.md` |
+| Виджет системы: снимок в `shared` + Glance в `:androidApp:widget` + вью расширения | `widget <slug>` | `references/widget.md` | `widgets.md` |
+| Фоновая задача: `BackgroundRunner` в `shared` + планировщик по `timing` | `background-task <slug>` | `references/background-task.md` | `background-tasks.md` |
 | Ресурс API: `<Resource>Api` над сгенерированными моделями + фикстуры | `api <resource>` | `references/api.md` | `shared-api.md` |
 | Kind / правило / скилл из шаблонов обвязки | `stack <kind>` · `rule <name>` · `skill <name>` | `references/harness.md` | — |
 
 Несколько вариантов в одной задаче (фича с экраном и deep link) — веди по основному (`feature`),
-затем подключай шаги соседних (`screen`, `entry-point`).
+затем подключай шаги соседних (`screen`, `entry-point`). Устойчивые связки:
+
+- **виджет** — ведёт `widget`, затем `entry-point` (`kind: widget`, `pattern` = slug виджета) и
+  `system-action` на каждую кнопку (канал `widget:<slug>`);
+- **локальное напоминание** — ведёт `background-task` (`trigger: time`, `timing: exact`), затем
+  `entry-point` (`push`, `trigger: background:<slug>`); бэкенд не участвует;
+- **действие из шторки** — ведёт `system-action` (канал `notification:<slug>`) поверх
+  существующей push-записи;
+- **фича без экрана** — носителем может быть `system-action` или `background-task`, а не `screen`.
 
 ## Когда НЕ применять
 
@@ -41,8 +52,10 @@ kind + slug (`docs/reference/strategy-mapping.md`). `--from-args` — без к�
    `platforms` (все / android / ios); недостающее — одним блоком вопросов до начала. Нет карты —
    `--from-args` + предупреждение.
 2. **Сделать изменение** по шагам reference: `shared` → `androidApp` → `iosApp` (по `platforms`).
-   Имена — по канону: `<X>Presenter/State/Intent` (shared), `<X>Route/<X>Screen/<X>ViewModel`
-   (Android), `<X>View/<X>Model` (iOS), `Fake<Port>` (`commonTest/…/testing/Fakes.kt`).
+   Имена — по канону: `<X>Presenter/State/Intent`, `<X>Action`, `<X>Task`,
+   `<X>Widget{Snapshot,Provider}` (shared), `<X>Route/<X>Screen/<X>ViewModel`, `<X>Widget{,Receiver}`
+   (Android), `<X>View/<X>Model`, `<X>Intent`, `<X>Entry` (iOS), `Fake<Port>`
+   (`commonTest/…/testing/Fakes.kt`).
 3. **Тесты по RED→GREEN.** Где появляется логика — сначала тест (`commonTest` на фикстурах
    `mock/`), потом код; экран — Robolectric-тест + Roborazzi на каждое состояние; iOS —
    snapshot-заглушка (Mac).
@@ -59,12 +72,15 @@ kind + slug (`docs/reference/strategy-mapping.md`). `--from-args` — без к�
 - ❌ Фича зависит от фичи — общее в `entity`/`core`.
 - ❌ Строковые маршруты; `NavHost`; `androidx.navigation` 2.x.
 - ❌ Экран без состояния `error`/`loading` там, где есть сеть.
-- ❌ Скаффолд «на будущее» без записи в карте и без потребителя.
+- ❌ Скаффолд «на будущее» без записи в карте и без потребителя — виджет, системное действие и
+  фоновая задача особенно склонны к «на всякий случай».
+- ❌ Логика в платформенной обёртке (Glance-виджет, worker, обработчик канала) вместо `shared`.
+- ❌ Обещание точного времени исполнения кода в фоне и частого обновления виджета.
 - ❌ Claim «готово» без `make check`; iOS «готово» без `check-mac`.
 
 ## См. также
 
-- `references/{entity,feature,screen,flow,entry-point,permission,api,harness}.md`.
+- `references/{entity,feature,screen,flow,entry-point,permission,system-action,widget,background-task,api,harness}.md`.
 - `docs/reference/strategy-mapping.md` — kind → пути в трёх местах.
 - Правила (автогрузятся): `kmp-shared`, `kmp-public-api`, `android-ui`, `ios-ui`, `navigation`,
   `deep-links-and-push`, `tests-pipeline`, `mock-and-fixtures`.

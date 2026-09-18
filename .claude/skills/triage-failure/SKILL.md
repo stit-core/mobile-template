@@ -28,7 +28,7 @@ description: Red-арм cockpit'а — структурированный раз
 |---|---|---|
 | **Формат** | `FAIL: format kotlin` / `format swift` | `make fmt`, затем diff — единственные автофиксеры |
 | **detekt / Lint / SwiftLint / archlint** | `FAIL: detekt`, `android lint`, `swiftlint`, `archlint` | `build/gate-logs/{detekt,android_lint,swiftlint,archlint}.log`; правило и файл в первых строках выжимки |
-| **Паритет** | `FAIL: tokens-check` / `i18n-check` / `deeplinks-check` | `build/gate-logs/{tokens_check,i18n_check,deeplinks_check}.log`: `make gen-tokens` / ключ в `values-ru/` или `core_ui_error_<code>` / тест в `DeepLinkParserTest`, плейсхолдер `${DEEP_LINK_HOST}` |
+| **Паритет** | `FAIL: tokens-check` / `i18n-check` / `deeplinks-check` / `capability-check` | `build/gate-logs/{tokens_check,i18n_check,deeplinks_check,capability_check}.log`: `make gen-tokens` / ключ в `values-ru/` или `core_ui_error_<code>` / тест в `DeepLinkParserTest`, плейсхолдер `${DEEP_LINK_HOST}` / ключ задачи, ветка `backgroundRunner(id)`, идентификатор в `BGTaskSchedulerPermittedIdentifiers`, эталон и тест состояния виджета, строка ответа действия в обоих `values` |
 | **Build** | `e: file.kt:12:5 Unresolved reference`, `Inconsistent JVM-target`, `Cannot add extension 'kotlin'` | `build/gate-logs/assembleDevDebug.log`; первая `e:` обычно главная |
 | **Unit test** | `FAILED` в `shared jvm tests` / `android unit tests` | `FORMAT=detailed make test`; точечно `./gradlew :shared:jvmTest --tests '*XTest*'` |
 | **Konsist** | `ArchitectureTest > … FAILED` | нарушена матрица `docs/reference/architecture.md` или именование |

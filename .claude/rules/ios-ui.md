@@ -1,6 +1,6 @@
 ---
 name: ios-ui
-description: SwiftUI-слой iosApp/ — View рисует State презентера из shared через PresenterModel-адаптер без бизнес-логики, Features не импортируют друг друга и Platform/Persistence, строки из Localizable.xcstrings таргета, токены через @Environment(\.theme), Liquid Glass системными компонентами, snapshot на состояние. Terse; «как и почему» — docs/reference/architecture.md. Грузится при правке .swift в iosApp/.
+description: SwiftUI-слой iosApp/ — View рисует State презентера из shared через PresenterModel-адаптер без бизнес-логики, Features не импортируют друг друга и Platform/Persistence, строки из Localizable.xcstrings таргета, токены через @Environment(\.theme), Liquid Glass системными компонентами, snapshot на состояние; вне экранов — интенты Core/SystemActions, записи виджетов Core/Widgets и вью WidgetsFeature, фон Core/Platform/Background. Terse; «как и почему» — docs/reference/architecture.md. Грузится при правке .swift в iosApp/.
 paths:
   - "iosApp/**/*.swift"
 ---
@@ -21,6 +21,10 @@ paths:
   `PlatformDeps` собирает только `App/AppEnvironment.swift` (`IosPlatformDeps`); `Core/*` не
   импортирует `Features`. Ловят SwiftLint `no_feature_import`, `no_platform_import_in_features`
   и `Tools/archlint` (граф `Package.swift`).
+- **Вне экранов — `Core/{SystemActions,Widgets}` (только `Pure`, без `Shared`),
+  `Core/Platform/{Background,SystemActionsBridge,NotificationActions,WidgetRefresh}`,
+  `Features/WidgetsFeature` и appex `iosApp/Widgets/`**; таргет действий зовётся `SystemActions`,
+  а не `Intents` (это системный модуль SiriKit). Инварианты — rule `off-screen-surfaces`.
 - **Сеть — только через `Shared`**: `URLSession(` вне `Core/SharedBridge` — SwiftLint `no_raw_urlsession`.
 - **Строки — `Resources/Localizable.xcstrings` своего таргета** (`defaultLocalization: "ru"`, ru/en),
   `Text("<slug>.<key>", bundle: .module)`; ключи ошибок `error.<code>` — каталог `DesignSystem`

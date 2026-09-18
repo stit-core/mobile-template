@@ -1,6 +1,6 @@
 ---
 name: kmp-shared
-description: Что можно и нельзя в shared/ (KMP) — чистый commonMain без platform API, expect/actual только для currentPlatform/ioDispatcher/platformHttpEngine, остальное — интерфейсы PlatformDeps, iosMain на Foundation + Security, cinterop и CocoaPods запрещены, презентер = StateFlow<State> + dispatch(Intent) + close(), слои core < entity < feature. Terse; «как и почему» — docs/reference/architecture.md. Грузится при правке shared/.
+description: Что можно и нельзя в shared/ (KMP) — чистый commonMain без platform API, expect/actual только для currentPlatform/ioDispatcher/platformHttpEngine, остальное — интерфейсы PlatformDeps, iosMain на Foundation + Security, cinterop и CocoaPods запрещены, презентер = StateFlow<State> + dispatch(Intent) + close(), носители вне экранов <X>Action/<X>Task/<X>Widget{Snapshot,Provider}, слои core < entity < feature. Terse; «как и почему» — docs/reference/architecture.md. Грузится при правке shared/.
 paths:
   - "shared/**"
 ---
@@ -19,8 +19,8 @@ paths:
 - **`expect/actual` — только `currentPlatform`, `ioDispatcher`, `platformHttpEngine`**
   (`core/lib/Platform.*.kt`, `Dispatchers.*.kt`, `core/api/HttpEngine.*.kt`). Всё остальное
   платформенное — интерфейсы, собранные в `PlatformDeps` (`SecureStore`, `Settings`,
-  `PushTransport`, `NotificationPermission`, `TelemetrySink`, `LogSink`, `LocaleProvider`,
-  `ConnectivityMonitor`, `AppInfo`, `filesDir`); реализации — `androidMain`
+  `PushTransport`, `NotificationPermission`, `BackgroundScheduler`, `TelemetrySink`, `LogSink`,
+  `LocaleProvider`, `ConnectivityMonitor`, `AppInfo`, `filesDir`); реализации — `androidMain`
   (`KeystoreSecureStore`, `DataStoreSettings`, `LogcatSink`), `iosMain` (`KeychainSecureStore`,
   `UserDefaultsSettings`, `NSLogSink`), остальное — `androidApp/core/platform` и Swift `Core/Platform`.
 - **`iosMain` — только Foundation и Security** (`NSUserDefaults`, `NSLog`, Keychain через
@@ -37,6 +37,9 @@ paths:
   `demo`); `XState` — immutable `data class`, `XIntent` — `sealed class`; ошибки ловит
   `attempt {}` (`core/lib/Attempt.kt`) → `MessageKey` в state. Без one-off событий, без
   generic-«движков» (Konsist).
+- **Вне экранов — три носителя в той же `feature/<group>/`**, не презентеры: `<X>Action`,
+  `<X>Task : BackgroundRunner` (`core/background`), `<X>Widget{Snapshot,Provider}`
+  (`core/widget`). Форма и инварианты — rule `off-screen-surfaces`.
 - **Composition root — `SharedContainer(platform: PlatformDeps, config: AppConfig)`**: ленивые
   `val` (репозитории, `sessionStore`, `pushRegistrar`, `requirements`, `demoMode`), фабрики
   `<x>Presenter()`. DI-фреймворка в `shared/` нет (Koin/Metro — вне шаблона).

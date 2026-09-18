@@ -19,7 +19,7 @@
 - [reference/kinship.md](reference/kinship.md) — родство с Go/SPA/bot-шаблонами; `make kin-diff`.
 
 ## Design source-of-truth
-- **Карта приложения** — слой `mobile/<surface>/` (9 kinds: entities · screens · flows · features · shell · entry-points · permissions · shared-api · shared-lib) в соседнем `<org>/strategy` (`docs/projects/<slug>/mobile/<surface>/`, ведёт `/mobile-deep-dive` там). Здесь read-only; копия канона для strategy-форков без него — [reference/strategy-mobile-canon/README.md](reference/strategy-mobile-canon/README.md).
-- [stack/README.md](stack/README.md) — артефакты платформы: 13 обязательных + 2 условных kinds, волны, cross-kind-инварианты, вход для `/de-template`. Остаётся в этом репо.
+- **Карта приложения** — слой `mobile/<surface>/` (12 kinds: entities · screens · flows · features · shell · entry-points · permissions · system-actions · widgets · background-tasks · shared-api · shared-lib) в соседнем `<org>/strategy` (`docs/projects/<slug>/mobile/<surface>/`, ведёт `/mobile-deep-dive` там). Здесь read-only; копия канона для strategy-форков без него — [reference/strategy-mobile-canon/README.md](reference/strategy-mobile-canon/README.md).
+- [stack/README.md](stack/README.md) — артефакты платформы: 14 обязательных + 2 условных kinds, волны, cross-kind-инварианты, вход для `/de-template`. Остаётся в этом репо.
 
 Точка входа агента в репо — `CLAUDE.md` (ядро + роутер). Дневной флоу — skill `/smartdev`.

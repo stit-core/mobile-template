@@ -1,6 +1,6 @@
 ---
 name: stack-deep-dive
-description: Углублённая интерактивная проработка 13 обязательных + 2 условных платформенных артефактов в `docs/stack/` (service · runtime · api · auth · deep-links · push · observability · styling · distribution · signing · compliance · dependencies · config · analytics · payments) — единственная точка входа для проектирования стека мобильного приложения. Ведёт сессию раундами `AskUserQuestion` (≤ 4 вопроса), фиксирует рабочее состояние в `state/`, не выдумывает платформенные решения. Активируй когда архитектор проектирует/добивает стек, говорит "/stack-deep-dive", "спроектируем стек", "добьём stack-артефакты", приносит сырьё (текущий build.gradle.kts, xcconfig, описание магазинов), или когда `/init-service` дошёл до стадии 4. Точечные правки уже стабильного артефакта — прямой Edit, не сюда.
+description: Углублённая интерактивная проработка 14 обязательных + 2 условных платформенных артефактов в `docs/stack/` (service · runtime · api · auth · deep-links · push · background · observability · styling · distribution · signing · compliance · dependencies · config · analytics · payments) — единственная точка входа для проектирования стека мобильного приложения. Ведёт сессию раундами `AskUserQuestion` (≤ 4 вопроса), фиксирует рабочее состояние в `state/`, не выдумывает платформенные решения. Активируй когда архитектор проектирует/добивает стек, говорит "/stack-deep-dive", "спроектируем стек", "добьём stack-артефакты", приносит сырьё (текущий build.gradle.kts, xcconfig, описание магазинов), или когда `/init-service` дошёл до стадии 4. Точечные правки уже стабильного артефакта — прямой Edit, не сюда.
 ---
 
 # Skill: stack-deep-dive
@@ -36,12 +36,12 @@ Anti-patterns и enum'ы канона — опциями; имена хосто�
 
 | вызов | поведение |
 |---|---|
-| `/stack-deep-dive` | сводка состояния 15 kinds + `AskUserQuestion`: что углубить / что завести |
+| `/stack-deep-dive` | сводка состояния 16 kinds + `AskUserQuestion`: что углубить / что завести |
 | `/stack-deep-dive <kind>` | завести (режим A — файла нет) или углубить (режим C — есть) |
 | `/stack-deep-dive <сырьё>` | текст/файл (`build.gradle.kts`, xcconfig, письмо заказчика про магазины) → разбор (режим B) |
 
-`kind` ∈ 13 обязательных: `service runtime api auth deep-links push observability styling
-distribution signing compliance dependencies config` + условные `analytics` (при
+`kind` ∈ 14 обязательных: `service runtime api auth deep-links push background observability
+styling distribution signing compliance dependencies config` + условные `analytics` (при
 `preset: consumer` или `ANALYTICS ≠ none`) и `payments` (при монетизации).
 
 ## Что делать сразу при запуске
@@ -88,9 +88,9 @@ distribution signing compliance dependencies config` + условные `analyti
 
 ## Волны (inside-out; у архитектора не спрашивается)
 
-W1 `service` → W2 `runtime` → W3 `api` → `auth` → W4 `deep-links` → `push` (→ `analytics` →
-`payments` по пресету) → W5 `styling` → `observability` → W6 `distribution` → `signing` →
-`compliance` → W7 `dependencies` → W8 `config` (rollup всех env-значений).
+W1 `service` → W2 `runtime` → W3 `api` → `auth` → W4 `deep-links` → `push` → `background`
+(→ `analytics` → `payments` по пресету) → W5 `styling` → `observability` → W6 `distribution` →
+`signing` → `compliance` → W7 `dependencies` → W8 `config` (rollup всех env-значений).
 
 Юзеру в начале: «иду фундамент → rollup, начну с `service`; скажи, если хочешь прыгнуть».
 
@@ -106,7 +106,7 @@ W1 `service` → W2 `runtime` → W3 `api` → `auth` → W4 `deep-links` → `p
 
 1. Обязательные секции заполнены без плейсхолдеров.
 2. `## Generates` конкретна (пути, имена env, ключи, скрипты).
-3. Cross-kind-инварианты 1–7 (`docs/stack/README.md`) для этого kind выполнены; rollup в
+3. Cross-kind-инварианты 1–8 (`docs/stack/README.md`) для этого kind выполнены; rollup в
    `config.md` обновлён.
 4. Frontmatter валиден (`id: stack.<name>`, `kind`, `name` = basename, `status`).
 5. Тест-критерий kind'а подтверждён архитектором в этой сессии.
@@ -121,7 +121,8 @@ W1 `service` → W2 `runtime` → W3 `api` → `auth` → W4 `deep-links` → `p
 
 - `auth` → `config` (`AUTH_MODE`, TTL), `api` (Bearer-схема ⇔ `POST /api/auth/refresh`), BACKEND-HANDOFF.
 - `deep-links` → `config` (хосты per env), `signing` (отпечатки), INFRA-HANDOFF (`wellknown`).
-- `push` → `config` (`PUSH_PROVIDERS`), `dependencies` (SDK), `compliance` (privacy manifest), BACKEND-HANDOFF B-18.
+- `push` → `config` (`PUSH_PROVIDERS`), `dependencies` (SDK), `compliance` (privacy manifest), BACKEND-HANDOFF B-18; кнопки категорий ← `system-actions.md` карты.
+- `background` → `compliance` (точные будильники, тип foreground service, background modes), `push` (локальные категории), `dependencies` (WorkManager), `service`/`config` (App Group для снимков виджетов); реестр задач ← `background-tasks.md` карты.
 - `observability` → `config` (`SENTRY_DSN` per env), `distribution` (символы в preflight).
 - `distribution` ↔ `service.platforms`; `ios ∈ platforms` ⇒ `runtime#mac-host` или `blocked-by: Mac`.
 - `compliance` ← `permissions.md` карты strategy, `dependencies`, `analytics`/`payments`.

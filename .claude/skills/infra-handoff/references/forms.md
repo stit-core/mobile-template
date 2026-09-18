@@ -61,7 +61,10 @@ RISK   следующий /scaffold или /de-template не увидит экр
 ```
 
 Типовые S-*: канон слоя `mobile/` отсутствует в форке strategy (S-1 — путь без PR:
-`docs/reference/strategy-mobile-canon/`), запись без источника, расхождение `status`.
+`docs/reference/strategy-mobile-canon/`), запись без источника, расхождение `status`,
+реализованные вне экранов возможности без записи — голосовое действие или кнопка уведомления
+(`system-actions.md`), виджет (`widgets.md`), фоновая работа на устройстве
+(`background-tasks.md`).
 
 ## Куда попадает
 

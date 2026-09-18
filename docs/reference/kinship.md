@@ -42,5 +42,5 @@
 - **Гейт** — часть стадий выполнима только на macOS; гейт печатает явный SKIP-блок, а не «зелёный».
 - **Три пола покрытия** — логика сосредоточена в `shared` (80 %), UI-слои держат скриншоты (70 %).
 - **23 правила** вместо 8–10: две платформы × магазины × право; каждое path-scoped и ≤ 60 строк.
-- **Карта продукта** — слой `mobile/<surface>/` (9 kinds) в strategy вместо FSD/screens; копия
+- **Карта продукта** — слой `mobile/<surface>/` (12 kinds) в strategy вместо FSD/screens; копия
   канона — [`strategy-mobile-canon/README.md`](strategy-mobile-canon/README.md).

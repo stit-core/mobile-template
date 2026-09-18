@@ -42,7 +42,7 @@
 
 ```yaml
 id: stack.<name>     # == "stack." + basename
-kind: <name>         # один из 15
+kind: <name>         # один из 16
 name: <name>         # == basename файла без .md
 status: draft|stable
 ```

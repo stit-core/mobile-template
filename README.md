@@ -24,7 +24,7 @@
 ## Место в экосистеме
 
 ```
-business-strategy-template (<org>/strategy)   ← карта продукта: слой mobile/<surface>/ (9 kinds)
+business-strategy-template (<org>/strategy)   ← карта продукта: слой mobile/<surface>/ (12 kinds)
         │  /scaffold и /de-template читают stable-записи
         ▼
 mobile-template (<org>/mobile)  ← вы здесь ──► <org>/backend (Bearer-auth, openapi.yaml, requirements, devices)
@@ -85,8 +85,9 @@ claude                 # → /smartdev → /init-service
   `profile`/`todos` удаляет `/de-template`.
 - **Качество** — Spotless/ktlint, detekt + compose-rules, Android Lint (`warningsAsErrors`),
   Konsist, Robolectric + Compose test v2, Roborazzi, Kover (80 / 70 %), BCV; swift-format,
-  SwiftLint, archlint (граф SwiftPM), Swift Testing; паритет токенов / строк / deep links
-  (`tokens-check`, `i18n-check`, `deeplinks-check`); негативные фикстуры `make gate-selftest`.
+  SwiftLint, archlint (граф SwiftPM), Swift Testing; паритет токенов / строк / deep links и
+  поверхностей вне экранов (`tokens-check`, `i18n-check`, `deeplinks-check`,
+  `capability-check`); негативные фикстуры `make gate-selftest`.
 - **Релиз** — версия из тега `vX.Y.Z`, подписанные AAB/APK (Linux) и IPA (Mac), символы в
   GlitchTip, Gitea Release, подача в RuStore / Play / TestFlight, STORE-HANDOFF.
 

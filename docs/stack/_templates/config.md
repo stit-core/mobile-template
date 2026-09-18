@@ -26,6 +26,7 @@ Rollup всех kinds: три класса значений per env. Новый 
 | `SENTRY_DSN` | пусто | _…_ | _…_ | пусто | `observability.md` |
 | `PUSH_PROVIDERS` | `rustore,fcm` / `apns` | то же | то же | пусто | `push.md` |
 | `RUSTORE_PROJECT_ID` (Android) | пусто | _…_ | _…_ | пусто | `push.md` |
+| `APP_GROUP_ID` (iOS) | `group.<bundle id>.dev` | _…_ | `group.<bundle id>` | `group.<bundle id>.demo` | `service.md` |
 | `ANALYTICS` | — (ключа в шаблоне нет; появляется вместе с kind `analytics`) | | | | `analytics.md` |
 
 ## Release-time
@@ -63,6 +64,7 @@ Rollup всех kinds: три класса значений per env. Новый 
 ## Release checklist
 
 - новые ключи build-time — во всех `config/env/*.properties` и `*.xcconfig`;
+- `APP_GROUP_ID` совпадает с App Group в entitlements приложения и расширения виджетов;
 - секреты — только release-time, ни одного в build-time;
 - `SENTRY_DSN` prod задан, `API_BASE_URL` prod — боевой хост;
 - `.env.local.example` содержит все имена release-time ключей.

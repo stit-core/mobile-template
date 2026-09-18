@@ -34,7 +34,7 @@ Release; всё, что нужно инфре, бэкенду или карте 
 |---|---|---|
 | **`<org>/infra`** | deep-link-хост / отпечаток → `wellknown` env (`MOBILE_ANDROID_APP_ID`, `MOBILE_ANDROID_SHA256_{UPLOAD,PLAY,RUSTORE}`, `MOBILE_IOS_TEAM_ID`, `MOBILE_IOS_BUNDLE_ID`); `SENTRY_DSN`/GlitchTip-проект; `API_BASE_URL` per env; URL политики и веб-удаления аккаунта | I-* |
 | **`<org>/backend`** | отсутствующий endpoint/поле (`POST /api/auth/refresh` + `X-Client`, `GET /api/app/requirements`, `PUT /api/v1/devices`, ресурс фичи); `ErrorModel.code`; `Idempotency-Key`-store; `min_version` после раскатки; push-событие/категория | B-* |
-| **`<org>/strategy`** | экран/фича/entity/entry-point/permission без записи или с расхождением в `mobile/<surface>/`; нужен канон слоя (`docs/reference/strategy-mobile-canon/`) | S-* |
+| **`<org>/strategy`** | экран/фича/entity/entry-point/permission/системное действие/виджет/фоновая задача без записи или с расхождением в `mobile/<surface>/`; нужен канон слоя (`docs/reference/strategy-mobile-canon/`) | S-* |
 
 Ни один класс не подходит — это не касание соседа, выходи.
 

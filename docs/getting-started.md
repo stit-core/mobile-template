@@ -41,14 +41,16 @@
 
 ## 4. Карта приложения — в `<org>/strategy`
 
-Слой `docs/projects/<slug>/mobile/<surface>/` — 9 kinds (entities · screens · flows · features ·
-shell · entry-points · permissions · shared-api · shared-lib), ведёт `/mobile-deep-dive` там.
-Нужны stable-записи для первого разворота. Канона `mobile/` в форке strategy нет — путь без PR:
+Слой `docs/projects/<slug>/mobile/<surface>/` — 12 kinds (entities · screens · flows · features ·
+shell · entry-points · permissions · system-actions · widgets · background-tasks · shared-api ·
+shared-lib), ведёт `/mobile-deep-dive` там. Нужны stable-записи для первого разворота.
+Канона `mobile/` в форке strategy нет — путь без PR:
 
 ```bash
 cp -r docs/reference/strategy-mobile-canon/. ../strategy/docs/projects/_template/mobile/
 mkdir -p ../strategy/docs/projects/<slug>/mobile/<surface>
 cp ../strategy/docs/projects/_template/mobile/_template/*.md ../strategy/docs/projects/<slug>/mobile/<surface>/
+ls ../strategy/docs/projects/<slug>/mobile/<surface>/*.md | wc -l   # 12 форм
 ```
 
 Форма — [reference/strategy-mobile-canon/README.md](reference/strategy-mobile-canon/README.md);
@@ -57,9 +59,9 @@ cp ../strategy/docs/projects/_template/mobile/_template/*.md ../strategy/docs/pr
 
 ## 5. Стек — `/stack-deep-dive`
 
-13 обязательных kinds + `analytics`/`payments` по пресету ([stack/README.md](stack/README.md)):
+14 обязательных kinds + `analytics`/`payments` по пресету ([stack/README.md](stack/README.md)):
 волны W1…W8 вопросами, каждый артефакт — до `status: stable` с конкретной `## Generates`;
-cross-kind-инварианты 1–7. При `platforms: [android]` iOS-секций нет.
+cross-kind-инварианты 1–8. При `platforms: [android]` iOS-секций нет.
 
 ## 6. Фундамент — `/de-template`
 
@@ -69,7 +71,7 @@ Gate: стек `stable`, карта stable (или `--no-strategy`), `make check
 (`--platform android|ios`), strip меты. Phase B: prune reference-фич `profile`/`todos`
 (остаются `demo`, `shell`, `requirements`, `auth`, `settings`, `push`), пресетные kinds, docs.
 Затем `/scaffold` по stable-записям карты (entity / feature / screen / flow / entry-point /
-permission / api).
+permission / system-action / widget / background-task / api).
 
 ## 7. Handoffs соседям — `/infra-handoff`
 

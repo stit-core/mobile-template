@@ -35,7 +35,7 @@ committed-скрипта нет — механика (пакет, id, prune, о�
    (инвариант 7), `## Generates` непусты:
    ```bash
    preset=$(grep -m1 -E '^\| *preset *\|' docs/stack/service.md | awk -F'|' '{print $3}' | tr -d '` ')
-   kinds="service runtime api auth deep-links push observability styling distribution signing compliance dependencies config"
+   kinds="service runtime api auth deep-links push background observability styling distribution signing compliance dependencies config"
    [ "$preset" = consumer ] && kinds="$kinds analytics"
    for k in $kinds; do
      f="docs/stack/$k.md"
@@ -45,11 +45,13 @@ committed-скрипта нет — механика (пакет, id, prune, о�
      grep -q 'blocked-by' "$f" && echo "STOP: $f blocked-by"
    done
    ```
-   Cross-kind-инварианты 1–7 (`docs/stack/README.md`) выполнены; `platforms: [android]` ⇒
+   Cross-kind-инварианты 1–8 (`docs/stack/README.md`) выполнены; `platforms: [android]` ⇒
    iOS-секций в kinds нет.
-3. **Карта в strategy.** `<strategy-path>/docs/projects/<slug>/mobile/<surface>/` — все 9 kinds
-   есть, записи для первого разворота `stable` (`/mobile-audit` там); иначе `--no-strategy` +
-   строка в roadmap «завести карту».
+3. **Карта в strategy.** `<strategy-path>/docs/projects/<slug>/mobile/<surface>/` — 12 файлов
+   карты на месте, **все записи** в них `stable` (`/mobile-audit` там): гейт считает записи, не
+   файлы. `system-actions.md`, `widgets.md`, `background-tasks.md` бывают без записей —
+   приложение без голоса, виджетов и фоновой работы нормально, пустой файл гейт не блокирует.
+   Карты нет — `--no-strategy` + строка в roadmap «завести карту».
 4. **Гейт зелёный:** `make check` → 0; `make gate-selftest` → все красные.
 5. **iOS:** `ios ∈ platforms` ⇒ `make check-mac` зелёный на HEAD **или** явный
    `--ios-unverified` → строка-долг в `.claude/plans/roadmap.md ## Backlog`

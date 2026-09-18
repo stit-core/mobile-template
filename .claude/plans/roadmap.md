@@ -21,21 +21,40 @@
 - **Dry-run обвязки (A9 сессии 3, отложен владельцем):** две копии репо в
   `~/.cache/stit-mobile-research/dryrun/{both,android}` + сосед-strategy из
   `docs/reference/strategy-mobile-canon/`; в копиях `/init-service` (стадии 1–5) →
-  `/stack-deep-dive` режим A на 13 kinds → `stable` → `/de-template` both и `--platform android`
-  → `/scaffold` каждого варианта; после каждого шага `make check` зелёный, `make gate-selftest`
-  красный; расхождения чинятся в скиллах шаблона. Бриф — `docs/research/prompts/NEXT-SESSION-4.md`.
+  `/stack-deep-dive` режим A на 14 kinds → `stable` → `/de-template` both и `--platform android`
+  → `/scaffold` каждого варианта (включая `system-action`, `widget`, `background-task`); после
+  каждого шага `make check` зелёный, `make gate-selftest` красный; расхождения чинятся в скиллах
+  шаблона. Бриф — `docs/research/prompts/NEXT-SESSION-4.md`.
 - **Mac-verify iOS-половины** (первый `make check-mac`): имена Obj-C-экспорта в `SharedBridge`
   (`Kotlinx_coroutines_coreStateFlow`, `KotlinBoolean`-боксинг suspend-результатов,
   `RouteTodoDetail`), `iosApp.xcodeproj` (локальные пакеты, per-env конфигурации и схемы
   Staging/Prod/Demo, UI-test target, wiring `Shared.framework` для пакетов, `Package.resolved`),
   snapshot-эталоны `__Snapshots__/`, `MemberImportVisibility`-импорты в `Core`/`Features`/`App`.
-- **Runtime-переключатель demo в prod** по `requirements.flags.demo_login` (08 §2.7): сейчас
-  `DemoMode`/панель доступны только при `API_MODE=mock` (flavor `demo`, схема `Demo`).
 - **FCM `getToken()`/`onNewToken` deprecated в firebase-messaging 25.1** — перейти на
   `register()`/`onRegistered`, когда API стабилизируется; сейчас `@Suppress("DEPRECATION")`.
+- **AppFunctions на устройстве** — прогнать реестр действий (`addTodo`) на Android 16+ с
+  ассистентом, который его поддерживает: голосом и автоматизацией; по выходу stable-релиза
+  `androidx.appfunctions` перейти на него и снять строку из
+  `docs/stack/dependencies.md § Version policy exceptions`.
+- **Срок задачи (`dueAt`) в контракте** — у reference-сущности `todo` поля срока нет, поэтому
+  виджет показывает «обновлено», а `todo-reminder` планируется на выбранный пользователем момент.
+  Добавить `dueAt` в `api/openapi.yaml` (BACKEND-HANDOFF) → `make gen` → сортировка виджета и
+  напоминание по сроку.
+- **Разделить в порте `WidgetRefresher` «перерисовать» и «опубликовать»** — сейчас
+  `refresh(slug)` делает и то и другое, поэтому после системного действия снимок публикуется
+  повторно (идемпотентно, но лишний раз); два метода уберут двойную публикацию.
 - **Фаза 5 на Mac:** `make check-mac` (M1–M9), snapshot-тесты всех состояний, XCUITest smoke,
-  верификация `iosApp.xcodeproj`, подпись, `mac-host.md` по факту; до этого iOS помечен
-  «не верифицирован на Mac», `/de-template` с `ios` требует `--ios-unverified`.
+  верификация `iosApp.xcodeproj`, подпись, `mac-host.md` по факту. Поверхности вне экранов и demo:
+  завести appex-таргет `iosAppWidgets` (`$(WIDGETS_BUNDLE_ID)`, entitlements, Embed) и App Group
+  обоим таргетам; убедиться, что `Shared.framework` не попал в расширение; проверить имена
+  Obj-C-экспорта новых типов (`BackgroundResult{Notify,RefreshWidget,Rejected}`,
+  `CompleteTodoResult*`, `AddTodoResult*`, кейсы enum'ов,
+  `TodayTodosWidgetProvider.companion.SLUG`) и concurrency-аннотации; API App Intents
+  (локализованные описания и диалоги, извлечение `${applicationName}` — возможно нужен
+  `AppShortcuts.xcstrings`); `make snapshot-record` (эталоны `widget-today-todos-*` и demo-вью);
+  отдельный риск существующего кода — у старых файлов `Platform` нет `public import SharedBridge`,
+  хотя Shared-типы стоят в public-сигнатурах: под `InternalImportsByDefault` не соберётся. До этого
+  iOS помечен «не верифицирован на Mac», `/de-template` с `ios` требует `--ios-unverified`.
 - **Фаза 7 — экосистема и первый релиз:** `wellknown` на dev-VPS, бэкенд с B-17/B-1…B-3,
   `/release --stop 1` demo-приложения → Gitea Release, `--stop 2` в RuStore и Play internal.
 - **Cross-repo P0** (синтез §9, порядок обязателен): corp-канон C-1…C-3 (7-й шаблон, контракт

@@ -16,6 +16,8 @@ status: draft
 | package | `tech.stit.mobile` _(→ `<reverse-domain>.<app>` на `/de-template`)_ |
 | applicationId | `tech.stit.mobile` · dev `.dev` · staging `.staging` · demo `.demo` · debug-build `.debug` |
 | bundle id | `tech.stit.mobile` · dev `.dev` · staging `.staging` · demo `.demo` |
+| widget extension bundle id | `<bundle id>.widgets` _(appex-таргет `iosApp/Widgets/`; при `ios ∉ platforms` строки нет)_ |
+| App Group | `group.<bundle id>` _(общий контейнер снимков виджетов; entitlement обоих таргетов)_ |
 | deep-link scheme | `stit` _(`DEEP_LINK_SCHEME`)_ |
 | locales | `ru` (default), `en` |
 | store accounts owner | _заказчик; stit — admin_ |
@@ -45,7 +47,8 @@ Sibling-checkout'ы форков одной org (`~/git/<org>/…`); сосед�
 
 - `androidApp/app/build.gradle.kts` — `applicationId`, `applicationIdSuffix` (`demo`)
 - `config/env/*.properties` — `DEEP_LINK_SCHEME`
-- `iosApp/Config/*.xcconfig` — `PRODUCT_BUNDLE_IDENTIFIER` per схема
+- `iosApp/Config/*.xcconfig` — `PRODUCT_BUNDLE_IDENTIFIER` per схема, `APP_GROUP_ID`
+- `iosApp/App/App.entitlements` и `iosApp/Widgets/` — App Group обоих таргетов; bundle id расширения
 - `README.md` — шапка проекта
 - поля `platforms` / `preset` / `strategy-path` / `backend-path` / `surface` — читают `/scaffold`,
   `/de-template`, `/release`, `make status`

@@ -16,7 +16,7 @@
 него нет, в оркестрацию `<org>/infra` он не входит.
 
 ```
-   <org>/strategy (← business-strategy-template)  — design-time SoT: карта mobile/<surface>/ (9 kinds)
+   <org>/strategy (← business-strategy-template)  — design-time SoT: карта mobile/<surface>/ (12 kinds)
         │ side-input: читают /scaffold и /de-template (рантайм не зависит)
         ▼
    ЭТОТ РЕПО ─── Bearer-auth, api/openapi.yaml, /api/app/requirements, /api/v1/devices ──► <org>/backend

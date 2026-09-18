@@ -59,6 +59,9 @@
 |---|---|---|
 | `<Key>` / `<entity>` | `read-only` \| `full` \| `blocked` | `draft` |
 
+`full` означает офлайн-правки: их догоняет фоновая задача синхронизации
+(`background-tasks.md`, `trigger: connectivity`).
+
 ## Theme & locale
 
 Тема `system` \| `light` \| `dark` (дефолт `system`); локали — `shared-lib.md#locales`;

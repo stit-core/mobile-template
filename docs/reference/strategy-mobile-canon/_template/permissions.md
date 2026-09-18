@@ -39,7 +39,7 @@
 - `rationale` — текст объяснения пользователю (ru) · текст · обяз.
 - `когда` — экран/фича и момент запроса · реф + текст · обяз.
 - `fallback` — поведение без разрешения · текст · обяз.
-- `используется` — фичи/экраны · массив ссылок → `features` / `screens.key` · обяз.
+- `используется` — фичи/экраны · массив ссылок → `features` / `screens.key` (фоновая задача — `background:<slug>`, системное действие — `action:<slug>`) · обяз.
 - `status` — зрелость записи · `draft` \| `stable` · обяз.
 
 | slug | name | description | android | ios | situation | rationale | когда | fallback | используется | status |

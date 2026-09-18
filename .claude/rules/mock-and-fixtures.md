@@ -1,6 +1,6 @@
 ---
 name: mock-and-fixtures
-description: Одна фикстурная база mock/ для тестов, demo-сборки, скриншотов, DemoFlowTest и Maestro (make e2e); сценарии empty|populated|authenticated|error; MockTransport — production-код (demo-режим для App Review); фикстуры валидируются схемой спеки (mock-check); demo не ходит в сеть (тест). Грузится при правке mock/, core/mock, demo.properties, Demo.xcconfig, e2e/.
+description: Одна фикстурная база mock/ для тестов, demo-сборки, скриншотов, DemoFlowTest и Maestro (make e2e); сценарии empty|populated|authenticated|error; MockTransport — production-код (demo-режим для App Review); runtime-вход в demo из обычной сборки по флагу requirements.demo_login с песочницей хранилищ, debug-панель остаётся mock-only; фикстуры валидируются схемой спеки (mock-check); demo не ходит в сеть (тест). Грузится при правке mock/, core/mock, demo.properties, Demo.xcconfig, e2e/.
 paths:
   - "mock/**"
   - "shared/**/core/mock/**"
@@ -28,10 +28,20 @@ paths:
   для App Review, не тестовая утилита.
 - **`demo` не ходит в сеть**: flavor/схема `demo` фиксирует `API_MODE=mock`, хост `.invalid`;
   `MockTransportTest` проверяет, что `SharedContainer` при `mock` ходит в `MockTransport`, а при
-  `real` его не создаёт. Runtime-переключатель в prod — только по `requirements.flags.demo_login`.
+  `real` его не создаёт.
+- **Runtime-вход в demo — только по флагу** `requirements.flags.demo_login` и только при
+  `API_MODE=real` (`DemoGate`): requirements недоступны ⇒ `AppRequirements.Default`, флага нет,
+  кнопки нет. `enter()` подменяет движок `ApiClient` (`useEngine` → `MockTransport.engine`),
+  уводит `SecureStore` и `Settings` в память (`DemoStorage`), сбрасывает сессию и сеет
+  `authenticated`; реальный refresh-токен не читается и не перезаписывается, в боевой бэкенд не
+  уходит ни один запрос (`DemoGateTest`). `leave()` возвращает движок и хранилища и сбрасывает
+  `requirements`; метка `app.demo.active` пишется в **реальные** настройки до подмены, чтобы
+  старт после убитого процесса вычистил снимки фикстур. Поверхности вне экранов (фон, снимок
+  виджета, системное действие) идут через тот же контейнер и в demo работают на фикстурах.
 - **Debug-панель** (`feature/demo/DemoPanelPresenter`: сценарий, `latencyMs`) — только при
   `API_MODE=mock` (`DemoPanelState.available`, иначе `DemoMode == null`): секция `demoSection` в
-  `SettingsScreen` (Android), `DemoPanelSection` в `SettingsView` (iOS).
+  `SettingsScreen` (Android), `DemoPanelSection` в `SettingsView` (iOS). В обычной сборке сценарий
+  не переключается — вход ревьюера фиксирован на `authenticated`.
 - **Фикстуры валидируются схемой**: `FixturesTest` парсит каждую фикстуру каждого сценария
   строгими сгенерированными моделями (`make mock-check`); фикстура с полем не по схеме —
   красный гейт (NF-16). Новая сущность = фикстуры во всех сценариях (`/scaffold entity`).

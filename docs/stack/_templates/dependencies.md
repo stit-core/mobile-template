@@ -19,6 +19,9 @@ status: draft
 | DI (Android) | Hilt 2.60.1 + KSP 2.3.12, androidx.hilt 1.4.0 | Apache-2.0 | — | — |
 | persistence | DataStore 1.2.1 (`DataStoreSettings`, `KeystoreSecureStore` в `androidMain`) | Apache-2.0 | androidMain | — |
 | платформа Android | AppCompat 1.8.0 (per-app locale ниже API 33), Biometric 1.1.0 (`BiometricUnlock`) | Apache-2.0 | — | — |
+| фон Android | WorkManager (`work-runtime-ktx`, `work-testing`): `AndroidBackgroundScheduler`, `BackgroundTaskWorker`; механизм по `background.md`, граф воркеру достаётся Hilt EntryPoint'ом (`hilt-work` не подключается) | Apache-2.0 | — | — |
+| виджеты Android | `glance-appwidget` + `glance-appwidget-testing` (`:androidApp:widget`: `GlanceAppWidget`, `ActionCallback`, эталоны через `compose()` → `RemoteViews`) | Apache-2.0 | — | — |
+| системные действия Android | `appfunctions` + `appfunctions-compiler` (KSP; каналы `voice`/`automation`) — тянет appsearch и guava, требует `compileSdk ≥ 36` и рантайма Android 16; см. `## Version policy exceptions` | Apache-2.0 | — | — |
 | изображения | шов: библиотеки в шаблоне нет; кандидаты при первом экране с картинками — Coil 3 (Android), `AsyncImage` (iOS) — запись здесь | — | — | — |
 | тесты | JUnit 4, Robolectric 4.17, Compose test v2, Roborazzi 1.74, Turbine 1.2, okio-fakefilesystem, Konsist 0.17.3, Kover 0.9.9, Swift Testing, swift-snapshot-testing 1.19.5 | MIT/Apache | — | — |
 | качество | Spotless 8.10 + ktlint 1.8, detekt 1.23.8 + compose-rules 0.4.28, sort-dependencies, BCV 0.18.2, SwiftLint 0.65.1, swift-format | Apache/MIT | — | — |
@@ -38,6 +41,16 @@ Generator, TCA/Combine, Firebase кроме FCM-транспорта, `security-
 Timber, Kermit (логи — `Logger`/`LogSink` в `shared`), kotlinx-datetime (время — `kotlin.time`),
 аналитика/IAP/рекламные SDK по умолчанию.
 
+## Version policy exceptions
+
+Политика `runtime.md#update-policy` — latest stable с двухнедельной выдержкой; alpha/beta/rc не
+берём. Исключения живут только здесь, по строке на зависимость, с причиной и триггером выхода.
+
+| зависимость | почему исключение | триггер снятия |
+|---|---|---|
+| `androidx.appfunctions` + `appfunctions-compiler` (alpha, experimental preview) | единственный механизм канала `voice`/`automation` с исполнением без экрана; решение владельца. Цена принята осознанно: `compileSdk ≥ 36`, реестр работает только на Android 16, транзитивно приезжают appsearch и guava | выход stable-релиза — перейти на него и удалить строку |
+| _<зависимость>_ | _…_ | _…_ |
+
 ## Seams
 
 | шов | интерфейс | реализация по умолчанию |
@@ -47,6 +60,7 @@ Timber, Kermit (логи — `Logger`/`LogSink` в `shared`), kotlinx-datetime (
 | аналитика | `TelemetrySink` / kind `analytics` | `none` |
 | платежи | `Payments` / kind `payments` | `none` |
 | feature flags | `AppRequirements.flags` / `flag(name, default)` ← `GET /api/app/requirements` | бэкенд |
+| планировщик фона | `PlatformDeps.background` (`BackgroundScheduler`) | WorkManager / фоновое обновление приложения по `background.md` |
 
 ## Generates
 

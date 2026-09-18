@@ -1,6 +1,6 @@
 ---
 name: android-ui
-description: Модули androidApp/ и их допустимые зависимости, тонкий @HiltViewModel над презентером из shared, экран = *Screen(state, onIntent) без VM внутри, <Group>NavEntry/Previews/TestTags, Roborazzi на каждое состояние, Material 3 без Expressive, ресурсы вместо литералов (i18n-check). Terse; «как и почему» — docs/reference/architecture.md. Грузится при правке androidApp/.
+description: Модули androidApp/ и их допустимые зависимости, тонкий @HiltViewModel над презентером из shared, экран = *Screen(state, onIntent) без VM внутри, <Group>NavEntry/Previews/TestTags, Roborazzi на каждое состояние, Material 3 без Expressive, ресурсы вместо литералов (i18n-check); вне экранов — виджеты системы на Glance в :androidApp:widget, планировщик фона и каналы системных действий. Terse; «как и почему» — docs/reference/architecture.md. Грузится при правке androidApp/.
 paths:
   - "androidApp/**"
 ---
@@ -13,10 +13,12 @@ paths:
 ## Модули
 
 - `app` → всё; `feature:<group>` → `shared`, `core:{designsystem,ui,navigation,platform}` (подключает
-  `stit.android.feature`); `core:ui` → `shared`, `designsystem`; `core:navigation`/`core:platform` → `shared`;
+  `stit.android.feature`); `widget` → `shared`, `core:{designsystem,platform}`; `core:ui` → `shared`,
+  `designsystem`; `core:navigation`/`core:platform` → `shared`;
   `core:designsystem` → ничего; `core:testing` — только в `testImplementation`; `lint` — JVM, никого не знает.
 - **Feature не зависит от feature** — падает на конфигурации (`stit.android.feature`, `afterEvaluate`)
-  и в Konsist. Общее — в `core:*` или в `shared`; `app` — медиатор (`AppNavigation`).
+  и в Konsist. Общее — в `core:*` или в `shared`; `app` — медиатор (`AppNavigation`). `widget` от
+  фич тоже не зависит: срез берётся из `<X>WidgetProvider` в `shared`.
 - Новый модуль = `include(...)` в `settings.gradle.kts` + плагин `stit.*` + строка в
   `docs/reference/architecture.md`. Пакеты — `tech.stit.mobile.android.<module>`.
 
@@ -52,6 +54,7 @@ paths:
 - Логи — `Logger` из `shared` (`LogcatSink` debug / `SentryLogSink` release), `android.util.Log` запрещён.
   Compose-тесты — `androidx.compose.ui.test.junit4.v2` (v1 — detekt), Robolectric (`robolectric.properties` пинит
   `sdk=35`); `testTag` из `UiTestTags`/`<Group>TestTags` читает и Maestro (`testTagsAsResourceId` на корне `StitApp`).
+- Виджеты (`:androidApp:widget`), фон и каналы действий (`core:platform/{background,action}`) — rule `off-screen-surfaces`.
 
 ## Сигналы
 

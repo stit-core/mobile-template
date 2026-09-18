@@ -28,9 +28,29 @@ status: draft
 
 ## Channels and categories
 
+Колонка «источник» различает два происхождения: событие домена шлёт бэкенд, локальную категорию
+показывает **само устройство** по фоновой задаче (`entry-points.trigger: background:<slug>`) — для
+неё провайдеры, транспорты и `PushRegistrar` не участвуют.
+
 | категория (UPPER_SNAKE) | Android channel_id · важность | iOS category | deep link | источник (карта `entry-points.md`) |
 |---|---|---|---|---|
-| _`ORDER_STATUS`_ | _`orders` · high_ | _`ORDER_STATUS`_ | _`https://app.<domain>/orders/{id}`_ | _`push:order-status`_ |
+| _`ORDER_STATUS`_ | _`orders` · high_ | _`ORDER_STATUS`_ | _`https://app.<domain>/orders/{id}`_ | _`push:order-status` · бэкенд `event:orders.StatusChanged`_ |
+| _`TODO_REMINDER`_ | _`todo_reminder` · default_ | _`TODO_REMINDER`_ | _`https://app.<domain>/todos/{id}`_ | _`push:todo-reminder` · локальная, `background:todo-reminder`_ |
+
+## Actions
+
+Кнопки в уведомлении — записи `system-actions.md` карты с каналом `notification:<slug>`; логика
+живёт в `<Slug>Action` (`shared`), кнопка только её зовёт.
+
+| категория | кнопка (`system-action`) | `mode` | требует разблокировки |
+|---|---|---|---|
+| _`TODO_REMINDER`_ | _`complete-todo`_ | _`headless`_ | _нет_ |
+
+Android — `NotificationCompat.Action` (рисует `PushNotifier`) → `NotificationActionReceiver`,
+адресат берётся из `deep_link` того же уведомления; iOS — `UNNotificationAction` в
+`NotificationCategories`. Тексты кнопок и ответов — ресурсы (`core_platform_action_<slug>_*`,
+`action.<slug>.*`), не литералы. Успех снимает уведомление и перерисовывает виджет; отказ
+`headless`-канала виден единственным доступным способом — уведомлением со ссылкой, где чинить.
 
 ## Permission flow
 
@@ -49,8 +69,10 @@ Data-first: `title_key`, `body_key`, `args`, `deep_link` (https из `deep-links
 - `androidApp/core/platform/…/push/{PushTransports,FcmTransport,RuStoreTransport,NotificationChannels,PushMessage,PushNotifier,StitFirebaseMessagingService,StitRuStoreMessagingService}.kt` + сервисы в `core/platform/src/main/AndroidManifest.xml`
 - `iosApp/Packages/Core/Sources/Platform/{ApnsRegistrar,PushPayload}.swift` (`NotificationCategories`, `NotificationDeduplicator`), `App/AppDelegate.swift`
 - `shared/…/core/push/{PushRegistrar,DeviceRegistration,PushStatus,PushTransport}.kt`, `PlatformDeps.pushTransports`/`notificationPermission`
+- кнопки категорий: `androidApp/core/platform/…/action/NotificationActionReceiver.kt`, `UNNotificationAction` в `Core/Platform/PushPayload.swift`, строки `core_platform_action_*` / `action.*`
+- локальные категории: показ из `BackgroundResult.Notify` (`background.md`), без транспортов и регистрации
 - `dependencies.md` (SDK провайдеров) + `compliance.md` (privacy manifests)
-- BACKEND-HANDOFF B-18 (`PUT /api/v1/devices`, отправка через `pushkit`)
+- BACKEND-HANDOFF B-18 (`PUT /api/v1/devices`, отправка через `pushkit`) — только для категорий с источником-событием
 
 ## Открытые вопросы
 

@@ -6,7 +6,8 @@ kotlinx-serialization, презентеры на `StateFlow`) + нативный
 (Xcode 27, Swift 6.4, SwiftUI, `@Observable`, SwiftPM local packages).
 Гейт: Spotless/ktlint + detekt + Android Lint + Robolectric/Roborazzi + Kover +
 Konsist; swift-format + SwiftLint + archlint + `swift test` чистых пакетов; паритет
-токенов/строк/deep links; macOS-стадии — по SSH (`make check-mac`).
+токенов/строк/deep links и поверхностей вне экранов (`capability-check`); macOS-стадии —
+по SSH (`make check-mac`).
 
 Этот файл — **ядро (always-on) + роутер**. Детали — в `docs/`, контекстные
 правила — в `.claude/rules/` (path-scoped), процедуры — в `.claude/skills/`.
@@ -41,13 +42,14 @@ Konsist; swift-format + SwiftLint + archlint + `swift test` чистых пак�
 ## Проектирование первично, код вторичен
 
 Карта приложения проектируется в соседнем `<org>/strategy`: слой
-`docs/projects/<slug>/mobile/<surface>/` — 9 kinds (entities · screens · flows ·
-features · shell · entry-points · permissions · shared-api · shared-lib); там её
-ведёт `/mobile-deep-dive`. Этот репо её **читает** (cross-repo, read-only):
+`docs/projects/<slug>/mobile/<surface>/` — 12 kinds (entities · screens · flows ·
+features · shell · entry-points · permissions · system-actions · widgets ·
+background-tasks · shared-api · shared-lib); там её ведёт `/mobile-deep-dive`.
+Этот репо её **читает** (cross-repo, read-only):
 `/scaffold` и `/de-template` разворачивают stable-записи в код и сами выводят
 пути (`shared/…/feature/<group>/<Slug>Presenter.kt`, `androidApp/feature/<group>/`,
 `iosApp/Packages/Features/Sources/<Group>Feature/`) из kind + slug. Артефакты
-платформы — локальные `docs/stack/` (13 kinds + 2 условных). Код пишется по
+платформы — локальные `docs/stack/` (14 kinds + 2 условных). Код пишется по
 артефактам, не наоборот. Reference-фичи `demo`, `shell`, `requirements`, `auth`,
 `profile`, `todos`, `settings`, `push` — учебные образцы
 (`docs/reference/architecture.md#reference`); `profile`/`todos` удаляет `/de-template`.
@@ -73,8 +75,9 @@ next-step, не падают.
 | `make gen` / `gen-check` / `mock-check` | модели из `api/openapi.yaml` (+ `openapi.lock`; нужны `OPENAPI_GENERATOR_JAR`, `python3` + PyYAML; затем `make api-dump`) / проверка дрейфа / фикстуры ↔ схема |
 | `make gen-tokens` / `tokens-check` | `design/tokens.json` → `Tokens.kt` + `Tokens.swift` (коммитятся) / паритет: регенерация во temp == дерево |
 | `make i18n-check` / `deeplinks-check` | `values/` == `values-ru/` + `error.<code>` → `core_ui_error_*` (iOS xcstrings — WARN) / манифест ↔ `config/env` ↔ `DeepLinkParserTest` ↔ `deep-links.md` |
+| `make capability-check` | поверхности вне экранов: задачи `shared` ↔ исполнители, тесты и `BGTaskSchedulerPermittedIdentifiers`; виджеты ↔ эталоны и тесты состояний; действия ↔ строки обоих `values`; классы из манифеста существуют |
 | `make swift-lint` / `swift-test` | SwiftLint `--strict` + archlint (граф `Package.swift`) / `swift test` `Pure` + пол 70 % |
-| `make check` | **gate** (Linux-полный): Swift-стадии → паритет (tokens/i18n/deeplinks) → контракт → detekt/Lint/тесты/Kover → kmp/api → assembleDevDebug; порядок — `docs/reference/architecture.md#гейт` |
+| `make check` | **gate** (Linux-полный): Swift-стадии → паритет (tokens/i18n/deeplinks/capability) → контракт → detekt/Lint/тесты/Kover → kmp/api → assembleDevDebug; порядок — `docs/reference/architecture.md#гейт` |
 | `make check-fast` | Swift-формат + SwiftLint + Kotlin-формат + detekt + `shared` jvmTest — цикл «пока пишу» |
 | `make check-mac` | macOS-стадии по SSH (`MAC_HOST`): link framework, iosSimulatorArm64Test, xcodebuild, планы Unit + Snapshot |
 | `make check-full` | `check` + `check-mac`; обязателен перед `/release` |
@@ -94,6 +97,7 @@ next-step, не падают.
 | Архитектура `shared/` ↔ `androidApp/` ↔ `iosApp/`, матрица зависимостей | `docs/reference/architecture.md` + rules `kmp-shared`, `android-ui`, `ios-ui` |
 | Фасад Kotlin → Swift (плоский, `apiDump`) | rule `kmp-public-api` |
 | Навигация и deep links | rules `navigation`, `deep-links-and-push` |
+| Поверхности вне экранов (виджеты, фон, системные действия) | rule `off-screen-surfaces` + `docs/reference/architecture.md`, `docs/stack/background.md` |
 | Экосистема (шаблоны, контракты, Gitea Release как STOP) | `docs/reference/ecosystem.md` |
 | Релиз, версии, магазины, Mac-хост | `docs/reference/release.md`, `distribution.md`, `mac-host.md` |
 | Observability (Sentry/GlitchTip, `Logger`/`LogSink`, `os.Logger`) | `docs/reference/observability.md` + rule `observability` |
@@ -102,8 +106,8 @@ next-step, не падают.
 | env, флейворы, xcconfig, секреты, сессия | rules `env-and-config`, `signing-and-secrets`, `auth-and-session` |
 | API-контракт, кодоген, mock-режим | rules `api-contract`, `mock-and-fixtures` |
 | Магазины и право | rules `store-compliance`, `privacy-and-law` |
-| Карта приложения (9 kinds, cross-repo) | `../strategy/docs/projects/<slug>/mobile/<surface>/` (копия канона — `docs/reference/strategy-mobile-canon/`); маппинг в код — `docs/reference/strategy-mapping.md` |
-| Stack-артефакты (13 + 2 kinds) | `docs/stack/README.md` |
+| Карта приложения (12 kinds, cross-repo) | `../strategy/docs/projects/<slug>/mobile/<surface>/` (копия канона — `docs/reference/strategy-mobile-canon/`); маппинг в код — `docs/reference/strategy-mapping.md` |
+| Stack-артефакты (14 + 2 kinds) | `docs/stack/README.md` |
 | Устройство `.claude`-системы, кто что enforce'ит | `docs/contributing.md` |
 | Forward-only стиль | rule `forward-only` |
 

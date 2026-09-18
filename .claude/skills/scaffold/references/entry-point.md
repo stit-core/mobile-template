@@ -1,14 +1,17 @@
-# scaffold › entry-point — deep link, push, shortcut, share
+# scaffold › entry-point — deep link, push, shortcut, share, widget
 
 Читает строку `entry-points.md` карты (`slug · kind (deep-link|push|shortcut|share|widget|demo)
-· паттерн · целевой экран · требует сессии · pending после логина · status`). Целевой экран
-и его `Route.<Key>` уже существуют.
+· паттерн · целевой экран · требует сессии · pending после логина · trigger · status`). Целевой
+экран и его `Route.<Key>` уже существуют.
 
 ## Вопросы до начала (≤ 3)
 
-1. `kind`: `deep-link` (путь) или `push` (категория)?
-2. Хост/схема per env уже в `docs/stack/deep-links.md`? Новый хост — INFRA-HANDOFF.
-3. Требует сессии → pending route после логина (дефолт для приватных экранов)?
+1. `kind`: `deep-link` (путь), `push` (категория), `shortcut`/`share`/`widget` (платформенный
+   вход) или `demo`?
+2. При `push`: сигнал бэкенда (`trigger: event:<ctx>.<Event>`) или локальное уведомление,
+   которое показывает фоновая задача устройства (`trigger: background:<slug>`)?
+3. Хост/схема per env уже в `docs/stack/deep-links.md` (новый хост — INFRA-HANDOFF); требует
+   сессии → pending route после логина (дефолт для приватных экранов)?
 
 ## deep-link
 
@@ -41,11 +44,29 @@ docs/stack/push.md                                        # + строка ка�
 `NotificationDeduplicator`) → BACKEND-HANDOFF (событие домена, которое шлёт бэкенд, — `trigger`
 записи карты) → `make check`.
 
-## shortcut / share / widget
+При `trigger: background:<slug>` уведомление показывает **устройство**: бэкенда, транспортов и
+`PushRegistrar` в цепочке нет, категория и `deep_link` — те же, планирование — `/scaffold
+background-task` (`result: notification:<slug>`), локальный показ — `PushNotifier` /
+`LocalNotifier`. BACKEND-HANDOFF в этой ветке не нужен; строка категории в `push.md` помечается
+как локальная.
+
+Кнопки в уведомлении (ответ из шторки, «Готово») — не вход: это `/scaffold system-action` с
+каналом `notification:<slug>`.
+
+## shortcut / share
 
 Платформенные точки входа без `shared`-логики сверх `Route`: Android — `shortcuts.xml` /
 intent-filter `ACTION_SEND`; iOS — `UIApplicationShortcutItems` / share extension (отдельный
 таргет — сначала спросить). Все ведут в `Route` через тот же роутер.
+
+## widget
+
+Вход **парный** записи `widgets.md`: `pattern` — slug виджета, `target` — экран, куда ведёт тап.
+Своей платформенной раскладки у входа нет: провайдер кладёт в снимок `tapUrl` — тот же https-адрес,
+что и deep link, — а `actionStartActivity(ACTION_VIEW, tapUrl)` с `setPackage` (Glance) и
+`widgetURL` (iOS) отдают его тому же роутеру (`MainActivity.openLink` / `Router.open`). Сам
+виджет — `/scaffold widget`, его кнопки — `/scaffold system-action` с каналом `widget:<slug>`.
+Шаги: путь есть в `deep-links.md` и покрыт `DeepLinkParserTest` → `tapUrl` в снимке → `make check`.
 
 ## Anti-patterns
 
@@ -53,3 +74,5 @@ intent-filter `ACTION_SEND`; iOS — `UIApplicationShortcutItems` / share extens
 - ❌ Секрет или токен в ссылке/payload.
 - ❌ Custom scheme как единственный вход для веб-ссылок.
 - ❌ Хост в манифесте литералом (NF-18) или без строки в `deep-links.md` и без `wellknown`.
+- ❌ Вход `kind: widget` без записи в `widgets.md` (и наоборот — виджет с `tap` без входа).
+- ❌ Локальное уведомление (`trigger: background:<slug>`) через транспорты push и BACKEND-HANDOFF.

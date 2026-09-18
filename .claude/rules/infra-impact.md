@@ -29,7 +29,7 @@ paths:
 |---|---|---|
 | **`<org>/infra`** | новый/изменённый deep-link-хост или отпечаток подписи (`deep-links.md`, `signing.md`); `SENTRY_DSN`/хост GlitchTip; `API_BASE_URL` per env; URL политики/удаления аккаунта (`compliance.md`); `MOBILE_*` env сервиса `wellknown` | INFRA-HANDOFF (I-*) |
 | **`<org>/backend`** | нужный endpoint/поле отсутствуют в `api/openapi.yaml` соседа (`POST /api/auth/refresh`, `GET /api/app/requirements`, `PUT /api/v1/devices`, новый ресурс); несовместимое изменение спеки; `min_version` после раскатки; push-категория/событие; `AuthMode.Cookie` | BACKEND-HANDOFF (B-*) |
-| **`<org>/strategy`** | код расходится с картой `mobile/<surface>/` (экран/фича/entry-point/permission без записи или с другим `status`); нужна новая запись | STRATEGY-HANDOFF (S-*) — карта правится там, `/mobile-deep-dive` |
+| **`<org>/strategy`** | код расходится с картой `mobile/<surface>/` (экран/фича/entry-point/permission/системное действие/виджет/фоновая задача без записи или с другим `status`); нужна новая запись | STRATEGY-HANDOFF (S-*) — карта правится там, `/mobile-deep-dive` |
 
 Не-касание: внутренняя логика, тесты, рефактор, правка значений в `config/env` в пределах
 уже согласованных хостов, code-default без нового обязательного ключа.
