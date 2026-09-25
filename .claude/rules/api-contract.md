@@ -14,7 +14,8 @@ paths:
 
 - **`api/openapi.yaml` — копия `<backend-path>/api/openapi.yaml`** (`docs/stack/api.md`,
   дефолт `../backend`); правится только `make gen` (копирование + генерация + `api/openapi.lock`).
-  `Edit`/`Write` на спеку — deny. Нет соседа — reference-спека шаблона остаётся как есть.
+  Правка спеки инструментами агента — deny (`Edit(api/openapi.yaml)`). Нет соседа —
+  reference-спека шаблона остаётся как есть.
 - **Модели генерируются** (openapi-generator 7.25, `kotlin` multiplatform, models-only,
   kotlinx-serialization, конфиг `config/openapi/kotlin-models.yaml`) в
   `shared/src/commonMain/kotlin/tech/stit/mobile/core/api/generated/` и **коммитятся**;

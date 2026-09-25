@@ -1,6 +1,6 @@
 ---
 name: init-service
-description: Оркестратор онбординга потребителя шаблона — ведёт путь форк → идентичность (platforms, preset, applicationId/bundle id, auth-режим) → env/config → связка с картой mobile/<surface>/ в соседнем <org>/strategy → черновики docs/stack (/stack-deep-dive) → handoffs соседям → /de-template, пока проект не перестанет помнить про шаблон. Активируй когда юзер форкнул mobile-template и говорит "/init-service", "онбординг", "развернуть своё приложение из шаблона", "с чего начать новый проект", или когда видишь свежий форк (applicationId ещё tech.stit.mobile, reference-фичи profile/todos на месте, docs/stack пуст). Сам не проектирует и не де-темплейтит — чейнит специализированные скиллы по порядку.
+description: Оркестратор онбординга потребителя шаблона — ведёт путь форк → идентичность (platforms, preset, applicationId/bundle id, auth-режим) → env/config → связка с картой mobile/<surface>/ в соседнем <org>/strategy → черновики docs/stack (/stack-deep-dive) → handoffs соседям → /de-template, пока проект не перестанет помнить про шаблон. Применяй, когда юзер (или агент хаба <org>/infra) начинает свой проект из форка mobile-template или видишь свежий форк (applicationId ещё tech.stit.mobile, reference-фичи profile/todos на месте, docs/stack пуст). Сам не проектирует и не де-темплейтит — чейнит специализированные скиллы по порядку.
 ---
 
 # Skill: init-service (онбординг-оркестратор)
@@ -17,7 +17,7 @@ description: Оркестратор онбординга потребителя 
   reference-фичи `profile`/`todos` на месте, `docs/stack/` содержит только `README.md` и `_templates/`
 - `--add-platform ios|android` — восстановление половины после `/de-template --platform`
 
-## Когда НЕ применять
+## Когда не применять
 
 - Проект уже де-темплейтизирован (свой `applicationId`, reference-фичи удалены) — обычный
   день-в-день через `/smartdev`.
@@ -68,11 +68,11 @@ none`, схема deep link (`<scheme>://`), языки (`ru` default), влад
      cp ../strategy/docs/projects/_template/mobile/_template/*.md ../strategy/docs/projects/<slug>/mobile/<surface>/
      ls ../strategy/docs/projects/<slug>/mobile/<surface>/*.md | wc -l   # 12 форм
      ```
-     + строка в roadmap `## Backlog`: «S-1 канон слоя mobile/ в strategy».
+     + строка в `.claude/plans/backlog.md`: «S-1 канон слоя mobile/ в strategy».
   2. **Канон есть, папки поверхности нет** → «спроектируй через `/mobile-deep-dive <slug> <surface>`
      в `<org>/strategy` и вернись»; можно продолжать стадии 4–5, `/de-template` подождёт.
   3. **Соседа нет вообще** → `strategy-path` не задан; `/scaffold` работает в режиме
-     `--from-args` с предупреждением; строка в roadmap «завести карту».
+     `--from-args` с предупреждением; строка в `.claude/plans/backlog.md` «завести карту».
 - Если канон в strategy есть — сверь формы с копией:
   `diff -r docs/reference/strategy-mobile-canon/_template
   <strategy-path>/docs/projects/_template/mobile/_template` — 12 форм (entities · screens ·
@@ -96,14 +96,16 @@ none`, схема deep link (`<scheme>://`), языки (`ru` default), влад
   `POST /api/auth/refresh`, `GET /api/app/requirements`, `PUT /api/v1/devices`; отсутствуют —
   печатай B-1…B-3 / B-17 / B-18 (`auth.mode: cookie` — режим совместимости до B-1…B-3).
   Спеки соседа нет — reference-спека шаблона остаётся.
-- **INFRA-HANDOFF**: `wellknown` (`MOBILE_*` env по `deep-links.md`), `SENTRY_DSN` per env,
-  URL политики/удаления аккаунта (I-6).
-- Блоки — в чат и в `**Infra impact.**` секции онбординга в roadmap.
+- **INFRA-HANDOFF**: `.well-known` на хостах deep links (I-1: `applicationId`, отпечатки,
+  Team ID · bundle id — по `deep-links.md`), `SENTRY_DSN` per env, URL политики/удаления
+  аккаунта (I-6).
+- Блоки — в ответ (юзеру или хабу `<org>/infra`, если онбординг запущен оттуда) и в
+  раздел `## Handoff` плана онбординга (`.claude/plans/`).
 
 ### 6. Развернуть фундамент → `/de-template`
 
-Gate `/de-template`: stack `stable`, карта `mobile/<surface>/` stable (или `--no-strategy` с
-записью в roadmap), `make check` зелёный, при `ios ∈ platforms` — `make check-mac` зелёный
+Gate `/de-template`: stack `stable`, карта `mobile/<surface>/` stable (или `--no-strategy` со
+строкой в `.claude/plans/backlog.md`), `make check` зелёный, при `ios ∈ platforms` — `make check-mac` зелёный
 или явный `--ios-unverified`. **Чейнь в `/de-template`** (Phase A идентичность → Phase B prune
 и docs → Verify). Затем `/scaffold` по stable-записям карты.
 
@@ -122,7 +124,7 @@ scripts/tools/mac.sh docs/reference/mac-host.md` и iOS-секции kinds из 
 Сообщи юзеру: онбординг закрыт, дальше `/smartdev`; первый релиз — `/release --stop 1`.
 `docs/getting-started.md` (META) удалён `/de-template`.
 
-## Что init-service НЕ делает
+## Что init-service не делает
 
 - ❌ Не проектирует карту (`/mobile-deep-dive` в strategy) и стек (`/stack-deep-dive` здесь) сам.
 - ❌ Не пишет в `../strategy`, `../backend`, `../infra` — только next-step и handoff-блоки.

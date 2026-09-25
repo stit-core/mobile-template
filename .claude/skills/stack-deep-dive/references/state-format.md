@@ -24,7 +24,7 @@ ref: docs/stack/deep-links.md
 - Custom scheme `acme://` — только для QR и писем; в push и вебе — https-URL.
 
 ## Что копать дальше
-- После отпечатков — обновить `signing.md#fingerprints` и INFRA-HANDOFF `MOBILE_ANDROID_SHA256_PLAY`.
+- После отпечатков — обновить `signing.md#fingerprints` и INFRA-HANDOFF I-1 (отпечаток Play в `assetlinks.json`).
 ```
 
 ## Frontmatter

@@ -40,7 +40,7 @@ status: draft
 
 ## Symbols
 
-`mapping.txt` — ассет STOP-1 из `make release-android`, в GlitchTip — `sentry-cli upload-proguard` (шаг
+`mapping.txt` — ассет STOP-1 из `make release-android`, в трекер — `sentry-cli upload-proguard` (шаг
 `/release`); dSYM — `sentry-cli debug-files upload` на Mac; оба до STOP-2 (в `preflight.sh` проверки нет). Секреты —
 `SENTRY_AUTH_TOKEN`, `SENTRY_ORG`, `SENTRY_PROJECT_*`, `SENTRY_URL` (release-time).
 
@@ -62,7 +62,7 @@ status: draft
 - `androidApp/core/platform/…/SentryCrashReporter.kt`, `iosApp/Packages/Core/Sources/Platform/SentryCrashReporter.swift`
 - шаг символов (mapping + dSYM через `sentry-cli`) в `/release`
 - пороги — блок `RISK`/`PLAY` STORE-HANDOFF
-- INFRA-HANDOFF I-5 (проекты и DSN в GlitchTip)
+- INFRA-HANDOFF I-5 (`SENTRY_DSN` per env — проекты в трекере ошибок)
 
 ## Открытые вопросы
 

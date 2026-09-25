@@ -29,7 +29,7 @@ status: draft
 | platforms | `[android, ios]` |
 | preset | `companion` _(`companion` \| `consumer` \| `enterprise`)_ |
 | auth.mode | `bearer` _(`bearer` \| `cookie` \| `none`; детали — `auth.md`)_ |
-| ios verified | _`make check-mac` на HEAD / не верифицирован (долг в roadmap)_ |
+| ios verified | _`make check-mac` на HEAD / не верифицирован (долг в `.claude/plans/backlog.md`)_ |
 
 ## Ecosystem
 

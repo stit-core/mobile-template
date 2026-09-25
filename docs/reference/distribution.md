@@ -92,7 +92,7 @@ App Review требует «active demo account or fully-featured demo mode»: r
 Play App Signing подписывает пользовательские сборки своим ключом, RuStore и direct-сборки —
 релизным ключом проекта, загрузка в Play — upload-ключом. `assetlinks.json` содержит **все**
 отпечатки массивом, иначе App Links верифицируются только у части пользователей; инвентарь —
-`signing.md`, значения для `wellknown` — INFRA-HANDOFF.
+`signing.md`, данные для `.well-known` — INFRA-HANDOFF I-1.
 
 ## Тест-дистрибуция без SaaS
 

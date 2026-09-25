@@ -55,9 +55,9 @@ style:
     active: true
     comments:
       - value: 'TODO:'
-        reason: 'TODO в коде не живёт — незакрытое идёт строкой в .claude/plans/roadmap.md.'
+        reason: 'TODO в коде не живёт — незакрытое идёт строкой в .claude/plans/backlog.md.'
       - value: 'FIXME:'
-        reason: 'FIXME в main-ветке не живёт — заводи запись в roadmap.'
+        reason: 'FIXME в main-ветке не живёт — заводи строку в .claude/plans/backlog.md.'
       - value: 'STOPSHIP:'
         reason: 'STOPSHIP нельзя мёржить в main.'
   MaxLineLength:

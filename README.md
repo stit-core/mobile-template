@@ -28,15 +28,16 @@ business-strategy-template (<org>/strategy)   ← карта продукта: �
         │  /scaffold и /de-template читают stable-записи
         ▼
 mobile-template (<org>/mobile)  ← вы здесь ──► <org>/backend (Bearer-auth, openapi.yaml, requirements, devices)
-        │                                  ──► <org>/infra (wellknown: assetlinks / AASA, SENTRY_DSN)
+        │                                  ──► <org>/infra (хаб; INFRA-HANDOFF: .well-known — assetlinks / AASA, SENTRY_DSN)
         │  STOP-1: Gitea Release vX.Y.Z (AAB + APK + mapping · IPA + dSYM · checksums · release-notes)
         ▼
 RuStore · Google Play · App Store   ← STOP-2: подача в каналы; модерация и промоушен — человек
 ```
 
-Корп control-plane (Gitea Release, Vaultwarden, ntfy, GlitchTip) —
-[`corp-infra-template`](https://git.stit.tech/stit-core/corp-infra-template).
-Подробнее — [`docs/reference/ecosystem.md`](docs/reference/ecosystem.md).
+Задачи сюда обычно приносит агент из операционного хаба `<org>/infra` — там общий план
+проекта; прямой заход в репо — тот же режим с той же обвязкой. Релиз в магазины — свой
+`/release`: деплой из инфры приложения не касается. Трекер ошибок — Sentry-совместимый по
+`SENTRY_DSN` проекта. Подробнее — [`docs/reference/ecosystem.md`](docs/reference/ecosystem.md).
 
 **Один репо — обе платформы.** Общее Kotlin-ядро даёт агенту на Linux проверяемую работу
 над iOS-половиной без Mac: `shared/` компилируется в klib под iOS-таргеты, тестируется в
@@ -89,7 +90,7 @@ claude                 # → /smartdev → /init-service
   поверхностей вне экранов (`tokens-check`, `i18n-check`, `deeplinks-check`,
   `capability-check`); негативные фикстуры `make gate-selftest`.
 - **Релиз** — версия из тега `vX.Y.Z`, подписанные AAB/APK (Linux) и IPA (Mac), символы в
-  GlitchTip, Gitea Release, подача в RuStore / Play / TestFlight, STORE-HANDOFF.
+  трекер ошибок, Gitea Release, подача в RuStore / Play / TestFlight, STORE-HANDOFF.
 
 ## Команды
 

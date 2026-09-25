@@ -49,13 +49,13 @@
       "Read(**/*.jks)", "Read(**/*.keystore)", "Read(**/*.p12)", "Read(**/*.p8)",
       "Read(**/*.mobileprovision)", "Read(.env.local)", "Read(local.properties)", "Read(iosApp/Config/Local.xcconfig)",
       "Edit(**/*.jks)", "Edit(**/*.keystore)", "Edit(**/*.p12)", "Edit(**/*.p8)",
-      "Edit(**/build/**)", "Write(**/build/**)",
-      "Edit(**/core/api/generated/**)", "Write(**/core/api/generated/**)",
-      "Edit(shared/api/**)", "Write(shared/api/**)",
-      "Edit(iosApp/**/*.pbxproj)", "Write(iosApp/**/*.pbxproj)",
+      "Edit(**/build/**)",
+      "Edit(**/core/api/generated/**)",
+      "Edit(shared/api/**)",
+      "Edit(iosApp/**/*.pbxproj)",
       "Edit(gradle/wrapper/gradle-wrapper.properties)",
-      "Edit(api/openapi.yaml)", "Write(api/openapi.yaml)",
-      "Write(**/.claude/projects/**/memory/**)", "Edit(**/.claude/projects/**/memory/**)"
+      "Edit(api/openapi.yaml)",
+      "Edit(**/.claude/projects/**/memory/**)"
     ]
   }
 }

@@ -69,7 +69,7 @@ Demo-доступ (`entry-points.md` `demo`): в обычной сборке —
 
 - `CHANNELS` для `/release` (STOP-2), `dist/`-структура, STORE-HANDOFF-шаблон
 - `scripts/release/build-android.sh` (AAB + APK + mapping + checksums)
-- App Review notes — блок `TESTFLIGHT` STORE-HANDOFF; дедлайны — `release-preflight`
+- App Review notes — блок `TESTFLIGHT` STORE-HANDOFF; дедлайны — блок `RISK` STORE-HANDOFF
 
 ## Открытые вопросы
 

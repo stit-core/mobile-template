@@ -13,11 +13,11 @@
 |---|---|
 | Linux-машина: JDK 21 (Temurin), Android SDK (`platforms/android-37.2`, build-tools, platform-tools, `cmdline-tools` с `android` CLI), Swift 6.4 + SwiftLint в `PATH`; RAM ≥ 6 ГБ, диск ≥ 15 ГБ | гейт и Android-релиз целиком; Swift-стадии Linux-части |
 | `export JAVA_HOME=… ANDROID_HOME=… SWIFT_TOOLCHAIN=…` (или `local.properties` из `local.properties.example`) | `make doctor` печатает next-step, если чего-то нет |
-| Соседи sibling-checkout'ами: `../strategy` (форк `business-strategy-template`, поверхность `type: mobile` в `surface.md`), `../backend` (`api/openapi.yaml`), `../infra` | карта, контракт, `wellknown`; соседа нет — скиллы печатают next-step |
+| Соседи sibling-checkout'ами: `../strategy` (форк `business-strategy-template`, поверхность `type: mobile` в `surface.md`), `../backend` (`api/openapi.yaml`), `../infra` (операционный хаб проекта) | карта, контракт, адресат INFRA-HANDOFF (`.well-known`, хосты, DSN); соседа нет — скиллы печатают next-step |
 | `OPENAPI_GENERATOR_JAR` (openapi-generator-cli 7.25.0) + `python3` с PyYAML (`python3-yaml`) | `make gen` (модели из спеки соседа) и полная `make gen-check`; без них `gen-check` сверяет только lock; после `make gen` — `make api-dump` (модели — часть фасада `shared`) |
 | **Mac build-host** (Apple silicon, Xcode 27) по SSH — **предусловие iOS-ветки** (`docs/reference/mac-host.md`) | линковка `Shared.framework`, `Core`/`Features`, snapshot-тесты, IPA; без него iOS помечен «не верифицирован» |
 | Аккаунты магазинов: RuStore (бесплатно, сразу), Google Play ($25, D-U-N-S ~30 дней, verification), Apple Developer Program ($99/год, оплата из РФ — решить заранее) | STOP-2; сроки — `docs/reference/distribution.md` |
-| Vaultwarden-коллекция `mobile/<org>/<app>`, ntfy-топик `releases-<org>` (corp-контур) | ключи и уведомления релиза |
+| Место для ключей подписи и store-credentials вне репозитория (решение владельца; инвентарь — `docs/stack/signing.md`) | на время релиза значения экспортируются в env (`STIT_KEYSTORE_*` и др.) |
 
 ## 1. Форк
 
@@ -30,7 +30,9 @@
 ## 2. `/smartdev` → `/init-service`
 
 В Claude Code: `/smartdev` — `make doctor` + `make status`; на свежем форке cockpit переключит в
-`/init-service`. Оркестратор ведёт стадии 3–7, сам не проектирует и не де-темплейтит.
+`/init-service`. Оркестратор ведёт стадии 3–7, сам не проектирует и не де-темплейтит. Обычно
+онбординг запускает агент из операционного хаба `<org>/infra` по общему плану проекта; прямой
+запуск здесь — тот же путь с той же обвязкой.
 
 ## 3. Идентичность и env — `docs/stack/service.md`, `config.md`
 
@@ -55,7 +57,7 @@ ls ../strategy/docs/projects/<slug>/mobile/<surface>/*.md | wc -l   # 12 фор�
 
 Форма — [reference/strategy-mobile-canon/README.md](reference/strategy-mobile-canon/README.md);
 маппинг в код — [reference/strategy-mapping.md](reference/strategy-mapping.md). Соседа нет —
-`/scaffold --from-args` с записью в roadmap «завести карту».
+`/scaffold --from-args` со строкой в `.claude/plans/backlog.md` «завести карту».
 
 ## 5. Стек — `/stack-deep-dive`
 
@@ -66,7 +68,7 @@ cross-kind-инварианты 1–8. При `platforms: [android]` iOS-сек�
 ## 6. Фундамент — `/de-template`
 
 Gate: стек `stable`, карта stable (или `--no-strategy`), `make check` зелёный, при iOS —
-`make check-mac` или `--ios-unverified` (долг в roadmap). Phase A: пакет `tech.stit.mobile` →
+`make check-mac` или `--ios-unverified` (долг в `.claude/plans/backlog.md`). Phase A: пакет `tech.stit.mobile` →
 свой, `applicationId`/bundle id, конфиги env/xcconfig, README, обрезка платформы
 (`--platform android|ios`), strip меты. Phase B: prune reference-фич `profile`/`todos`
 (остаются `demo`, `shell`, `requirements`, `auth`, `settings`, `push`), пресетные kinds, docs.
@@ -79,12 +81,13 @@ permission / system-action / widget / background-task / api).
   `GET /api/app/requirements`, `PUT /api/v1/devices`, `UserView.version` (B-20), закоммиченная
   `api/openapi.yaml`; до них
   работают fallback'и (`AuthMode.Cookie`, reference-спека, 404 ⇒ «требований нет»).
-- **`<org>/infra`** (INFRA-HANDOFF): сервис `wellknown` (`MOBILE_ANDROID_APP_ID`,
-  `MOBILE_ANDROID_SHA256_*`, `MOBILE_IOS_TEAM_ID`, `MOBILE_IOS_BUNDLE_ID` per env), `SENTRY_DSN`,
-  URL политики ПДн и веб-удаления аккаунта.
+- **`<org>/infra`** (INFRA-HANDOFF): раздача `.well-known` на хостах deep links
+  (`assetlinks.json` — `applicationId` и SHA-256 отпечатки, AASA — Team ID · bundle id; per env),
+  `SENTRY_DSN`, URL политики ПДн и веб-удаления аккаунта.
 - **`<org>/strategy`** (STRATEGY-HANDOFF): расхождение кода с картой.
 
-Блоки — в чат и в `**Infra impact.**` плана; из этого репо в соседей не пишут.
+Блоки — в ответ (юзеру или хабу `<org>/infra`) и в раздел `## Handoff` плана; из этого репо в
+соседей не пишут.
 
 ## 8. Первый релиз — `/release --stop 1`
 

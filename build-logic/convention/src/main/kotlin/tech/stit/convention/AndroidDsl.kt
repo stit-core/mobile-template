@@ -50,7 +50,7 @@ internal fun Project.envFlavors(): List<EnvFlavor> {
     }
 }
 
-// Ключ живёт вне репозитория (Vaultwarden); путь и пароли — только из env процесса сборки.
+// Ключ живёт вне репозитория; путь и пароли — только из env процесса сборки.
 internal fun Project.configureReleaseSigning(extension: ApplicationExtension) = with(extension) {
     val keystorePath = providers.environmentVariable("STIT_KEYSTORE_PATH")
     signingConfigs.create("releaseLocal") {

@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # Android-ассеты STOP-1 (08 §7.2): подписанные prod AAB + APK, mapping.txt и checksums.sha256 → dist/.
-# Подпись — только из env STIT_KEYSTORE_* (Vaultwarden mobile/<org>/<app>); версия — из тега.
+# Подпись — только из env STIT_KEYSTORE_* (ключи хранятся вне репозитория); версия — из тега.
 #   build-android.sh [vX.Y.Z]
 set -euo pipefail
 cd "$(dirname "$0")/../.."
 eval "$(bash scripts/tools/version-from-tag.sh "${1:-}")"
 export APP_VERSION APP_BUILD
 for name in STIT_KEYSTORE_PATH STIT_KEYSTORE_PASSWORD STIT_KEY_ALIAS STIT_KEY_PASSWORD; do
-    [ -n "${!name:-}" ] || { echo "FAIL: $name не задан — секреты подписи берутся из env (Vaultwarden mobile/<org>/<app>)"; exit 2; }
+    [ -n "${!name:-}" ] || { echo "FAIL: $name не задан — секреты подписи берутся из env, ключи хранятся вне репозитория"; exit 2; }
 done
 [ -f "$STIT_KEYSTORE_PATH" ] || { echo "FAIL: keystore $STIT_KEYSTORE_PATH не найден"; exit 2; }
 

@@ -78,7 +78,7 @@
    `WidgetGraph`, appex и пакеты `Core/{SystemActions,Widgets}` остаются каркасами под первый свой
    виджет; `make capability-check` зелёный на пустом реестре.
 
-## Что НЕ удалять
+## Что не удалять
 
 - `core/deeplink` (инфраструктура deep links остаётся без маршрутов `todos`).
 - `core/background` и `core/widget` + `PlatformDeps.background`, `background/{AndroidBackgroundScheduler,

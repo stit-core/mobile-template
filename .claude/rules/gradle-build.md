@@ -22,7 +22,9 @@ paths:
 - **Версии и SDK-уровни — только `gradle/libs.versions.toml`** (`compileSdk`,
   `compileSdkMinor`, `minSdk`, `targetSdk` — там же; плагины читают `libs.int(...)`).
   Версия в `build.gradle.kts` модуля — нарушение. Обновление версий — через `/plan`, latest
-  stable с двухнедельной выдержкой; alpha/beta/rc — никогда. Пары `kotlin` ↔ `ksp` ↔ `hilt`
+  stable с двухнедельной выдержкой; alpha/beta/rc — только решением владельца со строкой в
+  `docs/stack/dependencies.md § Version policy exceptions` (причина + триггер снятия; в шаблоне —
+  `androidx.appfunctions`). Пары `kotlin` ↔ `ksp` ↔ `hilt`
   и `agp` ↔ `androidTools` (= AGP + 23) обновляются вместе.
 - **AGP 9 со встроенным Kotlin**: `org.jetbrains.kotlin.android` не применяется,
   `kotlinOptions {}` нет (`kotlin { compilerOptions {} }`), kapt нет — только KSP;

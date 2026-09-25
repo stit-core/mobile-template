@@ -45,5 +45,6 @@ paths:
 3. `make api-dump` (обновляет оба дампа в `shared/api/`) — дампы коммитятся в том же коммите.
 4. `make api-check` зелёный; Swift-адаптеры в `iosApp/` — атом «Mac-verify».
 
-`./gradlew :shared:apiDump` напрямую — в `permissions.deny`: изменение фасада проходит только
-через верб и план. Не редактируй `shared/api/*.api` руками.
+Изменение фасада проходит только через верб `make api-dump` и план — Gradle-таск `apiDump`
+напрямую не зови (`./gradlew apiDump*` — в `permissions.deny`). `shared/api/*.api` руками не
+редактируй (`Edit(shared/api/**)` — deny).

@@ -27,7 +27,8 @@ paths:
   `SentryCrashReporter.init(context, config, appInfo)` в `StitApplication.onCreate`,
   `SentryCrashReporter(dsn:environment:release:)` в `AppEnvironment.init`; при пустом DSN Android
   отдаёт `NoopTelemetrySink`. `environment = APP_ENV`, `release = <applicationId>@X.Y.Z+<code>`
-  (одинаков на обеих платформах), `dist = <code>`. Приёмник — self-host GlitchTip.
+  (одинаков на обеих платформах), `dist = <code>`. Приёмник — Sentry-совместимый трекер ошибок
+  проекта по `SENTRY_DSN` (GlitchTip/Sentry — `docs/stack/observability.md#receiver`).
 - **Согласие на крэш-репорты** (rule `privacy-and-law`) — шов: экрана согласия и флага в
   `SettingsKeys` в шаблоне нет, SDK стартует при непустом DSN; проект с DSN в prod заводит
   флаг перед `SentryCrashReporter.init` и строку в `compliance.md`.
@@ -39,7 +40,7 @@ paths:
   `X-Request-ID` каждого запроса — tag `request_id` на событии ошибки API; пользователю при
   ошибке показываются первые 8 символов («код обращения»).
 - **Символы — часть релиза**: `mapping.txt` — ассет STOP-1 (`build-android.sh` → `dist/`); в
-  GlitchTip его и dSYM заливает `sentry-cli` на шагах `/release` до STOP-2 (Sentry Gradle-плагин
+  трекер его и dSYM заливает `sentry-cli` на шагах `/release` до STOP-2 (Sentry Gradle-плагин
   не подключён; в `preflight.sh` проверки символов нет). Без символов крэши нечитаемы.
 - **`TelemetrySink` — шов** (`PlatformDeps.telemetry`): `NoopTelemetrySink` в `shared`,
   Sentry-реализация — на платформе (`core:platform/SentryCrashReporter.kt`,
@@ -52,4 +53,4 @@ paths:
 ## Сигналы
 
 - detekt `ForbiddenImport: android.util.Log` → замени на `Logger` из `shared` (NF-01).
-- Крэши без стека в GlitchTip → символы не залиты (проверь `SENTRY_AUTH_TOKEN` при релизе).
+- Крэши без стека в трекере → символы не залиты (проверь `SENTRY_AUTH_TOKEN` при релизе).

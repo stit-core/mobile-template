@@ -42,7 +42,8 @@ expect/actual) инжектируется в `SharedContainer`, тесты по�
 
 ## Update policy
 
-Latest stable с пином и двухнедельной выдержкой; alpha/beta/rc — никогда. Пары `kotlin`/`ksp`/`hilt`
+Latest stable с пином и двухнедельной выдержкой; alpha/beta/rc — только строкой в
+`dependencies.md#version-policy-exceptions` (решение владельца, триггер снятия). Пары `kotlin`/`ksp`/`hilt`
 и `agp`/`androidTools` обновляются вместе; Xcode — с каждым major по дедлайну App Store
 (`distribution.md#deadlines`). Обновление — через `/plan`.
 

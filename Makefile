@@ -181,5 +181,5 @@ kin-diff: ## Advisory-сверка идентичных файлов с go-backe
 gate-selftest: ## Негативные фикстуры .gate-fixtures/NF-*: каждая обязана уронить свою стадию (F=NF-03 — одна)
 	@bash scripts/tools/gate-selftest.sh $(F)
 
-validate-plan: ## Структура .claude/plans/roadmap.md: атомы с Verify/Зависит от, статусы, чекпоинты
+validate-plan: ## Формат планов .claude/plans/ (--summary — сводка: bash scripts/tools/validate-plan.sh --summary)
 	@bash scripts/tools/validate-plan.sh

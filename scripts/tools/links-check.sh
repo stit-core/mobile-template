@@ -24,6 +24,8 @@ start=$(date +%s)
 total=0
 broken=()
 for file in "${files[@]}"; do
+    # Удалённый, но ещё не закоммиченный файл (закрытый план) остаётся в индексе — пропускаем.
+    [ -f "$file" ] || continue
     dir=$(dirname "$file")
     while IFS= read -r target; do
         [ -z "$target" ] && continue

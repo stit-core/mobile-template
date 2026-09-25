@@ -16,7 +16,7 @@
 секреты в build-time конфиге и артефакте, слабый refresh-флоу — отсутствие single-flight,
 ротации или отзыва при reuse, deep links с секретами в ссылке), и ошибки в
 security-sensitive коде (`shared/…/core/auth`, `SecureStore`-actual'ы, `AuthPlugin`,
-`PiiScrubber`, `scripts/release/*`, `build-logic` — подпись).
+`SentryCrashReporter` — `beforeSend`, `scripts/release/*`, `build-logic` — подпись).
 
 Вне скоупа: уязвимости в upstream-зависимостях (Ktor, Compose, Hilt, Sentry SDK, SwiftUI
 и т. д.) — их мейнтейнерам; здесь — только если наш код или дефолт-конфиг делает их
@@ -24,11 +24,12 @@ security-sensitive коде (`shared/…/core/auth`, `SecureStore`-actual'ы, `A
 
 ## Секреты не в репозитории
 
-Шаблон не содержит реальных секретов. `local.properties.example`, `.env.local.example`,
-`iosApp/Config/Local.xcconfig.example` — закоммичены с placeholder'ами; `local.properties`,
-`.env.local`, `Local.xcconfig`, `*.jks`, `*.keystore`, `*.p12`, `*.p8`, `*.mobileprovision` —
-gitignored и в deny-листе `pre-commit`. Ключи подписи и store-credentials живут в Vaultwarden
-(коллекция `mobile/<org>/<app>`) и приходят в сборку только через env на время `make release-*`.
+Шаблон не содержит реальных секретов. `local.properties.example` и
+`iosApp/Config/Local.xcconfig.example` закоммичены с placeholder'ами (`.env.local.example` с
+именами release-time ключей форк получает на `/de-template`); `local.properties`, `.env.local`,
+`Local.xcconfig`, `*.jks`, `*.keystore`, `*.p12`, `*.p8`, `*.mobileprovision` — gitignored и в
+deny-листе `pre-commit`. Ключи подписи и store-credentials хранятся вне репозитория и приходят в
+сборку только через env (`STIT_KEYSTORE_*` и др.) на время `make release-*`.
 В артефакте секретов нет: build-time конфиг (`config/env`, xcconfig) публичен по определению,
 `SENTRY_DSN` — public by design. Если случайно закоммитил секрет в свой форк — ротируй его и
 вычисти историю.

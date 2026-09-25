@@ -27,7 +27,8 @@ bundle id в `iosApp/Config/*.xcconfig`, `README.md`-шапка, `platforms`/`pr
 `.swift-version`, `iosApp/.test-simulator`.
 **Cross-kind**: `ios ∈ platforms` ⇒ `Mac build-host` заполнен или `blocked-by`; версии →
 `dependencies`.
-**Anti-patterns**: alpha/beta/rc в пинах; `compileSdk < 37`; Mac не упомянут при iOS.
+**Anti-patterns**: alpha/beta/rc в пинах без строки в `dependencies.md § Version policy exceptions`;
+`compileSdk < 37`; Mac не упомянут при iOS.
 **Порядок**: подтвердить дефолты toolchain'ов (опции «дефолт шаблона» / Other) → minSdk/target/
 deployment target → Swift-mode → `MAC_HOST` (Other) → политика обновлений → `Generates`.
 
@@ -59,7 +60,7 @@ pinning на leaf; нет удаления аккаунта.
 
 **H2**: `Hosts and schemes`, `Fingerprints`, `Paths to Route`, `Generates`.
 **Generates**: intent-filters `AndroidManifest.xml`, `applinks:` entitlements, тесты
-`DeepLinkParser`, INFRA-HANDOFF `MOBILE_*`.
+`DeepLinkParser`, INFRA-HANDOFF I-1 (`.well-known`: app id, отпечатки, Team ID · bundle id).
 **Cross-kind**: хосты → `config` per env; отпечатки == `signing`; пути ↔ `entry-points.md` карты
 и `pages.path` web-surface того же продукта.
 **Anti-patterns**: один хост на все среды; один отпечаток; custom scheme как основной; путь
@@ -103,8 +104,8 @@ App Group → `Generates`.
 
 **H2**: `Receiver`, `DSN per env`, `PII policy`, `Logging`, `Symbols`, `Quality thresholds`, `Generates`.
 **Generates**: `SENTRY_DSN` в `config/env`/xcconfig, инициализация в `core:platform`/`Core/Platform`,
-`SENTRY_AUTH_TOKEN` в release-preflight, пороги для STORE-HANDOFF.
-**Cross-kind**: DSN → `config`; символы → `distribution` (preflight); согласие → `compliance`.
+`SENTRY_AUTH_TOKEN` для шага символов `/release`, пороги для STORE-HANDOFF.
+**Cross-kind**: DSN → `config`; символы → `distribution` (шаг `/release`); согласие → `compliance`.
 **Anti-patterns**: DSN prod пуст; `sendDefaultPii`; символы «потом»; OTel без коллектора.
 **Порядок**: приёмник (enum GlitchTip/Sentry SaaS/none) → DSN per env (Other; dev пусто) →
 PII → пороги (подтвердить дефолты) → `Generates`.
@@ -135,9 +136,10 @@ Liquid Glass политика → a11y-минимум → локали (default 
 **Generates**: `signingConfigs` из env (`STIT_KEYSTORE_*`), `.env.local.example`,
 `iosApp/Config/Local.xcconfig.example`, чек отпечатков `/de-template`.
 **Cross-kind**: отпечатки == `deep-links`; аккаунты ↔ `distribution`.
-**Anti-patterns**: ключи не в Vaultwarden; upload == app-signing; нет резервной копии.
-**Порядок**: инвентарь (multi-select по платформам) → custody (Vaultwarden коллекция — Other) →
-отпечатки (Other) → ротация и резервная копия → `Generates`.
+**Anti-patterns**: ключи в репозитории или постоянно на машине сборки; upload == app-signing;
+нет резервной копии.
+**Порядок**: инвентарь (multi-select по платформам) → custody (где вне репозитория хранится каждый
+ключ и кто владелец — Other) → отпечатки (Other) → ротация и резервная копия → `Generates`.
 
 ## compliance (W6)
 

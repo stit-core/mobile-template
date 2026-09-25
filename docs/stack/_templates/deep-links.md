@@ -45,8 +45,9 @@ status: draft
 - `iosApp/App/App.entitlements` — `applinks:$(DEEP_LINK_HOST)`; `App/Info.plist` — `CFBundleURLSchemes $(DEEP_LINK_SCHEME)` (значения — `iosApp/Config/*.xcconfig`)
 - `shared/…/core/deeplink/{Route,DeepLinkParser}.kt` + `DeepLinkParserTest` на каждую строку «Paths to Route»; стадия `deeplinks-check` сверяет манифест, env и тесты с этой таблицей
 - `config/env/*.properties`, `iosApp/Config/*.xcconfig` — `DEEP_LINK_HOST`, `DEEP_LINK_SCHEME`
-- INFRA-HANDOFF → `<org>/infra`: `MOBILE_ANDROID_APP_ID`, `MOBILE_ANDROID_SHA256_{UPLOAD,PLAY,RUSTORE}`,
-  `MOBILE_IOS_TEAM_ID`, `MOBILE_IOS_BUNDLE_ID` для сервиса `wellknown` (per env)
+- INFRA-HANDOFF I-1 → `<org>/infra`: раздача `.well-known` на хостах из таблицы (per env) —
+  `assetlinks.json` (`applicationId`, SHA-256 upload / Play app-signing / RuStore) и AASA
+  (Team ID · bundle id, пути «Paths to Route»)
 
 ## Открытые вопросы
 

@@ -13,7 +13,7 @@ paths:
 
 ## Инварианты
 
-- **`iosApp/iosApp.xcodeproj` руками не правится** (`Edit`/`Write` на `*.pbxproj` — в
+- **`iosApp/iosApp.xcodeproj` руками не правится** (`Edit(iosApp/**/*.pbxproj)` — в
   `permissions.deny`). Таргеты `iosApp` (product `iosApp.app`) и `iosAppWidgets`
   (`.appex`, `iosApp/Widgets/`), базовая конфигурация —
   `Config/Dev.xcconfig`, `PRODUCT_BUNDLE_IDENTIFIER = $(BUNDLE_ID)`, build phase «Compile Kotlin

@@ -19,7 +19,7 @@ Linux (агент, гейт, релиз Android)
                   результаты (xcresult, snapshot-diff'ы, ipa) ──► rsync обратно в build/mac/, dist/
 ```
 
-Один Mac на всю экосистему (ресурс org, не сервис control-plane): держит Xcode, симуляторы,
+Один Mac на всю экосистему (ресурс орги, не сервис стека `<org>/infra`): держит Xcode, симуляторы,
 связку ключей; проекта на нём нет — только `~/ci/<slug>/`. Xcode Cloud (25 ч/мес в Developer
 Program) — резерв для подписи и загрузки в TestFlight, не основной путь. Аренда Mac за рубежом —
 только при зарубежном платёжном канале; виртуализация macOS на не-Apple железе — нарушение
@@ -69,11 +69,12 @@ build phase `scripts/embed-shared.sh`); завести per-env конфигур�
 ## Подпись и релиз
 
 Сертификаты и provisioning profiles — `fastlane match` в приватном репо `<org>/ios-certificates`
-(пароль в Vaultwarden `apple-signing`) или профили вложениями из Vaultwarden; App Store Connect
-API key (`ASC_*`) — для экспорта с `destination: upload` в TestFlight. `xcrun altool`/`fastlane` —
-только человек на Mac; агент по SSH выполняет `xcodebuild` с `CODE_SIGNING_ALLOWED=NO` для
-проверок и не читает связку ключей. dSYM заливает `sentry-cli` там же (FSL-лицензия — ок для
-внутреннего инструмента). Шаги — `.claude/skills/release/references/steps.md`.
+(пароль `MATCH_PASSWORD` — вне репозитория, в env на время релиза) или профили, установленные на
+хосте вручную; App Store Connect API key (`ASC_*`) — для экспорта с `destination: upload` в
+TestFlight. `xcrun altool`/`fastlane` — только человек на Mac; агент по SSH выполняет
+`xcodebuild` с `CODE_SIGNING_ALLOWED=NO` для проверок и не читает связку ключей. dSYM заливает
+`sentry-cli` там же (FSL-лицензия — ок для внутреннего инструмента). Шаги —
+`.claude/skills/release/references/steps.md`.
 
 ## Гигиена
 

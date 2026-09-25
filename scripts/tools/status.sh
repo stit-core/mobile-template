@@ -129,23 +129,7 @@ sed -n 's/^include("\(.*\)")$/  \1/p' settings.gradle.kts
 echo
 
 echo "== Plan =="
-if [ -f .claude/plans/roadmap.md ]; then
-    focus=$(grep -m1 '^\*\*Current focus:\*\*' .claude/plans/roadmap.md | sed -E 's/\*\*Current focus:\*\*[[:space:]]*//')
-    [ -n "$focus" ] && echo "  focus: $focus"
-    awk '
-      function flush(){ if(slug!="") printf "  %s: %s | next: %s\n", slug, st, (nx==""?"—":nx) }
-      /^## Active/ { inact=1; next }
-      /^## /       { flush(); inact=0; slug=""; next }
-      !inact       { next }
-      /^### /      { flush(); slug=$0; sub(/^### /,"",slug); sub(/ .*/,"",slug); st="?"; nx=""; next }
-      slug=="" { next }
-      /\*\*Статус:\*\*/ { s=$0; sub(/.*\*\*Статус:\*\*[[:space:]]*/,"",s); sub(/[[:space:]].*$/,"",s); st=s }
-      /^- \[ \] \*\*A[0-9]/ && nx=="" { n=$0; sub(/^- \[ \] \*\*/,"",n); sub(/:.*/,"",n); nx=n }
-      END { flush() }
-    ' .claude/plans/roadmap.md
-else
-    echo "  (no roadmap)"
-fi
+bash scripts/tools/validate-plan.sh --summary
 echo
 
 # Карта mobile/<surface>/ соседа: kinds и зрелость (последняя колонка таблиц — status).

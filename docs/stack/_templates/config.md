@@ -31,17 +31,18 @@ Rollup всех kinds: три класса значений per env. Новый 
 
 ## Release-time
 
-Нужны сборке/публикации, **не** в артефакте: env процесса `make release-*` из Vaultwarden
-`mobile/<org>/<app>`; локально — `.env.local` (gitignored, образец `.env.local.example`).
+Нужны сборке/публикации, **не** в артефакте: env процесса `make release-*`, значения хранятся вне
+репозитория (где — `signing.md#inventory`) и экспортируются человеком на время команды; локально —
+`.env.local` (gitignored, образец `.env.local.example`).
 
-| ключ | зачем | запись Vaultwarden |
-|---|---|---|
-| `STIT_KEYSTORE_PATH`, `STIT_KEYSTORE_PASSWORD`, `STIT_KEY_ALIAS`, `STIT_KEY_PASSWORD` | подпись AAB/APK | `android-upload-key` |
-| `PLAY_SERVICE_ACCOUNT_JSON` | Play internal | `play-service-account` |
-| `RUSTORE_KEY_ID`, `RUSTORE_PRIVATE_KEY` | RuStore | `rustore-api-key` |
-| `ASC_KEY_ID`, `ASC_ISSUER_ID`, `ASC_KEY_P8`, `MATCH_GIT_URL`, `MATCH_PASSWORD` | TestFlight, подпись IPA | `apple-asc-api-key`, `apple-signing` |
-| `SENTRY_AUTH_TOKEN`, `SENTRY_ORG`, `SENTRY_PROJECT_*`, `SENTRY_URL` | символы | `sentry` |
-| `GITEA_TOKEN`, `NTFY_TOPIC`, `NTFY_TOKEN`, `MAC_HOST` | STOP-1, уведомления, iOS-стадии | `gitea-release-token`, `ntfy`, — |
+| ключ | зачем |
+|---|---|
+| `STIT_KEYSTORE_PATH`, `STIT_KEYSTORE_PASSWORD`, `STIT_KEY_ALIAS`, `STIT_KEY_PASSWORD` | подпись AAB/APK |
+| `PLAY_SERVICE_ACCOUNT_JSON` | Play internal |
+| `RUSTORE_KEY_ID`, `RUSTORE_PRIVATE_KEY` | RuStore |
+| `ASC_KEY_ID`, `ASC_ISSUER_ID`, `ASC_KEY_P8`, `MATCH_GIT_URL`, `MATCH_PASSWORD` | TestFlight, подпись IPA |
+| `SENTRY_AUTH_TOKEN`, `SENTRY_ORG`, `SENTRY_PROJECT_*`, `SENTRY_URL` | символы |
+| `GITEA_TOKEN`, `MAC_HOST` (не секрет) | STOP-1, iOS-стадии |
 
 ## Runtime
 
@@ -74,7 +75,8 @@ Rollup всех kinds: три класса значений per env. Новый 
 - `config/env/{dev,staging,prod,demo}.properties`, `iosApp/Config/{Dev,Staging,Prod,Demo}.xcconfig`
 - `.env.local.example`, `local.properties.example`, `iosApp/Config/Local.xcconfig.example`
 - `shared/…/core/config/{AppConfig,AppEnv,ApiMode,AuthMode}.kt` (`AppConfig.parse(...)` из сырых строк), `AppFoundation.AppConfig`; платформенные ключи — `AppOptions` (`androidApp/app`)
-- seed для INFRA-HANDOFF (хосты, DSN) и `release-preflight` (release-time ключи)
+- seed для INFRA-HANDOFF (хосты, DSN) и списка release-time ключей `/release` (факт «задано» для
+  `STIT_KEYSTORE_*` проверяет `build-android.sh`)
 
 ## Открытые вопросы
 

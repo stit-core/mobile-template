@@ -1,6 +1,6 @@
 ---
 name: stack-deep-dive
-description: Углублённая интерактивная проработка 14 обязательных + 2 условных платформенных артефактов в `docs/stack/` (service · runtime · api · auth · deep-links · push · background · observability · styling · distribution · signing · compliance · dependencies · config · analytics · payments) — единственная точка входа для проектирования стека мобильного приложения. Ведёт сессию раундами `AskUserQuestion` (≤ 4 вопроса), фиксирует рабочее состояние в `state/`, не выдумывает платформенные решения. Активируй когда архитектор проектирует/добивает стек, говорит "/stack-deep-dive", "спроектируем стек", "добьём stack-артефакты", приносит сырьё (текущий build.gradle.kts, xcconfig, описание магазинов), или когда `/init-service` дошёл до стадии 4. Точечные правки уже стабильного артефакта — прямой Edit, не сюда.
+description: Углублённая интерактивная проработка 14 обязательных + 2 условных платформенных артефактов в `docs/stack/` (service · runtime · api · auth · deep-links · push · background · observability · styling · distribution · signing · compliance · dependencies · config · analytics · payments) — единственная точка входа для проектирования стека мобильного приложения. Ведёт сессию раундами `AskUserQuestion` (≤ 4 вопроса), фиксирует рабочее состояние в `state/`, не выдумывает платформенные решения. Применяй, когда архитектор проектирует или добивает стек, приносит сырьё под платформенный разбор (build.gradle.kts, xcconfig, описание магазинов и аккаунтов) или `/init-service` дошёл до стадии 4. Точечная правка уже стабильного артефакта — прямой Edit, не сюда.
 ---
 
 # Skill: stack-deep-dive
@@ -19,13 +19,15 @@ auth, deep links, push, observability, токены, каналы дистриб
 
 ## Главный ритм: AskUserQuestion
 
-Скилл — **интервьюер архитектора**, не редактор. Каждый шаг — раунд `AskUserQuestion` (до 4
-вопросов) → ответ → `Edit` артефакта → следующий раунд. Без альтернатив:
+Скилл — **интервьюер архитектора**, не редактор: платформенные решения принимает архитектор, а
+скилл собирает их вопросами и записывает. Каждый шаг — раунд `AskUserQuestion` (до 4
+вопросов) → ответ → `Edit` артефакта → следующий раунд:
 
 - ❌ Prose-ответ «вот как я бы спроектировал» вместо вопросов.
 - ❌ Применить «обычный» дефолт (хост, провайдер, магазин) молча — это решение архитектора.
 - ❌ > 4 вопросов в одном `AskUserQuestion` — инструмент режет молча.
-- ❌ Копить ответы «запишу в конце волны» — пиши после **каждого** раунда.
+- ❌ Копить ответы «запишу в конце волны» — пиши после **каждого** раунда: сессия может
+  оборваться, а незаписанный ответ теряется.
 - ✅ Дефолты шаблона (Bearer, RuStore + Play, `ANALYTICS=none`, Sentry с пустым DSN) —
   предлагаются как **опции с пометкой «дефолт шаблона»**, архитектор подтверждает или меняет.
 
@@ -120,10 +122,10 @@ W1 `service` → W2 `runtime` → W3 `api` → `auth` → W4 `deep-links` → `p
 Правка kit-артефакта → скилл черновиком дополняет rollup и показывает дифф:
 
 - `auth` → `config` (`AUTH_MODE`, TTL), `api` (Bearer-схема ⇔ `POST /api/auth/refresh`), BACKEND-HANDOFF.
-- `deep-links` → `config` (хосты per env), `signing` (отпечатки), INFRA-HANDOFF (`wellknown`).
+- `deep-links` → `config` (хосты per env), `signing` (отпечатки), INFRA-HANDOFF (`.well-known`).
 - `push` → `config` (`PUSH_PROVIDERS`), `dependencies` (SDK), `compliance` (privacy manifest), BACKEND-HANDOFF B-18; кнопки категорий ← `system-actions.md` карты.
 - `background` → `compliance` (точные будильники, тип foreground service, background modes), `push` (локальные категории), `dependencies` (WorkManager), `service`/`config` (App Group для снимков виджетов); реестр задач ← `background-tasks.md` карты.
-- `observability` → `config` (`SENTRY_DSN` per env), `distribution` (символы в preflight).
+- `observability` → `config` (`SENTRY_DSN` per env), `distribution` (символы — шаг `/release` до STOP-2).
 - `distribution` ↔ `service.platforms`; `ios ∈ platforms` ⇒ `runtime#mac-host` или `blocked-by: Mac`.
 - `compliance` ← `permissions.md` карты strategy, `dependencies`, `analytics`/`payments`.
 - `dependencies` → `compliance`, `styling` (шрифты), `config`.
@@ -137,7 +139,6 @@ W1 `service` → W2 `runtime` → W3 `api` → `auth` → W4 `deep-links` → `p
 
 ## Запреты
 
-- Не редактировать артефакты вслепую — сначала `Read`.
 - Не выдумывать хосты, id, отпечатки, аккаунты, провайдеры — только от архитектора.
 - Не оставлять `Generates` пустым/абстрактным — это вход `/de-template`.
 - Не повышать `draft → stable` без подтверждения; не понижать сам.

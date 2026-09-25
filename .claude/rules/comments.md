@@ -19,7 +19,7 @@ paths:
 - **Tombstones.** `// убрано X`, `// раньше был Y` — нет, для этого есть git log.
 - **Reference to current task/PR.** `// добавлено для фичи X`, `// fix для #123` — это в commit message, не в коде.
 - **Flavor commentary.** Художественный пересказ того, что и так видно.
-- **TODO/FIXME.** В коде не живут (detekt `ForbiddenComment`); незакрытое — строкой в `.claude/plans/roadmap.md`.
+- **TODO/FIXME.** В коде не живут (detekt `ForbiddenComment`); незакрытое — строкой в `.claude/plans/backlog.md`.
 - **Section dividers.** `// ===== Helpers =====` — файл и так структурирован; длинный файл — разбей.
 
 ## Допустимо (одна короткая строка, по-русски)
@@ -32,7 +32,7 @@ paths:
 Примеры формы:
 
 ```kotlin
-// Ключ живёт вне репозитория (Vaultwarden); путь и пароли — только из env процесса сборки.
+// Ключ живёт вне репозитория; путь и пароли — только из env процесса сборки.
 val keystorePath = providers.environmentVariable("STIT_KEYSTORE_PATH")
 ```
 

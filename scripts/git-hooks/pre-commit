@@ -6,7 +6,7 @@ cd "$(git rev-parse --show-toplevel)"
 
 secrets=$(git diff --cached --name-only --diff-filter=ACMR | grep -E '(\.jks|\.keystore|\.p12|\.p8|\.mobileprovision)$|(^|/)(local\.properties|Local\.xcconfig|\.env\.local)$' || true)
 if [ -n "$secrets" ]; then
-    echo "ERROR: в коммит попали ключи/локальный конфиг — они живут вне репозитория (Vaultwarden, .gitignore):"
+    echo "ERROR: в коммит попали ключи/локальный конфиг — они живут вне репозитория (.gitignore):"
     echo "$secrets" | sed 's/^/  /'
     exit 1
 fi
@@ -25,8 +25,8 @@ if [ -n "$swift" ]; then
     bash scripts/tools/swift-step.sh "format swift" swift format lint --strict $swift
 fi
 
-roadmap=$(git diff --cached --name-only --diff-filter=ACMR | grep -E '^\.claude/plans/roadmap\.md$' || true)
-if [ -n "$roadmap" ]; then
+plans=$(git diff --cached --name-only --diff-filter=ACMRD | grep -E '^\.claude/plans/' || true)
+if [ -n "$plans" ]; then
     echo "pre-commit: validate-plan"
     bash scripts/tools/validate-plan.sh
 fi

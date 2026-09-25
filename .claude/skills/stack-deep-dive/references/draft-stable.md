@@ -16,15 +16,15 @@
 **Главный пункт**: это контракт для `/de-template` и `/scaffold`. Конкретно — это:
 - пути: `config/env/prod.properties`, `iosApp/Config/Prod.xcconfig`,
   `androidApp/app/src/main/AndroidManifest.xml`, `shared/src/commonMain/kotlin/tech/stit/mobile/core/deeplink/Route.kt`;
-- имена ключей: `API_BASE_URL`, `PUSH_PROVIDERS`, `MOBILE_ANDROID_SHA256_PLAY`;
+- имена ключей: `API_BASE_URL`, `PUSH_PROVIDERS`, `DEEP_LINK_HOST`;
 - скрипты/вербы: `make gen`, `scripts/release/build-android.sh`, `CHANNELS=rustore,play`;
-- handoff-блоки: `INFRA-HANDOFF → wellknown env`, `BACKEND-HANDOFF B-17`.
+- handoff-блоки: `INFRA-HANDOFF I-1 → .well-known`, `BACKEND-HANDOFF B-17`.
 
 Не считается: «соответствующий код», «нужные env», «настройки платформы» без имён.
 
 ### 3. Cross-kind-инварианты выполнены
 
-`docs/stack/README.md § Cross-kind-инварианты` (1–7). Программная проверка для kind'а:
+`docs/stack/README.md § Cross-kind-инварианты` (1–8). Программная проверка для kind'а:
 - каждый env/ключ, упомянутый в теле или `Generates`, есть в `config.md` в нужном классе
   (build-time / release-time / runtime);
 - каждый провайдер `push.md` — SDK в `dependencies.md` + строка в `compliance.md`;
@@ -77,8 +77,9 @@ status: draft|stable
 - **push** — ✅ провайдеры per flavor (`rustore,fcm` / `apns`), регистрация `PUT /api/v1/devices`,
   каналы/категории, permission-flow «в момент ценности», payload data-first. ❌ «FCM» без
   RuStore для RU; запрос разрешения на первом экране.
-- **observability** — ✅ GlitchTip DSN per env (dev пусто), PII-политика, mapping/dSYM в
-  preflight, пороги crash-free 99.5 %/48 ч. ❌ «Sentry есть» без DSN-политики и символов.
+- **observability** — ✅ приёмник (GlitchTip/Sentry) и DSN per env (dev пусто), PII-политика,
+  mapping/dSYM — шаг `/release` до STOP-2, пороги crash-free 99.5 %/48 ч. ❌ «Sentry есть» без
+  DSN-политики и символов.
 - **styling** — ✅ таблица токенов DTCG (`token · light · dark · android · ios`), тема
   system/light/dark, Material 3 / Liquid Glass политика, i18n-локали `ru`(default)/`en`.
   ❌ «Material Theme» без токенов; локали не названы.
@@ -86,8 +87,8 @@ status: draft|stable
   (владелец), сроки модерации, release-notes-политика, App Review notes с demo-доступом.
   ❌ каналы без аккаунтов; demo для ревью не описан.
 - **signing** — ✅ инвентарь ключей (upload, app-signing, RuStore, Apple certs/profiles, APNs
-  key), custody Vaultwarden `mobile/<org>/<app>`, оба отпечатка, ротация, резервная копия.
-  ❌ «ключи у разработчика»; отпечатки не записаны.
+  key), custody вне репозитория (где хранится каждый ключ и кто владелец), оба отпечатка,
+  ротация, резервная копия. ❌ «ключи у разработчика»; отпечатки не записаны.
 - **compliance** — ✅ Data safety / Nutrition Label таблица, permissions-матрица с обоснованием,
   privacy manifests SDK, 152-ФЗ-статус, возрастной рейтинг, шифрование, URL политики/удаления,
   чек-лист L-1…L-17 с датой. ❌ «политика будет»; permission без обоснования.
@@ -109,9 +110,9 @@ status: draft|stable
 4. Пункт 5 ✅ → `AskUserQuestion` «Готов к stable, повышаем?» (`Да` / `Нет`).
 5. «Да» → `Edit` `status: draft → stable`; повторная проверка frontmatter.
 
-## Что НЕ делать
+## Что не делать
 
 - Не повышать сам; не понижать `stable → draft` сам.
 - Не считать `Generates` заполненной без конкретных путей/ключей.
 - Не считать cross-kind sync согласованным, если архитектор сказал «потом» — `**blocker**`
-  в state рollup'а, stable не выдавать.
+  в state rollup'а, stable не выдавать.

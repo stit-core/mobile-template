@@ -1,6 +1,6 @@
 ---
 name: infra-impact
-description: Что считается «касанием» соседей и какой блок печатать — INFRA-HANDOFF (<org>/infra: wellknown env, DSN, хосты), BACKEND-HANDOFF (<org>/backend: B-* endpoint'ы, поля, auth), STRATEGY (расхождение с картой mobile/); формат WHAT/WHY/ACTION/WHO/DECIDE/RISK; блок — до claim «готово». Грузится при правке deep-links/push/config/distribution/signing/observability.md, openapi.lock, core/api, core/requirements.
+description: Что считается «касанием» соседей и какой блок печатать — INFRA-HANDOFF (<org>/infra: .well-known, DSN, хосты), BACKEND-HANDOFF (<org>/backend: B-* endpoint'ы, поля, auth), STRATEGY (расхождение с картой mobile/); формат WHAT/WHY/ACTION/WHO/DECIDE/RISK; блок — до claim «готово». Грузится при правке deep-links/push/config/distribution/signing/observability.md, openapi.lock, core/api, core/requirements.
 paths:
   - "docs/stack/deep-links.md"
   - "docs/stack/push.md"
@@ -19,15 +19,15 @@ paths:
 Изменение, **требующее действия соседа**, молча разъедется с прод-окружением, если его не
 зафиксировать. Процедура и формат блока — skill `/infra-handoff`.
 
-**Железобетонно:** тронул поверхность соседа → до claim «готово» / коммита оформи handoff-блок
-и **попроси юзера передать адресату**. Soft-механизм (правило + skill, не хук) — гарантия
-только в твоей дисциплине.
+Тронул поверхность соседа — до claim «готово» / коммита оформи handoff-блок для хаба `<org>/infra`
+или соседа-адресата: хука на это нет, держит только это правило. Задача пришла из хаба — блок
+уходит в ответ хабу; прямой заход — блок юзеру с просьбой передать адресату.
 
 ## Что считается касанием соседа
 
 | адресат | триггер | блок |
 |---|---|---|
-| **`<org>/infra`** | новый/изменённый deep-link-хост или отпечаток подписи (`deep-links.md`, `signing.md`); `SENTRY_DSN`/хост GlitchTip; `API_BASE_URL` per env; URL политики/удаления аккаунта (`compliance.md`); `MOBILE_*` env сервиса `wellknown` | INFRA-HANDOFF (I-*) |
+| **`<org>/infra`** | новый/изменённый deep-link-хост или отпечаток подписи (`deep-links.md`, `signing.md`) — раздача `.well-known` (`assetlinks.json`, AASA); `SENTRY_DSN` per env; `API_BASE_URL` per env; URL политики/удаления аккаунта (`compliance.md`) | INFRA-HANDOFF (I-*) |
 | **`<org>/backend`** | нужный endpoint/поле отсутствуют в `api/openapi.yaml` соседа (`POST /api/auth/refresh`, `GET /api/app/requirements`, `PUT /api/v1/devices`, новый ресурс); несовместимое изменение спеки; `min_version` после раскатки; push-категория/событие; `AuthMode.Cookie` | BACKEND-HANDOFF (B-*) |
 | **`<org>/strategy`** | код расходится с картой `mobile/<surface>/` (экран/фича/entry-point/permission/системное действие/виджет/фоновая задача без записи или с другим `status`); нужна новая запись | STRATEGY-HANDOFF (S-*) — карта правится там, `/mobile-deep-dive` |
 
@@ -36,12 +36,13 @@ paths:
 
 ## Куда кладётся
 
-1. **В чат** — блок юзеру с явным «передай <адресату> out-of-band».
-2. **В активный план** — подсекция `**Infra impact.**` в `### `-секции
-   `.claude/plans/roadmap.md`; `/release` агрегирует её в STORE-HANDOFF (`BACKEND`/`ENV`).
-   План удаляется по закрытии — блок обязан переехать в handoff **до** этого.
+1. **В чат** (или в ответ хабу, если задача пришла оттуда) — с явным «передай <адресату>».
+2. **В активный план** — раздел `## Handoff` плана `.claude/plans/<slug>.md`; `/release`
+   собирает его в STORE-HANDOFF (`BACKEND`/`ENV`). Закрытый план удаляется — блок обязан
+   уехать адресату **до** этого.
 
-Нет активного плана — блок только в чат, проследи, что юзер зафиксировал передачу.
+Нет активного плана — блок только в ответ (чат или хабу); при прямом заходе проследи, что юзер
+зафиксировал передачу.
 
 ## Инварианты
 

@@ -1,6 +1,6 @@
 ---
 name: de-template
-description: Развернуть форк mobile-template в самостоятельный проект по stable-артефактам docs/stack (карта — в соседнем <org>/strategy) — пакет и applicationId/bundle id, схема deep link, README, конфиги env/xcconfig, prune reference-фич profile/todos, обрезка платформы (--platform android|ios), пресетные kinds. Активируй когда юзер форкнул шаблон и говорит "/de-template", "разверни фундамент", "де-темплейтизируй", "сделай из шаблона свой проект", или когда init-service дошёл до стадии 6. Движок skill-only: механика и prune — reviewable edits под этой процедурой. НЕ запускать на каноническом репозитории шаблона.
+description: Развернуть форк mobile-template в самостоятельный проект по stable-артефактам docs/stack (карта — в соседнем <org>/strategy) — пакет и applicationId/bundle id, схема deep link, README, конфиги env/xcconfig, prune reference-фич profile/todos, обрезка платформы (--platform android|ios), пресетные kinds. Применяй, когда форк пора де-темплейтизировать — юзер просит развернуть фундамент или сделать из шаблона свой проект, либо init-service дошёл до стадии 6. Движок skill-only: механика и prune — reviewable edits под этой процедурой. На каноническом репозитории шаблона не запускается — это уничтожило бы шаблон.
 ---
 
 # Skill: de-template (движок развёртывания)
@@ -20,17 +20,18 @@ committed-скрипта нет — механика (пакет, id, prune, о�
 - «/de-template» / «разверни фундамент» / «сделай из шаблона свой проект»
 - `/init-service` дошёл до стадии 6 (стек `stable`, карта готова)
 
-## Когда НЕ применять
+## Когда не применять
 
 - Стек не `stable` — сначала `/stack-deep-dive`; карты нет и нет `--no-strategy` — сначала
   `/mobile-deep-dive` в `<org>/strategy`.
 - Проект уже де-темплейтизирован (свой `applicationId`, reference-фич нет) — `/smartdev`.
 - **Канонический репозиторий шаблона** — никогда (guard ниже).
 
-## Gate (проверить ДО любых правок)
+## Gate (проверить до любых правок)
 
 1. **Не канонический шаблон.** `applicationId` в `androidApp/app/build.gradle.kts` всё ещё
-   `tech.stit.mobile` И каталог — не временная копия/форк → СТОП, спроси юзера явно.
+   `tech.stit.mobile` **и** каталог — не временная копия/форк → остановись и спроси юзера явно:
+   на каноническом шаблоне механика ниже необратимо сотрёт шаблон.
 2. **Стек stable.** Все обязательные kinds существуют и `stable`, условные — по пресету
    (инвариант 7), `## Generates` непусты:
    ```bash
@@ -51,10 +52,10 @@ committed-скрипта нет — механика (пакет, id, prune, о�
    карты на месте, **все записи** в них `stable` (`/mobile-audit` там): гейт считает записи, не
    файлы. `system-actions.md`, `widgets.md`, `background-tasks.md` бывают без записей —
    приложение без голоса, виджетов и фоновой работы нормально, пустой файл гейт не блокирует.
-   Карты нет — `--no-strategy` + строка в roadmap «завести карту».
+   Карты нет — `--no-strategy` + строка в `.claude/plans/backlog.md` «завести карту».
 4. **Гейт зелёный:** `make check` → 0; `make gate-selftest` → все красные.
 5. **iOS:** `ios ∈ platforms` ⇒ `make check-mac` зелёный на HEAD **или** явный
-   `--ios-unverified` → строка-долг в `.claude/plans/roadmap.md ## Backlog`
+   `--ios-unverified` → строка-долг в `.claude/plans/backlog.md`
    («iOS не верифицирован на Mac»).
 6. **State чист:** `grep -RlE '\*\*blocker\*\*' .claude/skills/stack-deep-dive/state/` пуст.
 
@@ -106,12 +107,12 @@ Konsist `ArchitectureTest` в `shared/src/jvmTest`
 - `docs/reference/strategy-mobile-canon/` — оставь только при `--no-strategy` (иначе канон уже
   в strategy).
 - `docs/research/` — удали целиком (ресёрч шаблона, не проекта).
-- Сбрось `.claude/plans/roadmap.md` к пустому fork-start: шапка + пустые `## Active` /
-  `## Backlog` (+ долг `--ios-unverified`, если был).
+- `.claude/plans/` — форк стартует без планов шаблона: только `.claude/plans/backlog.md` с `_пусто_`
+  (+ долг `--ios-unverified`, если был).
 
 ## Phase B — prune и docs
 
-- **Prune reference-фич** `profile`/`todos` — полный чек-лист 8 точек в **`references/prune.md`**.
+- **Prune reference-фич** `profile`/`todos` — полный чек-лист 9 точек в **`references/prune.md`**.
   Делать **после** того, как свои фичи спроектированы в strategy (иначе теряешь живой образец);
   `--keep todos` оставляет `todos` учебной.
 - **Пресет**: `consumer` — `analytics.md`/`payments.md` из `_templates` уже `stable` (Gate);
@@ -129,7 +130,7 @@ Konsist `ArchitectureTest` в `shared/src/jvmTest`
 ```bash
 make check            # Linux-полный гейт
 make gate-selftest    # фикстуры красные (пути пакетов обновлены)
-make check-mac        # при ios ∈ platforms (или долг --ios-unverified в roadmap)
+make check-mac        # при ios ∈ platforms (или долг --ios-unverified в backlog.md)
 make kin-diff         # advisory: что разошлось с экосистемой (WARN допустим)
 ```
 
@@ -147,7 +148,7 @@ make kin-diff         # advisory: что разошлось с экосисте�
 
 ## См. также
 
-- `references/prune.md` — удаление reference-фич (8 точек).
+- `references/prune.md` — удаление reference-фич (9 точек).
 - `references/platform.md` — обрезка `--platform android|ios` и обратимость.
 - `docs/stack/README.md` — kinds, `Generates`, cross-kind-инварианты.
 - `.claude/skills/init-service/SKILL.md` — оркестратор, чейнит сюда последним шагом.

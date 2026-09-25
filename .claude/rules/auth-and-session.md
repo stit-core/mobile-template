@@ -48,7 +48,7 @@ paths:
 - **Обязательные экраны reference-фичи `auth`**: логин, список сессий
   (`GET/DELETE /api/auth/sessions`), **удаление аккаунта** (App Store 5.1.1(v), Play —
   URL веб-удаления в `compliance.md`); правовые документы доступны до логина.
-- OIDC (Authentik, BFF-mobile) и passkeys — расширения поверх контракта, не в v1; соцвход
+- OIDC (BFF-mobile) и passkeys — расширения поверх контракта, не в v1; соцвход
   тянет Sign in with Apple (4.8) — по умолчанию выключен.
 
 ## Сигналы

@@ -1,15 +1,16 @@
 ---
 name: infra-handoff
-description: Оформить handoff-блок соседу при изменении его поверхности — INFRA-HANDOFF в <org>/infra (wellknown env, отпечатки, DSN, хосты, URL политики), BACKEND-HANDOFF в <org>/backend (B-* — endpoint'ы, поля, auth-режим, min_version), STRATEGY-HANDOFF в <org>/strategy (S-* — расхождение с картой mobile/). Активируй когда правишь deep-links/push/config/distribution/signing/observability.md, openapi.lock, core/api, core/requirements, когда make status показал Handoffs, или юзер говорит "это задевает инфру/бэкенд", "что передать".
+description: Оформить handoff-блок хабу или соседу при изменении его поверхности — INFRA-HANDOFF в <org>/infra (.well-known — app id и отпечатки, DSN, хосты, URL политики), BACKEND-HANDOFF в <org>/backend (B-* — endpoint'ы, поля, auth-режим, min_version), STRATEGY-HANDOFF в <org>/strategy (S-* — расхождение с картой mobile/). Применяй, когда правишь deep-links/push/config/distribution/signing/observability.md, openapi.lock, core/api, core/requirements, когда make status показал Handoffs или изменение требует действия инфры, бэкенда или карты продукта.
 ---
 
 # Skill: infra-handoff
 
 Процедура фиксации изменения, которое требует действия соседа. Зона репо — код → Gitea
 Release; всё, что нужно инфре, бэкенду или карте продукта, должно уйти им **явным
-структурированным сообщением**, а не остаться в голове. Правило-якорь —
-`.claude/rules/infra-impact.md` (грузится автоматически); этот skill — как именно оформить и куда
-положить. Формы блоков — `references/forms.md`.
+структурированным сообщением**, а не остаться в голове. Получатель — операционный хаб
+`<org>/infra` (он ведёт общий план и рассылает задачи по сиблингам) или сосед-адресат.
+Правило-якорь — `.claude/rules/infra-impact.md` (грузится при правке путей из его `paths:`);
+этот skill — как именно оформить и куда положить. Формы блоков — `references/forms.md`.
 
 ## Когда применять
 
@@ -20,7 +21,7 @@ Release; всё, что нужно инфре, бэкенду или карте 
 - `/init-service` стадия 5 или `/stack-deep-dive` нашёл, что у соседа нет операции/канона
 - Юзер: «это задевает инфру», «бэкенд не умеет», «в карте этого нет»
 
-## Когда НЕ применять
+## Когда не применять
 
 - Внутренняя логика/тесты/рефактор без смены хостов, спеки, карты
 - Правка значений в пределах уже согласованных хостов и env
@@ -32,7 +33,7 @@ Release; всё, что нужно инфре, бэкенду или карте 
 
 | адресат | класс изменения | код |
 |---|---|---|
-| **`<org>/infra`** | deep-link-хост / отпечаток → `wellknown` env (`MOBILE_ANDROID_APP_ID`, `MOBILE_ANDROID_SHA256_{UPLOAD,PLAY,RUSTORE}`, `MOBILE_IOS_TEAM_ID`, `MOBILE_IOS_BUNDLE_ID`); `SENTRY_DSN`/GlitchTip-проект; `API_BASE_URL` per env; URL политики и веб-удаления аккаунта | I-* |
+| **`<org>/infra`** | deep-link-хост / отпечаток → раздача `.well-known` на хосте: `assetlinks.json` (`applicationId`, SHA-256 upload / Play app-signing / RuStore) и AASA (Team ID · bundle id, пути); `SENTRY_DSN` per env; `API_BASE_URL` per env; URL политики и веб-удаления аккаунта | I-* |
 | **`<org>/backend`** | отсутствующий endpoint/поле (`POST /api/auth/refresh` + `X-Client`, `GET /api/app/requirements`, `PUT /api/v1/devices`, ресурс фичи); `ErrorModel.code`; `Idempotency-Key`-store; `min_version` после раскатки; push-событие/категория | B-* |
 | **`<org>/strategy`** | экран/фича/entity/entry-point/permission/системное действие/виджет/фоновая задача без записи или с расхождением в `mobile/<surface>/`; нужен канон слоя (`docs/reference/strategy-mobile-canon/`) | S-* |
 
@@ -54,19 +55,20 @@ RISK   <последствие бездействия: ссылки открыв
 ===
 ```
 
-Конкретно. `WHAT: env MOBILE_ANDROID_SHA256_PLAY = <отпечаток из Play Console>, prod` —
-годится. `WHAT: что-то с deep links` — нет. Значение секрета **не** писать — только имя ключа.
+Конкретно. `WHAT: assetlinks.json на app.<domain> (prod) — добавить SHA-256 Play app-signing
+<отпечаток из Play Console>` — годится. `WHAT: что-то с deep links` — нет. Значение секрета **не**
+писать — только имя ключа.
 
 ### 3. Положить так, чтобы доехало до релиза
 
-- **Чат:** покажи блок юзеру, явно: «передай <адресату> out-of-band; из этого репо в соседний
-  не пишем».
-- **Активный план:** добавь/дополни `**Infra impact.**` в секции активного плана
-  `.claude/plans/roadmap.md`; `/release` агрегирует его в STORE-HANDOFF (`BACKEND`, `ENV`).
-  План удаляется по закрытии — infra-impact обязан переехать в handoff **до** этого; если план
-  закрывается раньше релиза — строкой в `## Backlog`.
-- **Нет активного плана:** блок только в чат; проследи, что юзер подтвердил передачу, прежде
-  чем пометить «готово».
+- **Ответ:** задача пришла из хаба `<org>/infra` — блок идёт в ответ хабу; прямой заход — покажи
+  блок юзеру с явным «передай <адресату>». Из этого репо в соседний не пишем.
+- **Активный план:** добавь/дополни раздел `## Handoff` активного плана
+  (`.claude/plans/<slug>.md`); `/release` собирает его в STORE-HANDOFF (`BACKEND`, `ENV`).
+  Закрытый план удаляется — handoff обязан уехать адресату **до** этого; если план
+  закрывается раньше релиза — строкой в `.claude/plans/backlog.md`.
+- **Нет активного плана:** блок только в ответ (чат или хабу); при прямом заходе проследи, что
+  юзер подтвердил передачу, прежде чем пометить «готово».
 
 ### 4. Граница
 

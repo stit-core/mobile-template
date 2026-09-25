@@ -17,12 +17,12 @@ permissions, системные действия, виджеты, фоновые
 | 2 | `runtime` | `runtime.md` | да | toolchain'ы (Kotlin/AGP/Gradle/JDK, Xcode/Swift), `minSdk`/`targetSdk`/deployment target, KMP-таргеты, Swift-concurrency, Mac build-host, политика обновлений | W2 |
 | 3 | `api` | `api.md` | да | источник спеки, копия + lock, генератор, конверт/ошибки/заголовки, совместимость, mock | W3 |
 | 4 | `auth` | `auth.md` | да | `mode: bearer\|cookie\|none`, TTL, ротация, `SecureStore`, сессии, биометрия, pinning, удаление аккаунта | W3 |
-| 5 | `deep-links` | `deep-links.md` | да | хосты/схемы per env, отпечатки, пути → `Route`, `wellknown` | W4 |
+| 5 | `deep-links` | `deep-links.md` | да | хосты/схемы per env, отпечатки, пути → `Route`, данные для `.well-known` (INFRA-HANDOFF) | W4 |
 | 6 | `push` | `push.md` | да (может быть `providers: []`) | провайдеры per flavor, регистрация, каналы/категории, permission-flow, payload | W4 |
 | 7 | `observability` | `observability.md` | да | приёмник, DSN per env, PII, логи, символы, пороги качества | W5 |
 | 8 | `styling` | `styling.md` | да | токены (DTCG-имена), тема, компоненты, a11y, **i18n** | W5 |
 | 9 | `distribution` | `distribution.md` | да | каналы per платформа, STOP-1/STOP-2, аккаунты, модерация, release-notes, App Review notes, дедлайны | W6 |
-| 10 | `signing` | `signing.md` | да | инвентарь ключей, custody (Vaultwarden), отпечатки, ротация | W6 |
+| 10 | `signing` | `signing.md` | да | инвентарь ключей, custody (где вне репозитория и у кого), отпечатки, ротация | W6 |
 | 11 | `compliance` | `compliance.md` | да | собираемые данные, permissions с обоснованиями, privacy manifests, 152-ФЗ, рейтинг, шифрование, правовые документы, чек-лист L-1…L-17 | W6 |
 | 12 | `dependencies` | `dependencies.md` | да | библиотеки/SDK: назначение, лицензия, privacy manifest, KMP-совместимость; швы | W7 |
 | 13 | `background` | `background.md` | да (может быть без задач) | таблица «`timing` → механизм» Android/iOS, реестр фоновых задач, идентификаторы, лимиты и разрешения, App Group | W4 |
@@ -70,8 +70,8 @@ W1 `service` → W2 `runtime` → W3 `api` → `auth` → W4 `deep-links` → `p
    открытый B-1…B-3 в BACKEND-HANDOFF, `stable` невозможен без явного `blocked-by`.
 5. `distribution.md#channels` содержит только платформы из `service.md#platforms`;
    `ios ∈ platforms` ⇒ `runtime.md#mac-host` заполнен или `blocked-by: Mac`.
-6. `observability.md#receiver ≠ none` ⇒ `SENTRY_DSN` per env в `config.md` и символы в
-   `release-preflight`.
+6. `observability.md#receiver ≠ none` ⇒ `SENTRY_DSN` per env в `config.md` и шаг загрузки
+   символов в `/release` (до STOP-2).
 7. Условные kinds существуют ⇔ `service.md#preset`/флаги их требуют (лишние — удалить,
    недостающие — создать из `_templates`).
 8. Каждая задача `background-tasks.md` карты имеет строку в `background.md`; идентификаторы там

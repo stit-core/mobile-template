@@ -1,6 +1,6 @@
 ---
 name: triage-failure
-description: Red-арм cockpit'а — структурированный разбор красного теста / стадии гейта / сборки / дрейфа (gen-check, api-check, kmp-check, screenshots, coverage). TDD-first для багфиксов (RED→GREEN). smartdev чейнит сюда на ATTENTION; багфикс идёт сюда, НЕ в plan. Активируй когда юзер пишет "тест падает", "гейт красный", "не собирается", "почему упало", "разбери failure", "вот лог".
+description: Red-арм cockpit'а — структурированный разбор красного теста / стадии гейта / сборки / дрейфа (gen-check, api-check, kmp-check, screenshots, coverage). TDD-first для багфиксов (RED→GREEN). smartdev чейнит сюда на ATTENTION; багфикс идёт сюда, а не в plan. Применяй, когда что-то падает или не собирается — красный тест, стадия гейта, сборка, дрейф — юзер приносит лог или стек либо просит разобрать причину.
 ---
 
 # Skill: triage-failure
@@ -9,15 +9,15 @@ description: Red-арм cockpit'а — структурированный раз
 зафиксировать инвариант тестом.
 
 **Red-арм cockpit'а:** `smartdev` переключает сюда, когда `make status`/`make check` дал
-`ATTENTION:` или задача — багфикс. Багфикс **никогда не идёт в `plan`** — он идёт сюда, по
-строгой петле RED→GREEN→REFACTOR.
+`ATTENTION:` или задача — багфикс. Багфикс идёт сюда, а не в `plan`: ему нужна строгая петля
+RED→GREEN→REFACTOR, а не атомы плана.
 
 ## Когда применять
 
 - «Тест X падает», «стадия `detekt` красная», «`kmp-check` FAIL», юзер кидает лог/стек.
 - `make gate-selftest` показал `GREEN?` (фикстура не покраснела — гейт ослеп).
 
-## Когда НЕ применять
+## Когда не применять
 
 - Юзер просит новую фичу — это `plan` или прямая работа.
 - Опечатка, видная с первой строки, — просто чини.
@@ -48,10 +48,10 @@ description: Red-арм cockpit'а — структурированный раз
   `./gradlew :androidApp:feature:todos:testDevDebugUnitTest --tests '*TodosScreenTest*'`,
   `swift test --package-path iosApp/Packages/Pure --filter <Suite>`.
 
-### 2. Прочитать сообщение целиком
+### 2. Прочитать лог стадии
 
-Не первую строку — **целиком**: `build/gate-logs/<стадия>.log` (`FORMAT=detailed` — длиннее
-выжимка, `VERBOSE=1` — сырой вывод). В Gradle полезное часто в середине после стека.
+Полный лог — `build/gate-logs/<стадия>.log` (`FORMAT=detailed` — длиннее выжимка, `VERBOSE=1` —
+сырой вывод). В Gradle-логах причина часто в середине, после стека, а не в первой строке.
 
 ### 3. Сформулировать гипотезу
 
@@ -59,8 +59,6 @@ description: Red-арм cockpit'а — структурированный раз
 - «`AuthPluginTest` падает, потому что два параллельных 401 запускают два refresh — нет single-flight».
 - «`kmp-check` красный, потому что в `commonMain` появился `java.io.File` из нового маппера».
 - «`screenshots` красный, потому что токен `color.action.bg` изменён — эталон устарел намеренно».
-
-Несколько гипотез — выбирай самую дешёвую в проверке.
 
 ### 4. TDD для багфиксов (обязательно)
 
@@ -103,7 +101,7 @@ description: Red-арм cockpit'а — структурированный раз
 - Дефект спеки бэкенда (`$schema`, `data: [array, null]`, нет `ErrorModel.code`) → пост-процессинг в
   `scripts/tools/gen.sh` + BACKEND-HANDOFF, не правка `api/openapi.yaml` руками.
 - Баг библиотеки (Roborazzi, Konsist, compose-rules) → не `@Ignore`; workaround с WHY-комментарием
-  и строка в `## Backlog` roadmap.
+  и строка в `.claude/plans/backlog.md`.
 
 ### 7. Когда застрял
 
@@ -124,6 +122,6 @@ description: Red-арм cockpit'а — структурированный раз
 - ❌ `@Ignore`/`.disabled` для флаки — корневая причина уйдёт в прод.
 - ❌ Baseline для Lint/detekt/SwiftLint — долг вместо фикса.
 - ❌ `make screenshots-record` «чтобы позеленело» без просмотра `*_compare.png`.
-- ❌ `--no-verify` — заблокировано хуком, и правильно.
+- ❌ `--no-verify` — заблокирован `permissions.deny`: хуки — часть гейта.
 - ❌ Фикс без теста для багфикса. TDD не опциональна для багов.
 - ❌ «Заодно» расширить скоуп — багфикс маленький; большое — отдельный план.

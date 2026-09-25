@@ -1,6 +1,6 @@
 ---
 name: env-and-config
-description: Три класса значений — build-time (flavor/xcconfig → BuildConfig/Info.plist), release-time (env из Vaultwarden, не в артефакте), runtime (GET /api/app/requirements); флейворы dev|staging|prod|demo = схемы; AppConfig собирается платформой и передаётся в SharedContainer, платформенные ключи — AppOptions; секретов в build-time нет; новый ключ → строка в docs/stack/config.md. Грузится при правке config/env, xcconfig, core/config, манифеста.
+description: Три класса значений — build-time (flavor/xcconfig → BuildConfig/Info.plist), release-time (env процесса make release-*, значения вне репозитория, не в артефакте), runtime (GET /api/app/requirements); флейворы dev|staging|prod|demo = схемы; AppConfig собирается платформой и передаётся в SharedContainer, платформенные ключи — AppOptions; секретов в build-time нет; новый ключ → строка в docs/stack/config.md. Грузится при правке config/env, xcconfig, core/config, манифеста.
 paths:
   - "config/env/**"
   - "iosApp/Config/**"
@@ -17,7 +17,7 @@ paths:
 | класс | где живёт | секрет? | примеры |
 |---|---|---|---|
 | **build-time** (в артефакте, публичен) | `config/env/<flavor>.properties` → `BuildConfig.<KEY>` + `manifestPlaceholders`; `iosApp/Config/<Env>.xcconfig` → `Info.plist` → `AppFoundation.AppConfig` | нет | `APP_ENV`, `API_BASE_URL`, `API_MODE`, `AUTH_MODE`, `DEEP_LINK_HOST`, `DEEP_LINK_SCHEME`, `SENTRY_DSN` (public by design), `PUSH_PROVIDERS`, `RUSTORE_PROJECT_ID`, `AUTH_BIOMETRIC_UNLOCK` |
-| **release-time** (нужны сборке/публикации, не в артефакте) | env процесса `make release-*` из Vaultwarden; `.env.local` gitignored | да | `STIT_KEYSTORE_*`, `PLAY_SERVICE_ACCOUNT_JSON`, `RUSTORE_*`, `ASC_*`, `SENTRY_AUTH_TOKEN`, `GITEA_TOKEN` |
+| **release-time** (нужны сборке/публикации, не в артефакте) | env процесса `make release-*`: значения хранятся вне репозитория, экспортирует человек; `.env.local` gitignored | да | `STIT_KEYSTORE_*`, `PLAY_SERVICE_ACCOUNT_JSON`, `RUSTORE_*`, `ASC_*`, `SENTRY_AUTH_TOKEN`, `GITEA_TOKEN` |
 | **runtime** (меняется без релиза) | бэкенд: `GET /api/app/requirements` (`min_version`, `maintenance`, `flags`, `links`), кэш локально | нет | min-version, kill-switch, URL политики, флаги |
 
 ## Инварианты

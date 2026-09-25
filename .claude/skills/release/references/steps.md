@@ -13,7 +13,7 @@
 |---|---|---|---|
 | `<app>-<X.Y.Z>-<code>-prod.aab` | Android | `make release-android` (`bundleProdRelease`) | да |
 | `<app>-<X.Y.Z>-<code>-prod.apk` | Android | то же (`assembleProdRelease`, universal; RuStore принимает AAB и APK) | да |
-| `mapping-<X.Y.Z>-<code>.txt` | Android | R8 (`build-android.sh` → `dist/`); в GlitchTip заливает `sentry-cli upload-proguard` на шаге 2 (Sentry Gradle-плагин не подключён) | да (дубль того, что ушло в GlitchTip) |
+| `mapping-<X.Y.Z>-<code>.txt` | Android | R8 (`build-android.sh` → `dist/`); в трекер ошибок заливает `sentry-cli upload-proguard` на шаге 2 (Sentry Gradle-плагин не подключён) | да (дубль того, что ушло в трекер) |
 | `<app>-<X.Y.Z>-<code>-ios.ipa` | iOS | `xcodebuild -exportArchive` (Mac) | при `ios ∈ platforms` |
 | `<app>-<X.Y.Z>-<code>-ios-dSYM.zip` | iOS | из архива (Mac) | при iOS |
 | `checksums.sha256` | обе | `build-android.sh` (+ iOS-ассеты дописываются) | да |
@@ -33,7 +33,7 @@
 xcodebuild archive -project iosApp/iosApp.xcodeproj -scheme Prod -destination 'generic/platform=iOS' \
   -archivePath build/mac/App.xcarchive
 xcodebuild -exportArchive -archivePath build/mac/App.xcarchive -exportOptionsPlist iosApp/ExportOptions.plist \
-  -exportPath build/mac/export          # method app-store-connect; подпись — профили из fastlane match / Vaultwarden
+  -exportPath build/mac/export          # method app-store-connect; подпись — профили fastlane match на Mac-хосте
 zip -r build/mac/dSYM.zip build/mac/App.xcarchive/dSYMs
 sentry-cli debug-files upload --include-sources build/mac/App.xcarchive/dSYMs
 ```
@@ -54,8 +54,6 @@ for f in dist/*; do
   curl -sS -X POST -H "Authorization: token $GITEA_TOKEN" -F "attachment=@$f" \
     "https://<gitea>/api/v1/repos/<org>/mobile/releases/<id>/assets?name=$(basename "$f")"
 done
-curl -sS -H "Authorization: Bearer $NTFY_TOKEN" -d "<app> vX.Y.Z STOP-1: https://<gitea>/<org>/mobile/releases/tag/vX.Y.Z" \
-  "https://ntfy.<domain>/$NTFY_TOPIC"
 ```
 
 `<gitea>`/`<org>` — из `git remote get-url origin`. Проверка: страница Release содержит все
@@ -71,23 +69,21 @@ curl -sS -H "Authorization: Bearer $NTFY_TOKEN" -d "<app> vX.Y.Z STOP-1: https:/
 | `gitea` (`enterprise`) | STOP-1 и есть канал: APK как ассет + страница «установить» | `GITEA_TOKEN` |
 | `abm` (`enterprise`) | тем же TestFlight-путём с назначением в Apple Business Manager — человек | — |
 
-После каждого канала — ntfy `releases-<org>`.
+## Секреты (env на время команды; хранятся вне репозитория, экспортирует человек)
 
-## Секреты (env на время команды; источник — Vaultwarden `mobile/<org>/<app>`)
+| переменная | нужна для |
+|---|---|
+| `STIT_KEYSTORE_PATH`, `STIT_KEYSTORE_PASSWORD`, `STIT_KEY_ALIAS`, `STIT_KEY_PASSWORD` | подпись AAB/APK (`STIT_KEYSTORE_PATH` — путь к `.jks` вне репо) |
+| `PLAY_SERVICE_ACCOUNT_JSON` | STOP-2 Play |
+| `RUSTORE_KEY_ID`, `RUSTORE_PRIVATE_KEY` | STOP-2 RuStore |
+| `ASC_KEY_ID`, `ASC_ISSUER_ID`, `ASC_KEY_P8` | TestFlight / App Store Connect |
+| `MATCH_GIT_URL`, `MATCH_PASSWORD` (или профили, установленные на Mac-хосте) | подпись IPA на Mac |
+| `SENTRY_AUTH_TOKEN`, `SENTRY_ORG`, `SENTRY_PROJECT_*`, `SENTRY_URL` | символы |
+| `GITEA_TOKEN` (scope `write:repository`) | STOP-1 |
+| `MAC_HOST` (не секрет) | iOS-стадии |
 
-| переменная | запись Vaultwarden | нужна для |
-|---|---|---|
-| `STIT_KEYSTORE_PATH`, `STIT_KEYSTORE_PASSWORD`, `STIT_KEY_ALIAS`, `STIT_KEY_PASSWORD` | `android-upload-key` (+ `.jks` вложением) | подпись AAB/APK |
-| `PLAY_SERVICE_ACCOUNT_JSON` | `play-service-account` | STOP-2 Play |
-| `RUSTORE_KEY_ID`, `RUSTORE_PRIVATE_KEY` | `rustore-api-key` | STOP-2 RuStore |
-| `ASC_KEY_ID`, `ASC_ISSUER_ID`, `ASC_KEY_P8` | `apple-asc-api-key` | TestFlight / App Store Connect |
-| `MATCH_GIT_URL`, `MATCH_PASSWORD` (или профили вложениями) | `apple-signing` | подпись IPA на Mac |
-| `SENTRY_AUTH_TOKEN`, `SENTRY_ORG`, `SENTRY_PROJECT_*`, `SENTRY_URL` | `sentry` | символы |
-| `GITEA_TOKEN` (scope `write:repository`) | `gitea-release-token` | STOP-1 |
-| `NTFY_TOPIC=releases-<org>`, `NTFY_TOKEN` | `ntfy` | уведомления |
-| `MAC_HOST` | не секрет | iOS-стадии |
-
-Агент значения не читает и не цитирует; проверка «задано» — `release-preflight`/`build-android.sh`.
+Агент значения не читает и не цитирует; факт «задано» проверяет `build-android.sh` (падает без
+`STIT_KEYSTORE_*`), остальные ключи — шаг, которому они нужны (`preflight.sh` env не проверяет).
 
 ## STORE-HANDOFF — форма
 
@@ -98,10 +94,12 @@ PLAY       internal track: uploaded · WHO: владелец аккаунта ·
 RUSTORE    черновик #… отправлен на модерацию (ожидание 1–5 раб. дней, черновик живёт 14 дней) · ACTION: ответить на замечания; при отказе — /release с Z+1
 TESTFLIGHT build <N> processing · ACTION: внешняя группа → App Review (demo-доступ: entry-points `demo`; App Review notes из distribution.md)
 BACKEND    min_version в /api/app/requirements → <X.Y.Z> после раскатки (BACKEND-HANDOFF) · openapi.lock: <sha>
-ENV        wellknown: отпечатки актуальны ✓ · SENTRY_DSN prod ✓ · MOBILE_* env в <org>/infra ✓
+ENV        .well-known (assetlinks / AASA) с актуальными отпечатками ✓ · SENTRY_DSN prod ✓ · открытые INFRA-HANDOFF: <I-* или none>
 LEGAL      L-10…L-17 (человек): политика опубликована по <url>, Data safety обновлён?, возрастной рейтинг, РКН-статус
 RISK       что может отклонить ревью (4.8 / 5.1.1 / 3.1.3), что не проверено на устройстве, что ушло без check-mac (не должно)
 ```
 
 Блок печатается в чат, пишется в `dist/store-handoff.md` (ассет STOP-1) и разворачивается
-секцией с человеческими шагами в `.claude/plans/roadmap.md`.
+планом `.claude/plans/release-v<X.Y.Z>.md`: человеческие шаги подачи в магазины — шагами
+плана, «версия опубликована в каналах» — критерием приёмки; `status: blocked`,
+`blocked-by:` — действие человека в консоли магазина.

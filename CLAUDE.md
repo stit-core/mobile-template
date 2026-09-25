@@ -15,19 +15,23 @@ Konsist; swift-format + SwiftLint + archlint + `swift test` чистых пак�
 
 ## Где это в экосистеме
 
-- **Роль:** мобильный клиент проекта `<org>` (surface `type: mobile` в
-  `<org>/strategy`); один репо на обе платформы; STOP — подписанные артефакты
-  в Gitea Release на теге (`docs/reference/release.md`).
-- **Зависит от:** `<org>/backend` (Bearer-auth, `api/openapi.yaml`,
-  `/api/app/requirements`, `/api/v1/devices`); `<org>/infra` (сервис `wellknown`
-  для deep links, `SENTRY_DSN`); `<org>/strategy` (карта `mobile/<surface>/`);
-  corp-контур — Gitea (Release), Vaultwarden (`mobile/<org>/<app>`),
-  ntfy (`releases-<org>`), GlitchTip/Sentry.
+- **Роль:** `<org>/mobile` — мобильный клиент проекта `<org>` (surface `type: mobile` в
+  `<org>/strategy`); один репо на обе платформы. Релиз — в магазины своим `/release`: STOP-1 —
+  подписанные артефакты в Gitea Release на теге, STOP-2 — подача в каналы
+  (`docs/reference/release.md`); выкатка тегов из хаба (`make bump`) приложения не касается.
+- **Зависит от:** `<org>/strategy` (карта `mobile/<surface>/`, read-only); `<org>/backend`
+  (Bearer-auth, `api/openapi.yaml`, `/api/app/requirements`, `/api/v1/devices`); `<org>/infra` —
+  требования через INFRA-HANDOFF: раздача `.well-known` (assetlinks/AASA) на хостах deep links,
+  `SENTRY_DSN` и `API_BASE_URL` per env; Gitea (`git.stit.tech`) — git и Release. Трекер ошибок —
+  Sentry-совместимый по `SENTRY_DSN` проекта.
 - **Используется:** магазинами (RuStore, Google Play, App Store) и пользователями.
-  В оркестрацию `<org>/infra` не входит — образа и compose-сервиса у него нет.
-- Полная карта — `docs/reference/ecosystem.md`.
+- Карта и флоу — `docs/reference/ecosystem.md` (канон — тот же файл в `<org>/infra`).
 
 ## Точка входа
+
+Сюда обычно приходит агент из операционного хаба `<org>/infra` с задачей из общего плана проекта;
+прямой заход в репо — такой же режим. Работай обвязкой этого репо (этот файл, скиллы, гейт
+`make check`); последствия для соседей — handoff-блок (`/infra-handoff`) для хаба или соседа.
 
 - **`/smartdev`** — cockpit сессии: `make doctor` → `make status` (ветка,
   платформы, Mac-хост, дрейф API-спеки, активный план, гейты) + переключение
@@ -35,8 +39,9 @@ Konsist; swift-format + SwiftLint + archlint + `swift test` чистых пак�
 - **Потребителю шаблона** — `docs/getting-started.md`: форк → `/init-service` →
   проектирование (`/stack-deep-dive` здесь; карта `mobile/<surface>/` — в
   `<org>/strategy`) → `/de-template` → свой проект.
-- **Planning-first.** Содержательное изменение — через секцию в
-  `.claude/plans/roadmap.md` (skill `/plan`). Прямая правка — только
+- **Planning-first.** Содержательное изменение — через план: файл в
+  `.claude/plans/` (skill `/plan`: критерии приёмки, шаги с проверками, «Где мы
+  сейчас» для продолжения после `/clear`). Прямая правка — только
   truly-atomic и багфиксы (`/triage-failure`, RED-first).
 
 ## Проектирование первично, код вторичен
@@ -54,10 +59,9 @@ background-tasks · shared-api · shared-lib); там её ведёт `/mobile-d
 `profile`, `todos`, `settings`, `push` — учебные образцы
 (`docs/reference/architecture.md#reference`); `profile`/`todos` удаляет `/de-template`.
 
-Резолв соседей — sibling-checkout: поля `project-slug` / `strategy-path`
-(дефолт `../strategy`) / `backend-path` (дефолт `../backend`) / `surface` /
-`platforms` / `preset` в `docs/stack/service.md`. Соседа нет — скиллы печатают
-next-step, не падают.
+Резолв соседей — sibling-checkout: поля `project-slug` / `strategy-path` (дефолт `../strategy`) /
+`backend-path` (дефолт `../backend`) / `surface` / `platforms` / `preset` в `docs/stack/service.md`.
+Соседа нет — скиллы печатают next-step, не падают.
 
 ## Команды
 
@@ -77,7 +81,7 @@ next-step, не падают.
 | `make i18n-check` / `deeplinks-check` | `values/` == `values-ru/` + `error.<code>` → `core_ui_error_*` (iOS xcstrings — WARN) / манифест ↔ `config/env` ↔ `DeepLinkParserTest` ↔ `deep-links.md` |
 | `make capability-check` | поверхности вне экранов: задачи `shared` ↔ исполнители, тесты и `BGTaskSchedulerPermittedIdentifiers`; виджеты ↔ эталоны и тесты состояний; действия ↔ строки обоих `values`; классы из манифеста существуют |
 | `make swift-lint` / `swift-test` | SwiftLint `--strict` + archlint (граф `Package.swift`) / `swift test` `Pure` + пол 70 % |
-| `make check` | **gate** (Linux-полный): Swift-стадии → паритет (tokens/i18n/deeplinks/capability) → контракт → detekt/Lint/тесты/Kover → kmp/api → assembleDevDebug; порядок — `docs/reference/architecture.md#гейт` |
+| `make check` | **gate** (Linux-полный): формат → Swift-стадии → паритет (tokens/i18n/deeplinks/capability) → контракт → detekt/Lint/тесты/Kover → kmp/api → assembleDevDebug; порядок — `docs/reference/architecture.md#гейт` |
 | `make check-fast` | Swift-формат + SwiftLint + Kotlin-формат + detekt + `shared` jvmTest — цикл «пока пишу» |
 | `make check-mac` | macOS-стадии по SSH (`MAC_HOST`): link framework, iosSimulatorArm64Test, xcodebuild, планы Unit + Snapshot |
 | `make check-full` | `check` + `check-mac`; обязателен перед `/release` |
@@ -98,9 +102,9 @@ next-step, не падают.
 | Фасад Kotlin → Swift (плоский, `apiDump`) | rule `kmp-public-api` |
 | Навигация и deep links | rules `navigation`, `deep-links-and-push` |
 | Поверхности вне экранов (виджеты, фон, системные действия) | rule `off-screen-surfaces` + `docs/reference/architecture.md`, `docs/stack/background.md` |
-| Экосистема (шаблоны, контракты, Gitea Release как STOP) | `docs/reference/ecosystem.md` |
+| Экосистема (шаблоны, флоу хаба, контракты, Gitea Release как STOP) | `docs/reference/ecosystem.md` |
 | Релиз, версии, магазины, Mac-хост | `docs/reference/release.md`, `distribution.md`, `mac-host.md` |
-| Observability (Sentry/GlitchTip, `Logger`/`LogSink`, `os.Logger`) | `docs/reference/observability.md` + rule `observability` |
+| Observability (Sentry SDK → трекер по `SENTRY_DSN`, `Logger`/`LogSink`, `os.Logger`) | `docs/reference/observability.md` + rule `observability` |
 | Тесты (JVM, Robolectric, Roborazzi, Swift Testing, snapshot, Maestro) | rule `tests-pipeline` |
 | Токены дизайна (`design/tokens.json`, паритет платформ) | rule `design-tokens` |
 | env, флейворы, xcconfig, секреты, сессия | rules `env-and-config`, `signing-and-secrets`, `auth-and-session` |
@@ -109,9 +113,8 @@ next-step, не падают.
 | Карта приложения (12 kinds, cross-repo) | `../strategy/docs/projects/<slug>/mobile/<surface>/` (копия канона — `docs/reference/strategy-mobile-canon/`); маппинг в код — `docs/reference/strategy-mapping.md` |
 | Stack-артефакты (14 + 2 kinds) | `docs/stack/README.md` |
 | Устройство `.claude`-системы, кто что enforce'ит | `docs/contributing.md` |
-| Forward-only стиль | rule `forward-only` |
 
-## Инварианты (что в 2026 иначе, чем агент «помнит»)
+## Инварианты (стек новее, чем «помнит» модель)
 
 - **AGP 9.4 со встроенным Kotlin**: без `org.jetbrains.kotlin.android`, без
   kapt (только KSP), `kotlin { compilerOptions }`, `targetSdk` задаётся явно;
@@ -137,8 +140,8 @@ next-step, не падают.
 - **Токены**: `design/tokens.json` → `make gen-tokens` → `Tokens.kt`/`Tokens.swift`
   (коммитятся, `tokens-check` сверяет); в UI — только `StitTheme`/`theme`; сырой `0xFF…`
   — detekt `MagicNumber` + Lint `StitRawDesignValue`, в Swift — SwiftLint
-- **Секреты**: токены только в `SecureStore` (Keystore/Keychain), access — в
-  памяти; `security-crypto` запрещён; ключи подписи — в Vaultwarden, не в репо
+- **Секреты**: токены только в `SecureStore` (Keystore/Keychain), access — в памяти;
+  `security-crypto` запрещён; ключи подписи — из env `STIT_KEYSTORE_*`, хранятся вне репозитория
 - **Сеть — только через `shared`**: `URLSession`/`OkHttp` напрямую в фичах запрещены
 - **Комментарии** — только WHY (rule `comments`); **forward-only** (rule `forward-only`)
 
@@ -149,24 +152,21 @@ next-step, не падают.
 - Push в `main` разрешён (прямой или через PR); линейная история
 - Хуки (`scripts/git-hooks/`, ставятся `make setup`): `commit-msg` — формат;
   `pre-commit` — секреты подписи, Spotless/detekt по staged, `validate-plan`
-  для roadmap; `pre-push` — `GATE_RELEASE=1 make check` (пропуск —
+  для `.claude/plans/`; `pre-push` — `GATE_RELEASE=1 make check` (пропуск —
   `SKIP_PREPUSH=1`, не `--no-verify`)
-- Теги `vX.Y.Z` — только через `/release` (`versionCode` / `CFBundleVersion`
-  выводятся из тега)
+- Теги `vX.Y.Z` — только через `/release` (из тега выводятся `versionCode`/`CFBundleVersion`)
 
 ## Границы
 
 ### Делать всегда
-- Перед claim «готово» — `make check`; «готово по iOS» — `make check-mac`
-- Изменение — через план (skill `/plan`)
 - Новая логика — в `shared/` (презентер + тест на JVM), UI — тонкий;
   cross-feature — через `entity`/`core`
 - Новый endpoint/поле — сначала `api/openapi.yaml` (`make gen` → `make api-dump`);
   бэкенд отстаёт — BACKEND-HANDOFF
 - При правке `docs/stack/*.md` — следить за `status: stable` и `## Generates`;
   карта `mobile/` правится только в `<org>/strategy`
-- Правка deep-link-хостов, push-провайдеров, `SENTRY_DSN`, min-version —
-  INFRA-HANDOFF (rule `infra-impact`, skill `/infra-handoff`)
+- Правка deep-link-хостов, отпечатков, `SENTRY_DSN`, push-провайдеров, min-version —
+  handoff-блок хабу или соседу (rule `infra-impact`, skill `/infra-handoff`)
 
 ### Сначала спросить
 - Новая зависимость / SDK (запись в `docs/stack/dependencies.md` +
@@ -175,11 +175,11 @@ next-step, не падают.
 - Правка permissions в `AndroidManifest.xml`, usage-descriptions в `Info.plist`,
   entitlements
 - Удаление reference-фич вручную (это работа `/de-template`)
-- Любой `--no-verify`; любой `make release-*`; `make screenshots-record`
+- Любой `make release-*`; `make screenshots-record`
 
 ### Не делать никогда
-- `--no-verify` без явного разрешения
-- Коммитить `*.jks`, `*.p12`, `*.p8`, `*.mobileprovision`, `local.properties`,
+- `--no-verify` (закрыт `permissions.deny`; пропуск pre-push — `SKIP_PREPUSH=1` с разрешения юзера)
+- Коммитить `*.jks`, `*.keystore`, `*.p12`, `*.p8`, `*.mobileprovision`, `local.properties`,
   `Local.xcconfig`, `.env.local`
 - Править `*.pbxproj` руками (product name, bundle id, team — в xcconfig;
   таргеты — в `Package.swift`)
@@ -190,12 +190,11 @@ next-step, не падают.
 
 ## Forward-only
 
-Любой текст в репо описывает **только текущее состояние** — не «было/стало».
-История — в `git log` + Conventional Commits. Полное правило —
-`.claude/rules/forward-only.md`.
+Любой текст в репо описывает **только текущее состояние** — не «было/стало»; история — в
+`git log` + Conventional Commits. Полное правило — `.claude/rules/forward-only.md`.
 
 ## Авто-память
 
-Запись в файловую авто-память запрещена глобально. Не предлагай «сохранить в
-память». Долгосрочное знание — в репо: `CLAUDE.md`, `.claude/rules/`, `state/`
-каждого скилла.
+Авто-память выключена (`autoMemoryEnabled: false` в `.claude/settings.json`), поэтому
+долгосрочное знание — договорённости, решения, уроки — записывай в репо: `CLAUDE.md`,
+`.claude/rules/`, `.claude/plans/`, `state/` скилла `stack-deep-dive`.

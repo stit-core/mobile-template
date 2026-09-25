@@ -389,5 +389,5 @@ Maestro-флоу `e2e/{android,ios}` на сценарии `populated`. Prune-л
 | снимки виджетов | `<PlatformDeps.filesDir>/cache/widget-<slug>.json` (`FileCache`, JSON: enum по имени, `Instant` ISO-8601); на iOS каталог — контейнер App Group из `APP_GROUP_ID` |
 | e2e | `e2e/android/*.yaml`, `e2e/ios/*.yaml` (`make e2e P=android|ios`) |
 | логи гейта | `build/gate-logs/<стадия>.log`, `check.last`, `mac.last` |
-| план | `.claude/plans/roadmap.md` |
+| планы | `.claude/plans/` (`<slug>.md` + `backlog.md`) |
 | карта продукта | `<strategy-path>/docs/projects/<slug>/mobile/<surface>/` (read-only) |

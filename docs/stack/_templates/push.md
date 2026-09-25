@@ -16,7 +16,7 @@ status: draft
 | iOS | Dev/Staging/Prod | `apns` (`sandbox` в dev) | `aps-environment` entitlement |
 
 Серверные ключи (`FCM_SERVICE_ACCOUNT_JSON`, `RUSTORE_SERVICE_TOKEN`, `APNS_P8`) — только на
-бэкенде (`golibinfra/pushkit`); `providers: []` — приложение без push.
+бэкенде (отправка — BACKEND-HANDOFF B-18); `providers: []` — приложение без push.
 
 ## Registration
 
@@ -72,7 +72,7 @@ Data-first: `title_key`, `body_key`, `args`, `deep_link` (https из `deep-links
 - кнопки категорий: `androidApp/core/platform/…/action/NotificationActionReceiver.kt`, `UNNotificationAction` в `Core/Platform/PushPayload.swift`, строки `core_platform_action_*` / `action.*`
 - локальные категории: показ из `BackgroundResult.Notify` (`background.md`), без транспортов и регистрации
 - `dependencies.md` (SDK провайдеров) + `compliance.md` (privacy manifests)
-- BACKEND-HANDOFF B-18 (`PUT /api/v1/devices`, отправка через `pushkit`) — только для категорий с источником-событием
+- BACKEND-HANDOFF B-18 (`PUT /api/v1/devices`, серверная отправка push) — только для категорий с источником-событием
 
 ## Открытые вопросы
 

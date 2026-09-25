@@ -1,8 +1,9 @@
 # Observability
 
-Крэши и ошибки — Sentry SDK обеих платформ (`sentry-android`, `sentry-cocoa`) с приёмником
-**GlitchTip self-host** (Sentry-совместимый DSN); логи — свой фасад; OpenTelemetry — шов.
-Инварианты для агента — rule `observability`; значения проекта — `docs/stack/observability.md`.
+Крэши и ошибки — Sentry SDK обеих платформ (`sentry-android`, `sentry-cocoa`) с
+Sentry-совместимым трекером ошибок проекта по `SENTRY_DSN` (GlitchTip или Sentry — выбор проекта в
+`docs/stack/observability.md`, дефолт формы — GlitchTip self-host); логи — свой фасад;
+OpenTelemetry — шов. Инварианты для агента — rule `observability`.
 
 ## Sentry / GlitchTip
 
@@ -40,7 +41,7 @@
 
 | артефакт | как заливается | когда |
 |---|---|---|
-| `mapping.txt` (R8) | `make release-android` кладёт в `dist/` (ассет STOP-1); в GlitchTip заливает `sentry-cli upload-proguard` (`SENTRY_AUTH_TOKEN`, `SENTRY_ORG`, `SENTRY_PROJECT_*`, `SENTRY_URL`); Sentry Gradle-плагин не подключён | шаг 2 `/release` |
+| `mapping.txt` (R8) | `make release-android` кладёт в `dist/` (ассет STOP-1); в трекер заливает `sentry-cli upload-proguard` (`SENTRY_AUTH_TOKEN`, `SENTRY_ORG`, `SENTRY_PROJECT_*`, `SENTRY_URL`); Sentry Gradle-плагин не подключён | шаг 2 `/release` |
 | dSYM | `sentry-cli debug-files upload --include-sources` на Mac-хосте | iOS-шаг `/release` |
 
 Без символов крэши нечитаемы, а перезалить для уже прилетевших нельзя — `/release` загружает

@@ -27,7 +27,7 @@ docs/stack/deep-links.md                             # + строка «путь
 
 Шаги: строка в `deep-links.md` → RED `DeepLinkParserTest` → ветка парсера → `pathPrefix` в
 манифесте → `Destination`/`AppRoute` → `make api-dump` (если `Route` новый) → `make deeplinks-check`
-→ INFRA-HANDOFF при новом хосте (AASA `components` меняет `<org>/infra`) → `make check`.
+→ INFRA-HANDOFF I-1 при новом хосте или пути (AASA `components` раздаёт `<org>/infra`) → `make check`.
 
 ## push
 
@@ -73,6 +73,7 @@ intent-filter `ACTION_SEND`; iOS — `UIApplicationShortcutItems` / share extens
 - ❌ Строковый маршрут в intent-filter/AASA без `Route`.
 - ❌ Секрет или токен в ссылке/payload.
 - ❌ Custom scheme как единственный вход для веб-ссылок.
-- ❌ Хост в манифесте литералом (NF-18) или без строки в `deep-links.md` и без `wellknown`.
+- ❌ Хост в манифесте литералом (NF-18) или без строки в `deep-links.md` и без INFRA-HANDOFF I-1
+  (`.well-known` на хосте).
 - ❌ Вход `kind: widget` без записи в `widgets.md` (и наоборот — виджет с `tap` без входа).
 - ❌ Локальное уведомление (`trigger: background:<slug>`) через транспорты push и BACKEND-HANDOFF.

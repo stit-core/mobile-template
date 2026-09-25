@@ -1,6 +1,6 @@
 ---
 name: deep-links-and-push
-description: Таблица хостов/схем per env = docs/stack/deep-links.md, значения — config/env и xcconfig через плейсхолдеры (стадия deeplinks-check); AASA/assetlinks — в <org>/infra (wellknown); push — data-first payload, notification_id для дедупа, регистрация PUT /api/v1/devices, провайдеры по PUSH_PROVIDERS, пред-запрос разрешения; локальные уведомления фоновой задачи и кнопки категорий — без бэкенда. Грузится при правке манифеста, entitlements, core/deeplink, core/push, платформенных push, deep-links.md, push.md.
+description: Таблица хостов/схем per env = docs/stack/deep-links.md, значения — config/env и xcconfig через плейсхолдеры (стадия deeplinks-check); AASA/assetlinks раздаёт <org>/infra по INFRA-HANDOFF; push — data-first payload, notification_id для дедупа, регистрация PUT /api/v1/devices, провайдеры по PUSH_PROVIDERS, пред-запрос разрешения; локальные уведомления фоновой задачи и кнопки категорий — без бэкенда. Грузится при правке манифеста, entitlements, core/deeplink, core/push, платформенных push, deep-links.md, push.md.
 paths:
   - "androidApp/app/src/main/AndroidManifest.xml"
   - "iosApp/**/*.entitlements"
@@ -26,10 +26,10 @@ paths:
 - **Стадия `deeplinks-check`** (`scripts/tools/deeplinks-check.sh`): `autoVerify` есть, хост и схема —
   из плейсхолдеров (литерал хоста — NF-18), оба ключа непусты в каждом env, каждый `pathPrefix`
   манифеста и каждая строка `## Paths to Route` покрыты `DeepLinkParserTest`.
-- **`.well-known` отдаёт `<org>/infra`** (сервис `wellknown`): `assetlinks.json` со **всеми** отпечатками
-  (upload, Play app-signing, RuStore), AASA на каждом сабдомене, HTTPS, без редиректов; env
-  `MOBILE_ANDROID_APP_ID`, `MOBILE_ANDROID_SHA256_*`, `MOBILE_IOS_TEAM_ID`, `MOBILE_IOS_BUNDLE_ID` →
-  INFRA-HANDOFF при любом изменении хоста/отпечатка.
+- **`.well-known` раздаёт `<org>/infra` — требование через INFRA-HANDOFF (I-1)**: `assetlinks.json` со
+  **всеми** отпечатками (upload, Play app-signing, RuStore), AASA на каждом сабдомене, HTTPS, без
+  редиректов. Любое изменение хоста или отпечатка — INFRA-HANDOFF с данными для обоих файлов
+  per env: `applicationId`, SHA-256 отпечатки, Team ID · bundle id.
 - **Custom scheme — fallback** для писем/QR; в push и вебе — только https-URL; ссылка не несёт секретов.
   Apple CDN кэширует AASA до 24 ч; Android 15+ ре-верифицирует до 7 дней (`adb shell pm verify-app-links --re-verify <pkg>`).
 
@@ -61,7 +61,7 @@ paths:
 - **Разрешение — в момент ценности**: pre-prompt `PushOptIn{Route,Screen,ViewModel}` / `PushOptInView` →
   `NotificationPermissionGate` (Activity Result API) / `NotificationCenterPermission`; отказ → `push_enabled=false`.
 - Серверные ключи (`FCM_SERVICE_ACCOUNT_JSON`, `RUSTORE_SERVICE_TOKEN`, `APNS_P8`) — только на бэкенде
-  (`golibinfra/pushkit`); Firebase — только FCM-транспорт, Crashlytics/Analytics нет.
+  (отправка push — BACKEND-HANDOFF B-18); Firebase — только FCM-транспорт, Crashlytics/Analytics нет.
 
 ## Сигналы
 

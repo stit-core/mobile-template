@@ -28,7 +28,7 @@ dist/
 .claude/skills/r8-analyzer/
 .claude/skills/testing-setup/
 
-# ключи и профили подписи — только вне репозитория (Vaultwarden)
+# ключи и профили подписи — только вне репозитория
 *.jks
 *.keystore
 *.p12

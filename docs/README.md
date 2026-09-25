@@ -10,10 +10,10 @@
 
 ## Reference (переезжает в проект)
 - [reference/architecture.md](reference/architecture.md) — `shared/` ↔ `androidApp/` ↔ `iosApp/`, матрица зависимостей и её enforcement, презентер, фасад для Swift, reference-фичи, гейт, ловушки.
-- [reference/ecosystem.md](reference/ecosystem.md) — место в экосистеме (7 шаблонов + библиотеки), контракт artifact-in-release, соседи и sibling-checkout, триггер kit-библиотек.
+- [reference/ecosystem.md](reference/ecosystem.md) — место в экосистеме (7 шаблонов + 2 библиотеки), как сюда приходят агенты (из хаба `<org>/infra` или прямым заходом), что репо берёт и отдаёт, контракт artifact-in-release, sibling-checkout, триггер kit-библиотек; канон — `docs/reference/ecosystem.md` инфра-репо.
 - [reference/release.md](reference/release.md) — версия из тега, STOP-1/STOP-2, вербы, секреты и custody, STORE-HANDOFF.
 - [reference/distribution.md](reference/distribution.md) — магазины, аккаунты, дедлайны, demo-режим как требование, чек-лист L-1…L-17, две подписи.
-- [reference/observability.md](reference/observability.md) — Sentry/GlitchTip, DSN per env, PII, логи, символы, пороги, `TelemetrySink`.
+- [reference/observability.md](reference/observability.md) — Sentry SDK и трекер по `SENTRY_DSN` (GlitchTip/Sentry), DSN per env, PII, логи, символы, пороги, `TelemetrySink`.
 - [reference/strategy-mapping.md](reference/strategy-mapping.md) — kinds карты `mobile/<surface>/` → пути в трёх местах кода; reference-соответствия.
 - [reference/mac-host.md](reference/mac-host.md) — Mac build-host: SSH, `~/ci/<slug>/`, стадии `check-mac`, подпись, гигиена.
 - [reference/kinship.md](reference/kinship.md) — родство с Go/SPA/bot-шаблонами; `make kin-diff`.

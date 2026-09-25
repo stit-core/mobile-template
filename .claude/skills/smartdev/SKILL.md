@@ -1,6 +1,6 @@
 ---
 name: smartdev
-description: Always-on cockpit дневного флоу. Запускай в начале сессии / после /clear / когда непонятно с чего начать. Гонит make doctor и make status, грузит контекст (активный план из roadmap, стек, Mac-хост, дрейф спеки) и САМ переключает в нужный режим (plan / triage-failure / scaffold / infra-handoff / Mac-verify / release), ведя RED→GREEN по дефолту. Активируй на "/smartdev", "что у нас?", "с чего начать?", "введи в курс дела", "статус проекта".
+description: Cockpit дневного флоу — запускай в начале сессии, после /clear или когда непонятно, с чего начать (в том числе когда задачу принёс агент из хаба <org>/infra). Гонит make doctor и make status, поднимает контекст (активные планы, стек, Mac-хост, дрейф спеки) и сам переключает в нужный режим (plan / triage-failure / scaffold / infra-handoff / Mac-verify / release), ведя RED→GREEN по дефолту. Применяй на просьбы ввести в курс дела, показать статус проекта или выбрать следующий шаг.
 ---
 
 # Skill: smartdev (cockpit)
@@ -15,7 +15,7 @@ description: Always-on cockpit дневного флоу. Запускай в н
 - Юзер дал задачу, но непонятно насколько большая
 - Не уверен, какой режим сейчас правильный
 
-## Когда НЕ применять
+## Когда не применять
 
 - Узкая чёткая задача («поправь опечатку в X») — иди прямо в работу (RED→GREEN всё равно)
 - Уже идёт активная сессия с известным контекстом — не повторяй briefing
@@ -45,26 +45,28 @@ set), `== Gate ==` (последний `check` и `check-mac`), `== Critical ==`
 сосед, `API-DUMP`, `KLIB`, `STACK-DRAFTS`, `SCREENSHOTS`), `== Handoffs ==` (INFRA / BACKEND
 pending), `== Modules ==`, `== Plan ==` (focus + активная секция + следующий открытый атом),
 `== Strategy ==` (карта `mobile/<surface>/` соседа: kinds, draft/stable), `== Recent commits ==`,
-`== TODOs ==`. Последняя строка — `OK` или `ATTENTION:<что>`: это твой сигнал ветвления.
+`== TODOs in changed files ==`. Последняя строка — `OK` или `ATTENTION: <что>` (`gate-red`,
+`gate-unknown`, `gen-drift`, `api-dump`, `screenshots`, `handoff`, `todos`): это твой сигнал
+ветвления.
 
 ### 3. Поднять контекст — читай сам, не жди скрипта
 
 `make status` — детерминированный детект критичного; ориентацию добери чтением:
 
-- **Roadmap целиком — `.claude/plans/roadmap.md`**: `## Active` и `## Backlog`. Active пуст —
-  назови юзеру 1–3 backlog-пункта как кандидатов «с чего начать».
-- **Активный план** (`<slug>: in-progress | next: A#`) — прочти секцию: последний чекпоинт,
-  следующий открытый атом. Продолжай с него, не перепланируя.
+- **Бэклог — `.claude/plans/backlog.md`.** Активных планов нет — назови юзеру 1–3 пункта бэклога как
+  кандидатов «с чего начать».
+- **Активный план** (`<slug> · in-progress · … · дальше: S<N> — …`) — прочти
+  `.claude/plans/<slug>.md` целиком, начиная с «Где мы сейчас». Продолжай с него, не перепланируя.
 - **Что это за приложение** (свежая сессия): `docs/stack/service.md` (де-темплейтизирован ли
   форк: `applicationId` ≠ `tech.stit.mobile`, `platforms`, `preset`), `docs/stack/` (что
   `draft`, что `stable`), наличие reference-фич `profile`/`todos` (на месте → путь
   `/init-service`), `iosApp/` (есть ли, верифицирован ли: `build/gate-logs/mac.last`).
-- Договорённости прошлых сессий — в закоммиченных артефактах (чекпоинты roadmap, `CLAUDE.md`,
-  rules); авто-память не используется.
+- Договорённости прошлых сессий — в закоммиченных артефактах (планы с их «Где мы сейчас», `CLAUDE.md`,
+  rules); авто-память выключена.
 
 On-demand: контекст уже поднят в этой сессии — не перечитывай.
 
-### 4. Чейнить — НЕ описывай, переключай
+### 4. Чейнить — переключай, а не описывай
 
 По приоритету сверху вниз. Первое сработавшее — переключаешься **сразу**, говоришь юзеру
 «→ перехожу в `<skill>`, потому что <причина>»:
@@ -72,8 +74,8 @@ On-demand: контекст уже поднят в этой сессии — н�
 | Сигнал из status / задачи | Действие — чейн |
 |---|---|
 | `make doctor` FAIL | чинить окружение по next-step; дальше не идти |
-| `ATTENTION:` gate-red / gen-drift / api-dump / klib / красный тест | → `/triage-failure` (RED-арм) |
-| `== Handoffs ==` не `none` (или правишь хосты/DSN/спеку/`requirements`) | → `/infra-handoff` (блок до claim/коммита) |
+| `ATTENTION:` gate-red / gen-drift / api-dump / screenshots / красный тест | → `/triage-failure` (RED-арм) |
+| `ATTENTION: handoff` — `== Handoffs ==` не `none` (или правишь хосты/DSN/спеку/`requirements`) | → `/infra-handoff` (блок до claim/коммита) |
 | Свежий форк (`tech.stit.mobile`, reference-фичи на месте, stack `draft`) | → `/init-service` |
 | Активный план `in-progress` | продолжай со следующего открытого атома; чекпоинт по правилам `/plan` |
 | Атом или задача трогает `iosApp/**` вне `Packages/Pure` | режим **Mac-verify**: `make mac-doctor` → правка → `make check-mac`; без Mac — атом остаётся открытым, не «готово» |
@@ -94,7 +96,7 @@ On-demand: контекст уже поднят в этой сессии — н�
 
 ## Формат вывода
 
-Сводка ≤ 25 строк + явный переход:
+Сводка — картина, которую юзер схватывает за полминуты, и явный переход:
 
 ```
 ## Состояние
@@ -103,21 +105,21 @@ On-demand: контекст уже поднят в этой сессии — н�
 **Платформы:** android ✓ ios ✓ (не верифицирован: check-mac never) · preset companion
 **Critical:** GEN ok · API-DUMP ok · KLIB ok · STACK-DRAFTS 2 (push, signing)   (или ATTENTION:<...>)
 **Handoffs:** none / INFRA pending: deep-links.md
-**План:** `<slug>` in-progress → next A#  (или —)
+**План:** `<slug>` in-progress → дальше S<N>  (или —)
 
 ## Что висит
 - <TODO / draft-kinds / stale screenshots — max 3>
 
-## Идеи в бэклоге (если Active пуст)
-- <1–3 пункта из roadmap ## Backlog>
+## Идеи в бэклоге (если активных планов нет)
+- <1–3 пункта из `.claude/plans/backlog.md`>
 
-## → Перехожу в <skill> / Продолжаю план с A#
+## → Перехожу в <skill> / Продолжаю план с S<N>
 <одна фраза почему>
 ```
 
 Если юзер дал задачу — после сводки сразу §4 (оценка + чейн) одним абзацем.
 
-## Что smartdev НЕ делает
+## Что smartdev не делает
 
 - Не гонит `make check` целиком сам (это перед claim «готово» / коммитом или по просьбе).
 - Не делает edits/коммитов в фазе briefing.
@@ -128,7 +130,6 @@ On-demand: контекст уже поднят в этой сессии — н�
 ## Anti-patterns
 
 - ❌ Дамп raw `make status` в чат. Сводка — резюме, не сырьё.
-- ❌ Briefing на 100 строк. Юзер хочет картину за 30 секунд.
 - ❌ Описать проблему и остановиться («есть drift»). Cockpit **переключает**.
 - ❌ Багфикс через `/plan`. Багфикс → `/triage-failure`.
 - ❌ Считать зелёный Linux-гейт готовностью iOS-UI.

@@ -7,17 +7,18 @@ enforce'ится детерминированно, как вмешаться. (�
 
 | слой | где | когда грузится | сила |
 |---|---|---|---|
-| Ядро + роутер | `CLAUDE.md` (≤ 200 строк); `AGENTS.md` — указатель для JetBrains/Xcode-агентов | всегда | advisory |
-| Path-scoped правила | `.claude/rules/*.md` (24) с `paths:` | когда matching-файл в контексте | advisory |
+| Ядро + роутер | `CLAUDE.md` (< 200 строк); `AGENTS.md` — указатель для JetBrains/Xcode-агентов (Claude Code читает его только без `CLAUDE.md`) | всегда | advisory |
+| Path-scoped правила | `.claude/rules/*.md` (24) с `paths:` | когда агент читает файл под `paths:` | advisory |
 | Skills (процедуры) | `.claude/skills/<name>/SKILL.md` (+ `references/`, `state/`) | по `description` или `/<name>` | procedural |
 | Официальные Android-скиллы | `.claude/skills/<id>/` — ставит `make setup` (`scripts/tools/android-skills.sh`), gitignored | по `description` | procedural |
-| Subagent'ы | `.claude/agents/{explorer,reviewer}.md` | когда основной агент делегирует | role-specific |
-| Settings / permissions | `.claude/settings.json` | старт сессии | детерминированно (deny) |
-| План | `.claude/plans/roadmap.md` (единый, `## Active` / `## Backlog`) | читает `/smartdev`, `/plan` | процесс |
+| Subagent'ы | `.claude/agents/{explorer,reviewer}.md` (`name` обязателен — без него файл не грузится как агент; `model: inherit`) | когда основной агент делегирует | role-specific |
+| Settings / permissions | `.claude/settings.json` (файловые deny — только `Edit(path)`: он покрывает все инструменты правки) | старт сессии | детерминированно (deny) |
+| Планы | `.claude/plans/` (`<slug>.md` — активный план, `backlog.md`; сквозная задача — программа в хабе `<org>/infra`) | читает `/smartdev`, `/plan` | процесс |
 
-Progressive disclosure: на холодном старте — имена и описания; тела skills/rules и `references/`
-грузятся по необходимости. **Ключ path-scoping — `paths:`** (не `globs:`); правило без `paths:`
-грузится всегда — не заводить.
+Progressive disclosure: на холодном старте — `CLAUDE.md` и `name`/`description` скиллов; тело
+скилла и его `references/` грузятся по вызову, правило — когда агент читает файл под его
+`paths:`. **Из frontmatter правила Claude Code читает только `paths:`** (не `globs:`);
+`name`/`description` правил — для людей. Правило без `paths:` грузится всегда — не заводить.
 
 **Парное место правки — список Android-скиллов**: `SKILLS=` в `scripts/tools/android-skills.sh`
 и каталоги `.claude/skills/<id>/` в `.gitignore` — менять одним коммитом.
@@ -25,8 +26,8 @@ Progressive disclosure: на холодном старте — имена и о�
 ## Цикл одной задачи
 
 ```
-prompt → /smartdev (make doctor → make status, roadmap, чейнит режим)
-       → /plan (planning-first; iOS-атом = Mac-verify)
+prompt → /smartdev (make doctor → make status, активные планы, чейнит режим)
+       → /plan (planning-first; iOS-шаг = Mac-verify)
        → act (RED→GREEN→REFACTOR; сосед задет → /infra-handoff)
        → verify (make check-fast → make check; iOS — make check-mac)
        → review (опц. subagent reviewer)
@@ -57,9 +58,9 @@ prompt → /smartdev (make doctor → make status, roadmap, чейнит реж�
 | реестр — код `shared`: у каждой задачи (`*Task : BackgroundRunner`) объявлен ключ, есть ветка `backgroundRunner(id)` и тест; `BGTaskSchedulerPermittedIdentifiers` == задачам, которые ведёт `BGTaskScheduler` (и обратно); у каждого виджета — эталон и тест на каждое состояние `WidgetState`; строки `core_platform_action_*`/`widget_*` — в обоих `values` (iOS-каталог — WARN); `android:name=".X"` манифеста существует как класс или строковая константа. `docs/stack/background.md` сверяется дополнительно, если заведён; пустой набор — зелёный | `scripts/tools/capability-check.sh` | `make capability-check` | `capability-check` (NF-25…27) |
 | формат Swift; границы пакетов; `print`/`NSLog`/Combine/`URLSession`/сырые цвета/фиксированный шрифт/`@preconcurrency` без WHY; `Pure` собирается без UIKit | swift-format `--strict`; SwiftLint custom rules (`no_print`, `no_nslog`, `no_combine`, `no_raw_urlsession`, `no_feature_import`, `no_platform_import_in_features`, `no_hardcoded_color`, `no_fixed_font_size`, `preconcurrency_needs_why`); `Tools/archlint` над `dump-package` (`Pure` → только Pure, `Core`/`TestSupport` ↛ `Features`, `Features` ↛ `Core/{Persistence,Platform}`, фича ↛ фича, ацикличность); `swift test` Pure + `coverage-floor.sh` | `iosApp/.swift-format`, `iosApp/.swiftlint.yml`, `iosApp/Tools/archlint`, `scripts/tools/{swift-step,coverage-floor}.sh` | `format swift`, `swiftlint`, `archlint`, `swift pure build+tests`, `coverage swift` (NF-20…24) |
 | гейт умеет краснеть | `make gate-selftest` — каждая `.gate-fixtures/NF-NN/fixture.sh` (`EXPECT`, `TOUCHES`, `apply`) обязана уронить свою стадию; откат из резервной копии | `scripts/tools/gate-selftest.sh` | самотест: NF-01…10 — Android/KMP-каркас, NF-11…16 — `shared`, NF-17…19 — паритет (i18n, deep links, токены), NF-20…24 — Swift, NF-25…27 — поверхности вне экранов (фон, виджеты, действия) |
-| Conventional Commits; секреты подписи не в коммите; формат/detekt staged; `validate-plan` для roadmap; `GATE_RELEASE=1 make check` перед push | git-хуки `commit-msg`, `pre-commit`, `pre-push` (ставит `make setup`; пропуск — `SKIP_PREPUSH=1`, не `--no-verify`) | `scripts/git-hooks/` | **детерминированно** |
+| Conventional Commits; секреты подписи не в коммите; формат/detekt staged; `validate-plan` для `.claude/plans/`; `GATE_RELEASE=1 make check` перед push | git-хуки `commit-msg`, `pre-commit`, `pre-push` (ставит `make setup`; пропуск — `SKIP_PREPUSH=1`, не `--no-verify`) | `scripts/git-hooks/` | **детерминированно** |
 | `--no-verify`, force-push, `reset --hard`, `apiDump`/`assembleRelease`/`keytool`/`sdkmanager` напрямую, правка `generated/`/`shared/api/`/`.pbxproj`/`build/`, чтение ключей и `.env.local` | `permissions.deny` | `.claude/settings.json` | **детерминированно** |
-| структура плана (атомы с `Verify:`/`Зависит от:`, статусы, чекпоинты) | `scripts/tools/validate-plan.sh` | `pre-commit` при staged `roadmap.md` | детерминированно |
+| формат планов (критерии приёмки и шаги с `Проверка:`, статусы, «Где мы сейчас», бэклог) | `scripts/tools/validate-plan.sh` | `pre-commit` при изменениях в `.claude/plans/` | детерминированно |
 | ссылки в docs/обвязке резолвятся | `scripts/tools/links-check.sh` | `make links-check` | advisory |
 | родство с экосистемой | `scripts/tools/kin-diff.sh` | `make kin-diff` | advisory (WARN) |
 | соседи задеты → handoff; карта правится в strategy; логика в `shared`; iOS «готово» только после `check-mac` | правила + скиллы (`infra-impact`, `/infra-handoff`, `/plan` Mac-verify) | `.claude/rules`, `.claude/skills` | soft (дисциплина) |
@@ -77,8 +78,8 @@ SwiftLint нет — фикстуры обязаны краснеть.
 | **Виджет / фоновая задача / системное действие** | запись в карте (`widgets.md` / `background-tasks.md` / `system-actions.md`) → `/scaffold widget` \| `background-task` \| `system-action` → носитель в `shared/…/feature/<group>/` с тестом на каждое состояние или ветку → платформенная обёртка (`:androidApp:widget` + порт `WidgetRefresher`, `core:platform/{background,action}`, `Core/{SystemActions,Widgets}`) → строка в `docs/stack/background.md` или `push.md` → эталоны состояний (`make screenshots-record`) → `make capability-check` |
 | **Токен дизайна** | строка в `design/tokens.json` → `make gen-tokens` → потребление в `StitColors`/`StitSpacing`/… и `Theme.swift` → `make screenshots-record` осознанно → строка в `docs/stack/styling.md § Tokens` |
 | **Kind stack** | форма в `docs/stack/_templates/<kind>.md` (frontmatter, `## Generates`) → строка в `docs/stack/README.md` → чек-лист в `.claude/skills/stack-deep-dive/references/field-checklists.md` |
-| **Правило** | `.claude/rules/<name>.md` ≤ 60 строк, `name`/`description`/`paths:` → счётчик правил в таблице «Что где лежит», строка в таблице «Кто что enforce'ит» (если правило что-то enforce'ит) и `harness.md`; переросшее правило дробится по path-срезу, а не растёт |
-| **Скилл** | `.claude/skills/<name>/SKILL.md` (+ `references/`) — ссылки только на реальные вербы и пути; `make help` — источник вербов |
+| **Правило** | `.claude/rules/<name>.md` ≈ 60 строк, `paths:` (+ `name`/`description` для людей) → счётчик правил в таблице «Что где лежит», строка в таблице «Кто что enforce'ит» (если правило что-то enforce'ит) и `harness.md`; переросшее правило дробится по path-срезу, а не растёт |
+| **Скилл** | `.claude/skills/<name>/SKILL.md` (< 500 строк; + `references/`) — `description` с ключевым сценарием первым (с `when_to_use` ≤ 1536 символов); ссылки только на реальные вербы и пути; `make help` — источник вербов |
 | **Стадия гейта** | `stage()` + массив `STAGES` в `scripts/tools/check.sh` (дешёвое первым; Swift до Gradle) → верб в `Makefile` в своей группе `##@` (`LOOP / GATE / KMP / CONTRACT / SWIFT (Linux-часть) / MAC / RELEASE / SETUP / INTEL / META`) → негативная фикстура `.gate-fixtures/NF-NN/` → `make gate-selftest` красный |
 | **Негативная фикстура** | `.gate-fixtures/NF-NN/fixture.sh`: первая строка `# NF-NN — <что ловит>`, `EXPECT` (стадия), `TOUCHES` (пути), `apply()`; нумерация: NF-01…10 каркас, NF-11…16 `shared`, NF-17…19 паритет (i18n, deep links, токены), NF-20…24 Swift, NF-25…27 поверхности вне экранов (идентификатор задачи из `Info.plist`, эталон состояния виджета, ответ действия без `values-ru`); `make gate-selftest F=NF-NN` — одна |
 | **Верб Makefile** | группа `##@`, комментарий `## …` одной строкой, реализация через `scripts/tools/*.sh` с `OK:`/`FAIL:` (`gradle-step.sh`/`swift-step.sh`), логи в `build/gate-logs/`; новый верб — в `allow` `.claude/settings.json` и в таблицу `CLAUDE.md § Команды` |
@@ -109,8 +110,9 @@ SwiftLint нет — фикстуры обязаны краснеть.
 
 | симптом | куда смотреть |
 |---|---|
-| Skill не активируется | `description` в frontmatter — конкретнее, «pushy», с триггер-фразами |
-| Path-scoped rule не грузится | frontmatter `paths:` (не `globs:`!), glob совпадает с путём файла |
+| Skill не активируется | `description` в frontmatter — конкретнее: что делает и когда применять, ключевой сценарий первым, категории намерений вместо списков фраз; вместе с `when_to_use` в листинге обрезается на 1536 символах |
+| Path-scoped rule не грузится | frontmatter `paths:` (не `globs:`), glob совпадает с путём файла |
+| Subagent не виден | в frontmatter нет `name` — файл считается документацией |
 | Subagent ушёл надолго | `tools` в frontmatter — read-only; не давать ему Gradle |
 | `CLAUDE.md` игнорируется | длина > 200 строк или конфликт инструкций между секциями |
 | Коммит reject'нут | `scripts/git-hooks/commit-msg` — type ∈ {feat,fix,refactor,docs,test,chore,meta,perf,style}, subject ≤ 72 |

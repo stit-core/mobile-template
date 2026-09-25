@@ -1,6 +1,6 @@
 ---
 name: release-flow
-description: STOP-1 = Gitea Release на аннотированном теге vX.Y.Z с подписанными артефактами и символами; STOP-2 = подача в каналы; версия из тега (versionCode = X·1e6 + Y·1e3 + Z); символы до публикации; check-full до тега; отклонение модерации → Z+1; STORE-HANDOFF; ntfy. Грузится при правке scripts/release/, Makefile, distribution.md, release.md, .gitea/.
+description: STOP-1 = Gitea Release на аннотированном теге vX.Y.Z с подписанными артефактами и символами; STOP-2 = подача в каналы; версия из тега (versionCode = X·1e6 + Y·1e3 + Z); символы до публикации; check-full до тега; отклонение модерации → Z+1; секреты из env; STORE-HANDOFF. Грузится при правке scripts/release/, Makefile, distribution.md, release.md, .gitea/.
 paths:
   - "scripts/release/**"
   - "Makefile"
@@ -37,12 +37,11 @@ paths:
   48 ч — `observability.md`).
 - **Каналы по `preset`**: `companion`/`consumer` — RuStore + Play (+ App Store при iOS);
   `enterprise` — `gitea` (APK как ассет) + ABM; Play не используется.
-- **Секреты — env из Vaultwarden на время команды** (rule `signing-and-secrets`); релиз без
-  env падает, debug-ключом не подписывается.
-- **Уведомление** — ntfy-топик `releases-<org>` на STOP-1 и STOP-2.
+- **Секреты — env на время команды**: значения хранятся вне репозитория, экспортирует человек
+  (rule `signing-and-secrets`); релиз без env падает, debug-ключом не подписывается.
 - **Partial release** — `--platform android|ios|both`; iOS-часть только с Mac-хоста
   (`docs/reference/mac-host.md`).
-- Что `/release` не делает: не генерирует ключи (`keytool` deny), не читает Vaultwarden,
+- Что `/release` не делает: не генерирует ключи (`keytool` deny), не экспортирует секреты,
   не отвечает модерации, не переключает production-трек.
 - Скрипты `scripts/release/*.sh` — `set -euo pipefail`, одна строка `OK:`/`FAIL:`, версия из
   тега через `eval "$(version-from-tag.sh)"`, без хардкода имён приложения (берётся из
