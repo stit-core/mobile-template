@@ -11,13 +11,15 @@
 экраны по карте продукта, не обвязку.
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-2563eb)](LICENSE)
-[![Часть stit](https://img.shields.io/badge/stit-открытые_шаблоны-6366f1)](https://git.stit.tech/stit-core/stit-public)
+[![Часть stit](https://img.shields.io/badge/stit-открытые_шаблоны-6366f1)](https://github.com/stit-core)
 [![Kotlin](https://img.shields.io/badge/Kotlin_2.4-KMP-7f52ff)](#что-внутри)
 [![Android](https://img.shields.io/badge/Android-AGP_9.4_%2B_Compose-3ddc84)](#что-внутри)
 [![iOS](https://img.shields.io/badge/iOS-Swift_6.4_%2B_SwiftUI-0a84ff)](#что-внутри)
 [![Gate](https://img.shields.io/badge/gate-make_check_on_Linux-22c55e)](#команды)
 
 </div>
+
+> Разработка идёт в приватном Gitea (`git.stit.tech/stit-core/mobile-template`), публичное зеркало — [github.com/stit-core/mobile-template](https://github.com/stit-core/mobile-template). Как с ним работать вне инфраструктуры stit — в [профиле stit-core](https://github.com/stit-core).
 
 ---
 
@@ -123,7 +125,7 @@ make release-preflight TAG=vX.Y.Z && make release-android TAG=vX.Y.Z   # skill /
 
 Это один из открытых шаблонов stit (Apache-2.0) — фундамент «-1 уровня»,
 берите бесплатно и владейте. Карта всех шаблонов и точка входа —
-**[витрина stit](https://git.stit.tech/stit-core/stit-public)**. Нужна
+**[витрина stit](https://github.com/stit-core)**. Нужна
 команда, стандарт или поддержка — **[наш подход и контакты (vision)](https://git.stit.tech/stit/vision)**.
 
 ## Лицензия
