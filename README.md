@@ -21,6 +21,8 @@
 
 > Разработка идёт в приватном Gitea (`git.stit.tech/stit-core/mobile-template`), публичное зеркало — [github.com/stit-core/mobile-template](https://github.com/stit-core/mobile-template). Как с ним работать вне инфраструктуры stit — в [профиле stit-core](https://github.com/stit-core).
 
+> **Статус:** шаблон в разработке и ещё ни разу не тестировался.
+
 ---
 
 ## Место в экосистеме
@@ -126,7 +128,7 @@ make release-preflight TAG=vX.Y.Z && make release-android TAG=vX.Y.Z   # skill /
 Это один из открытых шаблонов stit (Apache-2.0) — фундамент «-1 уровня»,
 берите бесплатно и владейте. Карта всех шаблонов и точка входа —
 **[витрина stit](https://github.com/stit-core)**. Нужна
-команда, стандарт или поддержка — **[наш подход и контакты (vision)](https://git.stit.tech/stit/vision)**.
+команда, стандарт или поддержка — **[пишите в Telegram @gommgo](https://t.me/gommgo)**.
 
 ## Лицензия
 
