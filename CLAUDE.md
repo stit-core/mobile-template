@@ -29,9 +29,9 @@ Konsist; swift-format + SwiftLint + archlint + `swift test` чистых пак�
 
 ## Точка входа
 
-Сюда обычно приходит агент из операционного хаба `<org>/infra` с задачей из общего плана проекта;
-прямой заход в репо — такой же режим. Работай обвязкой этого репо (этот файл, скиллы, гейт
-`make check`); последствия для соседей — handoff-блок (`/infra-handoff`) для хаба или соседа.
+Задачу или фазу программы хаба `<org>/infra` приносит сессия корня проекта `~/git/<org>/` или её
+фоновый агент; прямой заход в репо — такой же режим. Работай обвязкой этого репо (этот файл, скиллы,
+гейт `make check`); последствия для соседей — handoff-блок (`/infra-handoff`) для хаба или соседа.
 
 - **`/smartdev`** — cockpit сессии: `make doctor` → `make status` (ветка,
   платформы, Mac-хост, дрейф API-спеки, активный план, гейты) + переключение
@@ -102,7 +102,7 @@ background-tasks · shared-api · shared-lib); там её ведёт `/mobile-d
 | Фасад Kotlin → Swift (плоский, `apiDump`) | rule `kmp-public-api` |
 | Навигация и deep links | rules `navigation`, `deep-links-and-push` |
 | Поверхности вне экранов (виджеты, фон, системные действия) | rule `off-screen-surfaces` + `docs/reference/architecture.md`, `docs/stack/background.md` |
-| Экосистема (шаблоны, флоу хаба, контракты, Gitea Release как STOP) | `docs/reference/ecosystem.md` |
+| Экосистема (шаблоны, флоу из корня проекта, контракты, Gitea Release как STOP) | `docs/reference/ecosystem.md` |
 | Релиз, версии, магазины, Mac-хост | `docs/reference/release.md`, `distribution.md`, `mac-host.md` |
 | Observability (Sentry SDK → трекер по `SENTRY_DSN`, `Logger`/`LogSink`, `os.Logger`) | `docs/reference/observability.md` + rule `observability` |
 | Тесты (JVM, Robolectric, Roborazzi, Swift Testing, snapshot, Maestro) | rule `tests-pipeline` |

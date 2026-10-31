@@ -75,7 +75,7 @@ key ≠ RuStore-ключ — все отпечатки в `signing.md`, `deep-li
 внутри — WHAT/WHY/ACTION/WHO/DECIDE/RISK) в чат, в `dist/store-handoff.md` (ассет STOP-1) и
 планом `.claude/plans/release-v<X.Y.Z>.md` с человеческими шагами. `BACKEND` и `ENV` собирают
 раздел `## Handoff` активных планов (`min_version` после раскатки, отпечатки в `.well-known`,
-`SENTRY_DSN`). Релиз запущен задачей из хаба `<org>/infra` — STORE-HANDOFF уходит и в ответ хабу.
+`SENTRY_DSN`). Релиз запущен задачей из корня проекта — STORE-HANDOFF уходит и в ответ сессии корня.
 Чек-лист магазинов L-10…L-17 — `docs/reference/distribution.md`.
 
 ## Что после релиза

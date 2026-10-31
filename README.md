@@ -38,8 +38,9 @@ mobile-template (<org>/mobile)  ← вы здесь ──► <org>/backend (Bea
 RuStore · Google Play · App Store   ← STOP-2: подача в каналы; модерация и промоушен — человек
 ```
 
-Задачи сюда обычно приносит агент из операционного хаба `<org>/infra` — там общий план
-проекта; прямой заход в репо — тот же режим с той же обвязкой. Релиз в магазины — свой
+Работа идёт из [корня проекта](https://github.com/stit-core/project-infra-template-compose/blob/main/docs/reference/project-root.md)
+`~/git/<org>/`: задачу или фазу программы хаба `<org>/infra` сюда приносит сессия корня или её
+фоновый агент; прямой заход в репо — тот же режим с той же обвязкой. Релиз в магазины — свой
 `/release`: деплой из инфры приложения не касается. Трекер ошибок — Sentry-совместимый по
 `SENTRY_DSN` проекта. Подробнее — [`docs/reference/ecosystem.md`](docs/reference/ecosystem.md).
 
@@ -60,7 +61,7 @@ Android-first: до релиза в RuStore/Play всё выполнимо на 
 Быстрый старт (чтобы собралось):
 
 ```bash
-# 1. Use this template → <org>/mobile, склонировать рядом с <org>/{strategy,backend,infra}
+# 1. Use this template → <org>/mobile, склонировать в корень проекта: ~/git/<org>/mobile
 # 2. окружение: JDK 21, Android SDK, Swift 6.4 — пути через env (или local.properties)
 export JAVA_HOME=… ANDROID_HOME=… SWIFT_TOOLCHAIN=…
 # 3. хуки, Android-скиллы, прогрев демона; зелёный гейт с явным SKIP-блоком macOS-стадий

@@ -13,7 +13,7 @@
 |---|---|
 | Linux-машина: JDK 21 (Temurin), Android SDK (`platforms/android-37.2`, build-tools, platform-tools, `cmdline-tools` с `android` CLI), Swift 6.4 + SwiftLint в `PATH`; RAM ≥ 6 ГБ, диск ≥ 15 ГБ | гейт и Android-релиз целиком; Swift-стадии Linux-части |
 | `export JAVA_HOME=… ANDROID_HOME=… SWIFT_TOOLCHAIN=…` (или `local.properties` из `local.properties.example`) | `make doctor` печатает next-step, если чего-то нет |
-| Соседи sibling-checkout'ами: `../strategy` (форк `business-strategy-template`, поверхность `type: mobile` в `surface.md`), `../backend` (`api/openapi.yaml`), `../infra` (операционный хаб проекта) | карта, контракт, адресат INFRA-HANDOFF (`.well-known`, хосты, DSN); соседа нет — скиллы печатают next-step |
+| Корень проекта `~/git/<org>/` ([`project-root.md`](https://github.com/stit-core/project-infra-template-compose/blob/main/docs/reference/project-root.md)), в нём соседи sibling-checkout'ами: `../strategy` (форк `business-strategy-template`, поверхность `type: mobile` в `surface.md`), `../backend` (`api/openapi.yaml`), `../infra` (хаб проекта) | из корня ведётся работа; карта, контракт, адресат INFRA-HANDOFF (`.well-known`, хосты, DSN); соседа нет — скиллы печатают next-step |
 | `OPENAPI_GENERATOR_JAR` (openapi-generator-cli 7.25.0) + `python3` с PyYAML (`python3-yaml`) | `make gen` (модели из спеки соседа) и полная `make gen-check`; без них `gen-check` сверяет только lock; после `make gen` — `make api-dump` (модели — часть фасада `shared`) |
 | **Mac build-host** (Apple silicon, Xcode 27) по SSH — **предусловие iOS-ветки** (`docs/reference/mac-host.md`) | линковка `Shared.framework`, `Core`/`Features`, snapshot-тесты, IPA; без него iOS помечен «не верифицирован» |
 | Аккаунты магазинов: RuStore (бесплатно, сразу), Google Play ($25, D-U-N-S ~30 дней, verification), Apple Developer Program ($99/год, оплата из РФ — решить заранее) | STOP-2; сроки — `docs/reference/distribution.md` |
@@ -22,7 +22,7 @@
 ## 1. Форк
 
 1. Gitea → `mobile-template` → **Use this template** → `<org>/mobile`.
-2. `git clone git@<gitea>:<org>/mobile.git ~/git/<org>/mobile` — рядом с `strategy`, `backend`, `infra`.
+2. `git clone git@<gitea>:<org>/mobile.git ~/git/<org>/mobile` — в корень проекта, к `strategy`, `backend`, `infra`.
 3. `make setup` — doctor + git-хуки (`core.hooksPath`) + официальные Android-скиллы
    (`.claude/skills/<id>/`, gitignored) + прогрев демона Gradle.
 4. `make check` — зелёный Linux-гейт с явным SKIP-блоком macOS-стадий.
@@ -31,8 +31,9 @@
 
 В Claude Code: `/smartdev` — `make doctor` + `make status`; на свежем форке cockpit переключит в
 `/init-service`. Оркестратор ведёт стадии 3–7, сам не проектирует и не де-темплейтит. Обычно
-онбординг запускает агент из операционного хаба `<org>/infra` по общему плану проекта; прямой
-запуск здесь — тот же путь с той же обвязкой.
+онбординг запускает сессия корня проекта — задачей или фазой программы хаба `<org>/infra`, сама
+или фоновым агентом в `mobile/`: сначала `mobile/CLAUDE.md` через Read, общие с другими репо
+скиллы — с именем папки (`/mobile:smartdev`). Прямой запуск здесь — тот же путь с той же обвязкой.
 
 ## 3. Идентичность и env — `docs/stack/service.md`, `config.md`
 
@@ -86,7 +87,7 @@ permission / system-action / widget / background-task / api).
   `SENTRY_DSN`, URL политики ПДн и веб-удаления аккаунта.
 - **`<org>/strategy`** (STRATEGY-HANDOFF): расхождение кода с картой.
 
-Блоки — в ответ (юзеру или хабу `<org>/infra`) и в раздел `## Handoff` плана; из этого репо в
+Блоки — в ответ (юзеру или сессии корня) и в раздел `## Handoff` плана; из этого репо в
 соседей не пишут.
 
 ## 8. Первый релиз — `/release --stop 1`

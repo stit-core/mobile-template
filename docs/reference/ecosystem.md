@@ -2,17 +2,20 @@
 
 Место `<org>/mobile` в экосистеме stit — самодостаточная выжимка для этого репо. Канон карты
 шаблонов и операционного флоу — `docs/reference/ecosystem.md` инфра-репо `<org>/infra` (форк
-`project-infra-template-compose`; sibling-checkout — `../infra/docs/reference/ecosystem.md`).
+`project-infra-template-compose`; sibling-checkout — `../infra/docs/reference/ecosystem.md`);
+устройство корня проекта — [`project-root.md`](https://github.com/stit-core/project-infra-template-compose/blob/main/docs/reference/project-root.md)
+там же.
 
 ## Шаблоны и форки
 
-Шаблоны `stit-core/*` форкаются в репо клиентской орги `<org>/*`; форки одной орги лежат рядом
-sibling-checkout'ами (`../<name>`).
+Шаблоны `stit-core/*` форкаются в репо клиентской орги `<org>/*`. Проект — папка `~/git/<org>/`:
+в её корне — карта проекта `CLAUDE.md`, в папках корня — форки орги sibling-checkout'ами
+(`../<name>`). Из корня ведётся вся работа.
 
 | шаблон → форк | роль |
 |---|---|
 | `business-strategy-template` → `<org>/strategy` | design-time source of truth: бизнес, AJTBD, SWOT, карта гипотез, продукты (в т. ч. карта `mobile/<surface>/` этого приложения), ИТ-периметр |
-| `project-infra-template-compose` → `<org>/infra` | runtime проекта (docker-compose на VPS) и **операционный хаб**: общий план, рассылка агентов по сиблингам, выкатка тегов (`make bump`) |
+| `project-infra-template-compose` → `<org>/infra` | runtime проекта (docker-compose на VPS) и **хаб**: программы сквозных задач, выкатка тегов (`make bump`) |
 | `go-backend-template` → `<org>/backend` | Go-сервис |
 | `spa-frontend-template` → `<org>/frontend` | React SPA (кабинет, всё за логином) |
 | `seo-frontend-template` → `<org>/site` | Astro SEO-сайт (индексируемый контент) |
@@ -34,8 +37,8 @@ sibling-checkout'ами (`../<name>`).
    <org>/strategy — design-time SoT: карта mobile/<surface>/ (12 kinds), /mobile-deep-dive
         │ read-only: /scaffold и /de-template
         ▼
-   <org>/infra (хаб) ── задача, агент в ../mobile ──► ЭТОТ РЕПО ◄── прямой заход
-                                                        │
+   сессия корня ~/git/<org>/ ── задача или фаза программы хаба ──► ЭТОТ РЕПО ◄── прямой заход
+                                                                     │
         ├─ Bearer-auth, api/openapi.yaml, /api/app/requirements, /api/v1/devices ──► <org>/backend
         ├─ INFRA-HANDOFF: .well-known (assetlinks / AASA), SENTRY_DSN, API_BASE_URL ──► <org>/infra
         ├─ STOP-1 ──► Gitea Release <org>/mobile vX.Y.Z: AAB + APK + mapping / IPA + dSYM · checksums · release-notes · openapi.lock
@@ -44,17 +47,22 @@ sibling-checkout'ами (`../<name>`).
 
 ## Как сюда приходят
 
-1. **Старт проекта — `<org>/strategy`.** Там проектируется продукт, в том числе карта
-   `mobile/<surface>/` (`/mobile-deep-dive`); этот репо её только читает.
-2. **Дальше задачи идут из хаба `<org>/infra`.** Сквозная задача — план-программа в
-   `.claude/plans/` инфры; агент хаба приходит в `../mobile` с фазой, ведёт её планом здесь
-   (`/plan`, `parent: infra:<slug>`) и работает **обвязкой этого репо** — `CLAUDE.md`,
-   скиллы, гейт `make check`. Релиз в магазины — `/release` этого репо; деплой из инфры его не
-   касается. Изменение дизайна по ходу — агентом из хаба в `../strategy`, скиллами strategy
+1. **Сначала проектирование — `<org>/strategy`.** До кода там проектируется всё, что можно:
+   бизнес, продукт, домены и сервисы, ИТ-периметр, интерфейсы и экраны, карта `mobile/<surface>/`
+   (`/mobile-deep-dive`), дизайн; этот репо карту только читает. Код начинается, когда проект
+   продуман.
+2. **Задачи приходят из корня проекта.** Работа ведётся одной сессией Claude Code в корне
+   `~/git/<org>/`: задачу или фазу программы хаба сюда приносит она сама или её фоновый агент в
+   папке `mobile/`. Сквозная задача — программа в `.claude/plans/` хаба `<org>/infra` (skill
+   `/plan` там), фаза этого репо — план здесь (`/plan`, `parent: infra:<slug>`). Здесь работают
+   **обвязкой этого репо**: сначала его `CLAUDE.md` через Read (с ним подхватываются правила и
+   скиллы репо), дальше — скиллы и гейт `make check`. Релиз в магазины — `/release` этого репо;
+   деплой хаба его не касается. Изменение дизайна по ходу — в `strategy/`, скиллами strategy
    (отсюда — STRATEGY-HANDOFF).
-3. **Прямой заход** в `<org>/mobile` — нормальный режим с той же обвязкой. Последствия для соседей
-   оформляются handoff-блоком (`/infra-handoff`: INFRA-/BACKEND-/STRATEGY-HANDOFF) для хаба или
-   соседа; задача пришла из хаба — блок уходит в ответ хабу.
+3. **Прямой заход** в `<org>/mobile` (сессия в папке `mobile/`) — нормальный режим с той же
+   обвязкой. Последствия для соседей оформляются handoff-блоком (`/infra-handoff`:
+   INFRA-/BACKEND-/STRATEGY-HANDOFF) для хаба или соседа; задача пришла из корня — блок уходит в
+   ответ сессии корня.
 
 ## Что репо берёт и отдаёт
 
@@ -76,7 +84,8 @@ Fallback'и, пока соседи отстают: `AuthMode.Cookie` (бэкен
 
 ## Sibling-checkout
 
-Все форки одной орги клонированы рядом: `~/git/<org>/{strategy,infra,backend,frontend,site,<bot>,mobile}`.
+Все форки одной орги клонированы в корень проекта, где лежит и карта проекта `CLAUDE.md`:
+`~/git/<org>/{strategy,infra,backend,frontend,site,<bot>,mobile}`.
 Резолв — поля `strategy-path` (дефолт `../strategy`), `backend-path` (`../backend`), `infra-path`
 (`../infra`) в `docs/stack/service.md`; сиблинг не склонирован — скиллы печатают next-step, не
 падают. Соседи — read-only: изменения их поверхности едут handoff-блоками
