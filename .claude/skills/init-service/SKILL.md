@@ -1,6 +1,6 @@
 ---
 name: init-service
-description: Оркестратор онбординга потребителя шаблона — ведёт путь форк → идентичность (platforms, preset, applicationId/bundle id, auth-режим) → env/config → связка с картой mobile/<surface>/ в соседнем <org>/strategy → черновики docs/stack (/stack-deep-dive) → handoffs соседям → /de-template, пока проект не перестанет помнить про шаблон. Применяй, когда юзер (или агент хаба <org>/infra) начинает свой проект из форка mobile-template или видишь свежий форк (applicationId ещё tech.stit.mobile, reference-фичи profile/todos на месте, docs/stack пуст). Сам не проектирует и не де-темплейтит — чейнит специализированные скиллы по порядку.
+description: Оркестратор онбординга потребителя шаблона — ведёт путь форк → идентичность (platforms, preset, applicationId/bundle id, auth-режим) → env/config → связка с картой mobile/<surface>/ в соседнем <org>/strategy → черновики docs/stack (/stack-deep-dive) → handoffs соседям → /de-template, пока проект не перестанет помнить про шаблон. Применяй, когда юзер (или сессия корня проекта либо её фоновый агент) начинает свой проект из форка mobile-template или видишь свежий форк (applicationId ещё tech.stit.mobile, reference-фичи profile/todos на месте, docs/stack пуст). Сам не проектирует и не де-темплейтит — чейнит специализированные скиллы по порядку.
 ---
 
 # Skill: init-service (онбординг-оркестратор)
@@ -25,8 +25,8 @@ description: Оркестратор онбординга потребителя 
 
 ## Pre-flight (стадия 0)
 
-- [ ] Форк создан (Gitea → **Use this template** → `<org>/mobile`), склонирован sibling'ом
-      рядом с `<org>/strategy`, `<org>/backend`, `<org>/infra`.
+- [ ] Форк создан (Gitea → **Use this template** → `<org>/mobile`), склонирован в корень
+      проекта `~/git/<org>/mobile`.
 - [ ] `make setup` прогнан (doctor + git-хуки + Android-скиллы + прогрев демона); `make doctor`
       OK или только WARN.
 - [ ] Соседи: `../strategy`, `../backend`, `../infra` — что есть, что нет (нет — не стоп: скилл
@@ -99,7 +99,7 @@ none`, схема deep link (`<scheme>://`), языки (`ru` default), влад
 - **INFRA-HANDOFF**: `.well-known` на хостах deep links (I-1: `applicationId`, отпечатки,
   Team ID · bundle id — по `deep-links.md`), `SENTRY_DSN` per env, URL политики/удаления
   аккаунта (I-6).
-- Блоки — в ответ (юзеру или хабу `<org>/infra`, если онбординг запущен оттуда) и в
+- Блоки — в ответ (юзеру или сессии корня, если онбординг запущен из корня проекта) и в
   раздел `## Handoff` плана онбординга (`.claude/plans/`).
 
 ### 6. Развернуть фундамент → `/de-template`
